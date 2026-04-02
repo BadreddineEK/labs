@@ -1,0 +1,11 @@
+[
+  {
+    "slug": "forecasting-explained",
+    "title": "Forecasting Explained",
+    "description": "What actually happens when a model reads your data and draws a line into the future. Trend, seasonality, noise, ruptures — visualized.",
+    "tags": ["Time Series", "ML", "Data Science"],
+    "date": "2026-04-02",
+    "color": "#0f766e",
+    "status": "live"
+  }
+]

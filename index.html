@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Labs — Badreddine EK</title>
+  <meta name="description" content="Interactive explainers and visual essays on data science, ML, and AI by Badreddine El Khamlichi." />
+  <meta property="og:title" content="Labs — Badreddine EK" />
+  <meta property="og:description" content="Interactive explainers and visual essays on data science, ML, and AI." />
+  <meta property="og:url" content="https://labs.badreddineek.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300..600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+
+      --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+      --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+      --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+      --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+      --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+      --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+      --text-3xl:  clamp(2.5rem,   1rem    + 4vw,    5rem);
+
+      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+      --space-4: 1rem;    --space-6: 1.5rem; --space-8: 2rem;
+      --space-12: 3rem;   --space-16: 4rem;  --space-24: 6rem;
+
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    :root, [data-theme="light"] {
+      --bg:           #f7f6f2;
+      --surface:      #f9f8f5;
+      --surface-2:    #edeae5;
+      --border:       rgba(40, 37, 29, 0.1);
+      --text:         #28251d;
+      --text-muted:   #7a7974;
+      --text-faint:   #bab9b4;
+      --accent:       #0f766e;
+      --accent-hover: #0c4e54;
+      --accent-bg:    rgba(15, 118, 110, 0.08);
+      --shadow-sm: 0 1px 2px rgba(40,37,29,0.06);
+      --shadow-md: 0 4px 16px rgba(40,37,29,0.08);
+      --shadow-lg: 0 12px 32px rgba(40,37,29,0.10);
+    }
+
+    [data-theme="dark"] {
+      --bg:           #111110;
+      --surface:      #1a1917;
+      --surface-2:    #222120;
+      --border:       rgba(255,255,255,0.07);
+      --text:         #e8e6e1;
+      --text-muted:   #797874;
+      --text-faint:   #4a4946;
+      --accent:       #2dd4bf;
+      --accent-hover: #5eead4;
+      --accent-bg:    rgba(45, 212, 191, 0.06);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.35);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.45);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--text);
+      background: var(--bg);
+      min-height: 100dvh;
+      line-height: 1.6;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin-inline: auto;
+      padding: var(--space-4) var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+    .logo-name {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+    .logo-sub {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .nav-link {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .nav-link:hover { color: var(--text); }
+    .theme-toggle {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-lg);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background var(--transition), color var(--transition);
+    }
+    .theme-toggle:hover { background: var(--surface); color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 1100px;
+      margin-inline: auto;
+      padding: var(--space-24) var(--space-6) var(--space-16);
+    }
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-bg);
+      border: 1px solid rgba(15,118,110,0.2);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full, 9999px);
+      margin-bottom: var(--space-6);
+    }
+    [data-theme="dark"] .hero-label {
+      border-color: rgba(45,212,191,0.2);
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      max-width: 16ch;
+      margin-bottom: var(--space-6);
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--text-muted);
+    }
+    .hero-desc {
+      font-size: var(--text-lg);
+      color: var(--text-muted);
+      max-width: 52ch;
+      line-height: 1.65;
+    }
+    .hero-meta {
+      margin-top: var(--space-8);
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .hero-stat-value {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      line-height: 1;
+      color: var(--text);
+    }
+    .hero-stat-label {
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .hero-divider {
+      width: 1px;
+      height: 32px;
+      background: var(--border);
+    }
+
+    /* ── GRID SECTION ── */
+    .grid-section {
+      max-width: 1100px;
+      margin-inline: auto;
+      padding: 0 var(--space-6) var(--space-24);
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-3);
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+    .section-count {
+      font-size: var(--text-sm);
+      color: var(--text-faint);
+    }
+
+    /* ── CARDS GRID ── */
+    #cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+      gap: var(--space-6);
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent);
+    }
+    .card-accent-bar {
+      height: 3px;
+      width: 100%;
+    }
+    .card-body {
+      padding: var(--space-6);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .tag {
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 2px var(--space-2);
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.02em;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+    .card-desc {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+    .card-footer {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-date {
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+    }
+    .card-arrow {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      transition: transform var(--transition), color var(--transition);
+    }
+    .card:hover .card-arrow {
+      transform: translateX(4px);
+      color: var(--accent);
+    }
+    .card-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: var(--text-xs);
+      font-weight: 500;
+    }
+    .card-status-badge.coming-soon {
+      color: var(--text-faint);
+    }
+    .card-status-badge.live {
+      color: var(--accent);
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ── EMPTY STATE ── */
+    #empty-state {
+      display: none;
+      text-align: center;
+      padding: var(--space-24) var(--space-8);
+      color: var(--text-faint);
+    }
+    #empty-state p { font-size: var(--text-sm); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-8);
+    }
+    .filter-btn {
+      font-size: var(--text-xs);
+      font-weight: 500;
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full, 9999px);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .filter-btn:hover { background: var(--surface-2); color: var(--text); }
+    .filter-btn.active {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: var(--space-8) var(--space-6);
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+    .footer-left {
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+    }
+    .footer-right {
+      display: flex;
+      gap: var(--space-4);
+    }
+    .footer-link {
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-link:hover { color: var(--text-muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .hero { padding-top: var(--space-16); }
+      .hero h1 { font-size: clamp(2rem, 8vw, 3rem); }
+      .hero-meta { gap: var(--space-4); }
+      .header-inner { padding: var(--space-3) var(--space-4); }
+      .grid-section { padding-inline: var(--space-4); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-label="Labs logo">
+          <rect width="32" height="32" rx="8" fill="var(--accent)" opacity="0.12"/>
+          <path d="M8 22 L14 10 L20 18 L23 13 L26 22" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="14" cy="10" r="2" fill="var(--accent)"/>
+        </svg>
+        <div>
+          <div class="logo-name">Labs</div>
+          <div class="logo-sub">badreddineek.com</div>
+        </div>
+      </a>
+      <div class="header-right">
+        <a href="https://badreddineek.com" class="nav-link" target="_blank" rel="noopener noreferrer">Portfolio</a>
+        <a href="https://github.com/BadreddineEK" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://linkedin.com/in/badreddine-el-khamlichi" class="nav-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-label">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+      Interactive Explainers
+    </div>
+    <h1>Technical concepts, <em>made visual.</em></h1>
+    <p class="hero-desc">
+      A collection of interactive essays on data science, machine learning and AI.
+      Each piece takes one idea and turns it into an experience you can explore.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <span class="hero-stat-value" id="stat-total">0</span>
+        <span class="hero-stat-label">Articles</span>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-value" id="stat-live">0</span>
+        <span class="hero-stat-label">Live</span>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-value" id="stat-tags">0</span>
+        <span class="hero-stat-label">Topics</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section class="grid-section">
+    <div class="section-header">
+      <h2 class="section-title">All pieces</h2>
+      <span class="section-count" id="section-count"></span>
+    </div>
+    <div class="filter-bar" id="filter-bar"></div>
+    <div id="cards-grid"></div>
+    <div id="empty-state"><p>No articles match this filter.</p></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-left">Built by <a href="https://badreddineek.com" class="footer-link" target="_blank" rel="noopener noreferrer">Badreddine El Khamlichi</a></span>
+      <div class="footer-right">
+        <a href="https://github.com/BadreddineEK/labs" class="footer-link" target="_blank" rel="noopener noreferrer">Source</a>
+        <a href="https://linkedin.com/in/badreddine-el-khamlichi" class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── THEME TOGGLE ──
+    const html = document.documentElement;
+    const toggleBtn = document.querySelector('[data-theme-toggle]');
+    let theme = 'dark';
+    const sunIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+    const moonIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+    toggleBtn.addEventListener('click', () => {
+      theme = theme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', theme);
+      toggleBtn.innerHTML = theme === 'dark' ? moonIcon : sunIcon;
+    });
+
+    // ── LOAD CONFIG & RENDER ──
+    async function loadLabs() {
+      let labs = [];
+      try {
+        const res = await fetch('./labs.config.json');
+        labs = await res.json();
+      } catch(e) {
+        console.warn('Could not load labs.config.json', e);
+      }
+
+      // Stats
+      const total = labs.length;
+      const live = labs.filter(l => l.status === 'live').length;
+      const allTags = [...new Set(labs.flatMap(l => l.tags || []))];
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-live').textContent = live;
+      document.getElementById('stat-tags').textContent = allTags.length;
+      document.getElementById('section-count').textContent = `${total} piece${total !== 1 ? 's' : ''}`;
+
+      // Filter bar
+      const filterBar = document.getElementById('filter-bar');
+      const filters = ['All', ...allTags];
+      let activeFilter = 'All';
+
+      function renderFilters() {
+        filterBar.innerHTML = filters.map(f =>
+          `<button class="filter-btn${f === activeFilter ? ' active' : ''}" data-filter="${f}">${f}</button>`
+        ).join('');
+        filterBar.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            activeFilter = btn.dataset.filter;
+            renderCards();
+            renderFilters();
+          });
+        });
+      }
+
+      function renderCards() {
+        const grid = document.getElementById('cards-grid');
+        const empty = document.getElementById('empty-state');
+        const filtered = activeFilter === 'All'
+          ? labs
+          : labs.filter(l => (l.tags || []).includes(activeFilter));
+
+        if (filtered.length === 0) {
+          grid.innerHTML = '';
+          empty.style.display = 'block';
+          return;
+        }
+        empty.style.display = 'none';
+
+        grid.innerHTML = filtered.map(lab => {
+          const isLive = lab.status === 'live';
+          const href = isLive ? `./${lab.slug}/` : '#';
+          const date = lab.date ? new Date(lab.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '';
+          const tags = (lab.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+          const accentColor = lab.color || 'var(--accent)';
+          return `
+            <a href="${href}" class="card"${!isLive ? ' aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:0.55"' : ''} style="--card-accent:${accentColor}">
+              <div class="card-accent-bar" style="background:${accentColor}"></div>
+              <div class="card-body">
+                <div class="card-tags">${tags}</div>
+                <h3 class="card-title">${lab.title}</h3>
+                <p class="card-desc">${lab.description}</p>
+              </div>
+              <div class="card-footer">
+                <span class="card-date">${date}</span>
+                <span class="card-status-badge ${lab.status}">
+                  <span class="status-dot"></span>
+                  ${isLive ? 'Live' : 'Coming soon'}
+                </span>
+                ${isLive ? '<span class="card-arrow">→</span>' : ''}
+              </div>
+            </a>`;
+        }).join('');
+      }
+
+      renderFilters();
+      renderCards();
+    }
+
+    loadLabs();
+  </script>
+</body>
+</html>
