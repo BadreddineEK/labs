@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>Forecasting Explained: Pattern Reading Under Uncertainty</title>
+  <meta name="description" content="An interactive explainer on how time series forecasting works: decomposing signals, understanding uncertainty, and why models sometimes fail. By Badreddine El Khamlichi." />
+  <meta name="author" content="Badreddine El Khamlichi" />
+  <link rel="canonical" href="https://forecasting.badreddine.dev" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Forecasting Explained: Pattern Reading Under Uncertainty" />
+  <meta property="og:description" content="An interactive explainer on how time series forecasting works. Decompose signals. Understand uncertainty. See why forecasting is hard." />
+  <meta property="og:url" content="https://forecasting.badreddine.dev" />
+  <meta property="og:image" content="https://forecasting.badreddine.dev/assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Forecasting Explained" />
+  <meta name="twitter:description" content="Pattern reading under uncertainty. An interactive explainer by Badreddine El Khamlichi." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ── NAV ─────────────────────────────────────── -->
+  <nav class="site-nav" id="site-nav" aria-label="Site navigation">
+    <div class="nav-inner">
+      <span class="nav-brand">Forecasting<em>Explained</em></span>
+      <div class="nav-right">
+        <a href="#anatomy" class="nav-link" data-i18n="nav.anatomy">Anatomy</a>
+        <a href="#hardness" class="nav-link" data-i18n="nav.difficulty">Difficulty</a>
+        <a href="#metrics" class="nav-link" data-i18n="nav.metrics">Metrics</a>
+        <a href="#validation" class="nav-link" data-i18n="nav.validation">Validation</a>
+        <a href="#stationarity" class="nav-link" data-i18n="nav.stationarity">Stationarity</a>
+        <a href="#lagfeatures" class="nav-link" data-i18n="nav.lagfeatures">Lag Features</a>
+        <a href="#models" class="nav-link" data-i18n="nav.models">Models</a>
+        <a href="#takeaways" class="nav-link" data-i18n="nav.ideas">Key Ideas</a>
+        <button class="lang-toggle" id="lang-toggle" aria-label="Switch language">
+          <span class="lang-current" id="lang-label">FR</span>
+        </button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-icon"></span>
+        </button>
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="nav-drawer" id="nav-drawer" aria-hidden="true">
+      <a href="#anatomy" class="nav-drawer-link" data-i18n="nav.anatomy">Anatomy</a>
+      <a href="#hardness" class="nav-drawer-link" data-i18n="nav.difficulty">Difficulty</a>
+      <a href="#metrics" class="nav-drawer-link" data-i18n="nav.metrics">Metrics</a>
+      <a href="#validation" class="nav-drawer-link" data-i18n="nav.validation">Validation</a>
+      <a href="#stationarity" class="nav-drawer-link" data-i18n="nav.stationarity">Stationarity</a>
+      <a href="#lagfeatures" class="nav-drawer-link" data-i18n="nav.lagfeatures">Lag Features</a>
+      <a href="#models" class="nav-drawer-link" data-i18n="nav.models">Models</a>
+      <a href="#takeaways" class="nav-drawer-link" data-i18n="nav.ideas">Key Ideas</a>
+    </div>
+  </nav>
+
+  <!-- ── SECTION 1 · HERO ─────────────────────────────────────── -->
+  <section class="section section--hero" id="hero" aria-label="Introduction">
+    <div class="hero-content">
+      <p class="hero-eyebrow" data-i18n="hero.eyebrow">An interactive explainer</p>
+      <h1 class="hero-headline">
+        Forecasting<br />
+        is not magic.
+      </h1>
+      <p class="hero-sub" data-i18n="hero.sub">
+        It is pattern reading<br class="hide-mobile" /> under uncertainty.
+      </p>
+      <p class="hero-body" data-i18n="hero.body">
+        A visual exploration of how we predict time: what makes a good forecast,
+        why it fails, and what the data is really telling us.
+      </p>
+    </div>
+
+    <div class="hero-canvas-wrap" aria-hidden="true">
+      <canvas id="hero-canvas"></canvas>
+      <div class="hero-canvas-labels">
+        <span class="canvas-label canvas-label--past" data-i18n="hero.past">Past</span>
+        <span class="canvas-label canvas-label--future" data-i18n="hero.forecast">Forecast</span>
+      </div>
+    </div>
+
+    <button class="scroll-hint" aria-label="Scroll down" onclick="document.getElementById('what').scrollIntoView({behavior:'smooth'})">
+      <span class="scroll-hint-line"></span>
+    </button>
+  </section>
+
+  <!-- ── SECTION 2 · WHAT IS A FORECAST ────────────────────────── -->
+  <section class="section section--alt reveal-section" id="what" aria-label="What is a forecast">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2 class="section-title" data-i18n="what.title">What is a forecast?</h2>
+      </div>
+
+      <div class="what-layout">
+        <div class="what-text">
+          <p class="lead-text" data-i18n="what.lead">
+            A forecast is a structured bet about the future, informed by patterns in the past.
+            It is not a crystal ball. It is not a guess. It is a calibrated estimate with known limitations.
+          </p>
+          <div class="key-statements">
+            <p class="key-statement">
+              <em>"The past is known. The future is estimated."</em>
+            </p>
+            <p class="key-statement">
+              <em>"A forecast is not a prediction. It is a structured hypothesis."</em>
+            </p>
+            <p class="key-statement">
+              <em>"The goal is not to be right. It is to be less wrong."</em>
+            </p>
+          </div>
+        </div>
+
+        <div class="what-visual" aria-hidden="true">
+          <canvas id="what-canvas"></canvas>
+          <div class="what-canvas-legend">
+            <span class="legend-dot legend-dot--known"></span><span data-i18n="what.observed">Observed</span>
+            <span class="legend-dot legend-dot--forecast"></span><span data-i18n="what.forecasted">Forecasted</span>
+            <span class="legend-dot legend-dot--interval"></span><span data-i18n="what.interval">Uncertainty range</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 3 · ANATOMY ───────────────────────────────────── -->
+  <section class="section reveal-section" id="anatomy" aria-label="Anatomy of a time series">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2 class="section-title" data-i18n="anatomy.title">What hides inside<br />a time series.</h2>
+      </div>
+      <p class="section-intro" data-i18n="anatomy.intro">
+        A time series is never just "data going up and down." The first three layers are classical decomposition components.
+        The fourth, a structural break, is an external event treated separately from the decomposition.
+        Toggle each layer to see what it contributes.
+      </p>
+
+      <div class="anatomy-layout">
+        <!-- Chart -->
+        <div class="anatomy-chart-wrap">
+          <canvas id="anatomy-canvas" aria-label="Interactive time series decomposition chart"></canvas>
+          <div class="anatomy-chart-axes" aria-hidden="true">
+            <span class="axis-label axis-label--y">Value</span>
+            <span class="axis-label axis-label--x">Time</span>
+          </div>
+        </div>
+
+        <!-- Toggles -->
+        <div class="anatomy-controls" role="group" aria-label="Signal component toggles">
+          <button class="toggle-btn active" data-component="trend" aria-pressed="true">
+            <span class="toggle-indicator"></span>
+            <div class="toggle-content">
+              <span class="toggle-name" data-i18n="anatomy.trend">Trend</span>
+              <span class="toggle-desc" data-i18n="anatomy.trendDesc">The long-term direction: up, down, or shifting.</span>
+            </div>
+          </button>
+
+          <button class="toggle-btn" data-component="seasonality" aria-pressed="false">
+            <span class="toggle-indicator"></span>
+            <div class="toggle-content">
+              <span class="toggle-name" data-i18n="anatomy.seasonality">Seasonality</span>
+              <span class="toggle-desc" data-i18n="anatomy.seasonalityDesc">Recurring patterns: weekly, monthly, yearly cycles.</span>
+            </div>
+          </button>
+
+          <button class="toggle-btn" data-component="noise" aria-pressed="false">
+            <span class="toggle-indicator"></span>
+            <div class="toggle-content">
+              <span class="toggle-name" data-i18n="anatomy.noise">Noise</span>
+              <span class="toggle-desc" data-i18n="anatomy.noiseDesc">Random variation: unavoidable, partially modelable.</span>
+            </div>
+          </button>
+
+          <button class="toggle-btn" data-component="shock" aria-pressed="false">
+            <span class="toggle-indicator"></span>
+            <div class="toggle-content">
+              <span class="toggle-name" data-i18n="anatomy.shock">Structural Break</span>
+              <span class="toggle-desc" data-i18n="anatomy.shockDesc">Not a decomposition component. A sudden level shift caused by an external event: requires separate detection and handling.</span>
+            </div>
+          </button>
+
+          <p class="anatomy-message" id="anatomy-message" aria-live="polite">
+            Trend only: the long-term direction, stripped of everything else.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 4 · WHY IT'S HARD ─────────────────────────────── -->
+  <section class="section section--alt reveal-section" id="hardness" aria-label="Why forecasting is hard">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2 class="section-title" data-i18n="hard.title">The further you look,<br />the less you see.</h2>
+      </div>
+      <p class="section-intro" data-i18n="hard.intro">
+        Forecasting is hard for reasons that are structural, not just technical.
+        Understanding these limits is the first step toward better predictions.
+      </p>
+
+      <div class="hard-panels">
+
+        <!-- Panel 1: Horizon -->
+        <div class="hard-panel reveal-section">
+          <div class="hard-panel-text">
+            <h3 class="hard-panel-title" data-i18n="hard.horizonTitle">The horizon problem</h3>
+            <p class="hard-panel-desc" data-i18n="hard.horizonDesc">Every step further into the future compounds uncertainty. Drag the slider to see how confidence intervals grow and eventually become uninformative.</p>
+            <div class="slider-wrap">
+              <label for="horizon-slider" class="slider-label" data-i18n="hard.horizonLabel">
+                Forecast horizon: <strong id="horizon-value">4 weeks</strong>
+              </label>
+              <input type="range" id="horizon-slider" min="1" max="52" value="4" class="custom-slider" aria-label="Adjust forecast horizon" />
+              <div class="slider-ticks" aria-hidden="true">
+                <span>1w</span><span>13w</span><span>26w</span><span>52w</span>
+              </div>
+            </div>
+          </div>
+          <div class="hard-panel-visual">
+            <canvas id="horizon-canvas" aria-label="Forecast horizon confidence interval chart"></canvas>
+          </div>
+          <p class="panel-insight">
+            <em>"Uncertainty grows with distance. A good forecast knows how uncertain it is."</em>
+          </p>
+        </div>
+
+        <!-- Panel 2: Shock -->
+        <div class="hard-panel hard-panel--reverse reveal-section">
+          <div class="hard-panel-text">
+            <h3 class="hard-panel-title" data-i18n="hard.shockTitle">The shock problem</h3>
+            <p class="hard-panel-desc" data-i18n="hard.shockDesc">Models are trained on the past. Structural breaks come from the future. When the underlying system changes abruptly, historical patterns become misleading.</p>
+            <div class="btn-group">
+              <button class="action-btn" id="inject-shock-btn" data-i18n="hard.injectBtn">Inject a shock</button>
+              <button class="action-btn action-btn--ghost" id="reset-shock-btn" data-i18n="hard.resetBtn">Reset</button>
+            </div>
+          </div>
+          <div class="hard-panel-visual">
+            <canvas id="shock-canvas" aria-label="Structural break impact on forecast chart"></canvas>
+          </div>
+          <p class="panel-insight">
+            <em>"Models are trained on the past. Shocks come from the future."</em>
+          </p>
+        </div>
+
+        <!-- Panel 3: Noise -->
+        <div class="hard-panel reveal-section">
+          <div class="hard-panel-text">
+            <h3 class="hard-panel-title" data-i18n="hard.noiseTitle">The noise problem</h3>
+            <p class="hard-panel-desc" data-i18n="hard.noiseDesc">At low noise, the underlying trend is obvious. As randomness increases, signal and noise become indistinguishable. Overfitting mistakes noise for pattern.</p>
+            <div class="slider-wrap">
+              <label for="noise-slider" class="slider-label" data-i18n="hard.noiseLabel">
+                Noise level: <strong id="noise-value">Low</strong>
+              </label>
+              <input type="range" id="noise-slider" min="0" max="100" value="15" class="custom-slider" aria-label="Adjust noise level" />
+              <div class="slider-ticks" aria-hidden="true">
+                <span>Low</span><span>Medium</span><span>High</span>
+              </div>
+            </div>
+          </div>
+          <div class="hard-panel-visual">
+            <canvas id="noise-canvas" aria-label="Signal to noise ratio chart"></canvas>
+          </div>
+          <p class="panel-insight">
+            <em>"Signal and noise look the same until you know what to look for."</em>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 4 · MEASURING ERROR ────────────────────────────── -->
+  <section class="section section--alt reveal-section" id="metrics" aria-label="Measuring forecast error">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2 class="section-title" data-i18n="metrics.title">Not all errors<br />are equal.</h2>
+      </div>
+      <p class="section-intro" data-i18n="metrics.intro">
+        How you measure forecast quality shapes what you optimize — and what you ignore.
+        MAE, RMSE, and MAPE tell different stories about the same mistake.
+      </p>
+
+      <div class="metrics-layout">
+        <div class="metrics-visual">
+          <canvas id="metrics-canvas" aria-label="Forecast error metrics visualization"></canvas>
+          <div class="slider-wrap">
+            <label for="outlier-slider" class="slider-label" data-i18n="metrics.outlierLabel">
+              Outlier size: <strong id="outlier-value">Small</strong>
+            </label>
+            <input type="range" id="outlier-slider" min="0" max="100" value="20" class="custom-slider" aria-label="Adjust outlier magnitude" />
+            <div class="slider-ticks" aria-hidden="true">
+              <span data-i18n="metrics.small">Small</span>
+              <span data-i18n="metrics.large">Large</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="metrics-cards">
+          <div class="metric-card" id="card-mae">
+            <div class="metric-header">
+              <span class="metric-abbr">MAE</span>
+              <span class="metric-value" id="mae-value">&mdash;</span>
+            </div>
+            <p class="metric-name" data-i18n="metrics.maeName">Mean Absolute Error</p>
+            <p class="metric-formula">mean( |y &minus; &#375;| )</p>
+            <p class="metric-note" data-i18n="metrics.maeNote">Every error counts the same. Intuitive. Easy to explain.</p>
+          </div>
+
+          <div class="metric-card" id="card-rmse">
+            <div class="metric-header">
+              <span class="metric-abbr">RMSE</span>
+              <span class="metric-value" id="rmse-value">&mdash;</span>
+            </div>
+            <p class="metric-name" data-i18n="metrics.rmseName">Root Mean Squared Error</p>
+            <p class="metric-formula">sqrt( mean( (y &minus; &#375;)&sup2; ) )</p>
+            <p class="metric-note" data-i18n="metrics.rmseNote">Large errors penalized quadratically. Watch it spike as the outlier grows.</p>
+          </div>
+
+          <div class="metric-card metric-card--warn" id="card-mape">
+            <div class="metric-header">
+              <span class="metric-abbr">MAPE</span>
+              <span class="metric-value" id="mape-value">&mdash;</span>
+            </div>
+            <p class="metric-name" data-i18n="metrics.mapeName">Mean Abs. Percentage Error</p>
+            <p class="metric-formula">mean( |y &minus; &#375;| / |y| ) &times; 100</p>
+            <p class="metric-note" data-i18n="metrics.mapeNote">Scale-independent. Explodes when actuals are near zero.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="panel-insight" data-i18n="metrics.insight">
+        <em>&ldquo;There is no universal best metric. Pick the one that reflects the true cost of your errors.&rdquo;</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SECTION 5 · VALIDATION ────────────────────────────────── -->
+  <section class="section reveal-section" id="validation" aria-label="Walk-forward validation">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <h2 class="section-title" data-i18n="val.title">You cannot shuffle<br />time.</h2>
+      </div>
+      <p class="section-intro" data-i18n="val.intro">
+        A random train/test split is standard for tabular ML. On a time series, it is a methodological error.
+        Training on data from the future leaks information the model should never see.
+      </p>
+
+      <div class="val-compare">
+        <div class="val-block val-block--wrong">
+          <p class="val-block-label" data-i18n="val.wrongLabel">&#x2715; Random split (wrong)</p>
+          <div class="val-random-wrap" id="val-random-bars" role="img" aria-label="Random split — train and test blocks interspersed"></div>
+          <p class="val-block-desc" data-i18n="val.wrongDesc">
+            Training data is scattered across the full timeline. The model has seen data from the future.
+          </p>
+        </div>
+
+        <div class="val-block val-block--right">
+          <p class="val-block-label" data-i18n="val.rightLabel">&#x2713; Walk-forward (correct)</p>
+          <canvas id="val-canvas" aria-label="Walk-forward validation diagram showing 5 folds"></canvas>
+          <div class="val-controls">
+            <button class="action-btn action-btn--ghost" id="val-prev-btn" data-i18n="val.prevBtn">&larr; Prev</button>
+            <span class="val-fold-label" id="val-fold-label">Fold 1 / 5</span>
+            <button class="action-btn" id="val-next-btn" data-i18n="val.nextBtn">Next &rarr;</button>
+          </div>
+          <p class="val-block-desc" data-i18n="val.rightDesc">
+            Training always ends before the test window. Each fold simulates a real deployment.
+          </p>
+        </div>
+      </div>
+
+      <div class="val-legend" aria-hidden="true">
+        <span class="val-legend-item"><span class="val-dot val-dot--train"></span><span data-i18n="val.trainLabel">Training</span></span>
+        <span class="val-legend-item"><span class="val-dot val-dot--test"></span><span data-i18n="val.testLabel">Validation</span></span>
+        <span class="val-legend-item"><span class="val-dot val-dot--future"></span><span data-i18n="val.futureLabel">Future (unseen)</span></span>
+      </div>
+
+      <p class="panel-insight" data-i18n="val.insight">
+        <em>&ldquo;Evaluate your model the way it will be deployed: train on the past, test on the future.&rdquo;</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SECTION 6 · STATIONARITY ────────────────────────────────── -->
+  <section class="section reveal-section" id="stationarity" aria-label="Stationarity">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <h2 class="section-title" data-i18n="stat.title">ARIMA needs<br />a stable baseline.</h2>
+      </div>
+      <p class="section-intro" data-i18n="stat.intro">
+        A stationary series has a constant mean and variance over time. ARIMA requires it.
+        Non-stationary series must be transformed &mdash; by differencing &mdash; before modeling.
+      </p>
+
+      <div class="stationary-layout">
+        <div class="stationary-visual">
+          <canvas id="stat-canvas" aria-label="Stationarity transformation visualization"></canvas>
+          <div id="stat-adf-badge" class="stat-adf-badge stat-adf-badge--bad">ADF: p = 0.614 &mdash; non-stationary</div>
+        </div>
+        <div class="stationary-controls">
+          <div class="stat-btns" role="group" aria-label="Series transformation mode">
+            <button class="stat-btn active" data-mode="original" data-i18n="stat.btnOriginal">Original series</button>
+            <button class="stat-btn" data-mode="diff1" data-i18n="stat.btnDiff1">First difference (&nabla;y)</button>
+            <button class="stat-btn" data-mode="seasonal" data-i18n="stat.btnSeasonal">Seasonal difference (&nabla;&sup8;y)</button>
+          </div>
+          <p class="stat-explanation" id="stat-explanation">
+            Clear upward trend. The mean is not constant &mdash; it grows with time. ARIMA(p,0,q) on this series would be meaningless.
+          </p>
+        </div>
+      </div>
+
+      <p class="panel-insight" data-i18n="stat.insight">
+        <em>&ldquo;Before fitting ARIMA: test for stationarity. If ADF p &gt; 0.05, you must difference first.&rdquo;</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SECTION 7 · LAG FEATURES ─────────────────────────────── -->
+  <section class="section section--alt reveal-section" id="lagfeatures" aria-label="Lag feature engineering">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">07</span>
+        <h2 class="section-title" data-i18n="lag.title">ML models<br />don&rsquo;t see time.</h2>
+      </div>
+      <p class="section-intro" data-i18n="lag.intro">
+        Tree-based models have no concept of order. You transform the series into a tabular dataset:
+        each row is one time step, each column a lagged value or calendar feature.
+        The model never sees the sequence &mdash; only the row.
+      </p>
+
+      <div class="lag-layout">
+        <div class="lag-visual">
+          <canvas id="lag-canvas" aria-label="Time series with highlighted lag features"></canvas>
+          <div class="slider-wrap">
+            <label for="lag-slider" class="slider-label">
+              <span data-i18n="lag.currentRowLabel">Current row:</span> <strong id="lag-row-value">t&thinsp;=&thinsp;7</strong>
+            </label>
+            <input type="range" id="lag-slider" min="7" max="12" value="7" class="custom-slider" aria-label="Adjust current time step" />
+          </div>
+        </div>
+        <div class="lag-table-wrap">
+          <table class="lag-table" id="lag-table" aria-label="Lag feature matrix"></table>
+        </div>
+      </div>
+
+      <p class="panel-insight" data-i18n="lag.insight">
+        <em>&ldquo;Feature engineering is the model for tree-based forecasting. Lag selection and leakage prevention matter more than hyperparameters.&rdquo;</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SECTION 8 · MODEL FAMILIES ─────────────────────────────── -->
+  <section class="section section--alt reveal-section" id="models" aria-label="Model families">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">08</span>
+        <h2 class="section-title" data-i18n="models.title">Choose your<br />tools wisely.</h2>
+      </div>
+      <p class="section-intro" data-i18n="models.intro">
+        No model wins every battle. Each family makes different assumptions about your data.
+        Knowing those assumptions is more important than memorizing hyperparameters.
+      </p>
+
+      <div class="models-grid">
+        <div class="model-card reveal-section">
+          <span class="model-tag model-tag--baseline" data-i18n="models.naiveTag">Baseline</span>
+          <h3 class="model-name" data-i18n="models.naiveName">Na&iuml;ve / Seasonal Na&iuml;ve</h3>
+          <p class="model-assumes" data-i18n="models.naiveAssumes"><strong>Assumes:</strong> the future repeats the recent past or the same season last year.</p>
+          <p class="model-desc" data-i18n="models.naiveDesc">Always compute a na&iuml;ve baseline first. If your complex model cannot beat it, go back to the drawing board.</p>
+          <code class="model-formula">&#375;<sub>t+h</sub> = y<sub>t&minus;S+h mod S</sub></code>
+          <p class="model-when" data-i18n="models.naiveWhen">&rarr; Use as benchmark. Every model should beat this.</p>
+        </div>
+
+        <div class="model-card reveal-section">
+          <span class="model-tag model-tag--ets" data-i18n="models.etsTag">Classical</span>
+          <h3 class="model-name" data-i18n="models.etsName">Exponential Smoothing (ETS)</h3>
+          <p class="model-assumes" data-i18n="models.etsAssumes"><strong>Assumes:</strong> trend and seasonality evolve smoothly via exponential weighting.</p>
+          <p class="model-desc" data-i18n="models.etsDesc">A state space model. Handles multiple seasonalities. Interpretable components. Underrated in practice.</p>
+          <code class="model-formula">ETS(Error, Trend, Seasonality)</code>
+          <p class="model-when" data-i18n="models.etsWhen">&rarr; Strong seasonal patterns. Classic business forecasting.</p>
+        </div>
+
+        <div class="model-card reveal-section">
+          <span class="model-tag model-tag--arima" data-i18n="models.arimaTag">Statistical</span>
+          <h3 class="model-name" data-i18n="models.arimaName">ARIMA / SARIMA</h3>
+          <p class="model-assumes" data-i18n="models.arimaAssumes"><strong>Assumes:</strong> the series is stationary (or can be made so by differencing d&nbsp;times).</p>
+          <p class="model-desc" data-i18n="models.arimaDesc">Models autocorrelation structure. Requires stationarity testing (ADF, KPSS). Sensitive to outliers and structural breaks.</p>
+          <code class="model-formula">ARIMA(p,d,q)(P,D,Q)<sub>S</sub></code>
+          <p class="model-when" data-i18n="models.arimaWhen">&rarr; Complex autocorrelation. Use ACF/PACF to select p,&nbsp;q.</p>
+        </div>
+
+        <div class="model-card reveal-section">
+          <span class="model-tag model-tag--ml" data-i18n="models.mlTag">ML</span>
+          <h3 class="model-name" data-i18n="models.mlName">LightGBM / XGBoost</h3>
+          <p class="model-assumes" data-i18n="models.mlAssumes"><strong>Assumes:</strong> nothing explicitly &mdash; learns from engineered lag features.</p>
+          <p class="model-desc" data-i18n="models.mlDesc">Powerful with many exogenous variables. Requires careful feature engineering and strictly temporal cross-validation. Highly prone to data leakage.</p>
+          <code class="model-formula">f(lags, calendars, exogenous)</code>
+          <p class="model-when" data-i18n="models.mlWhen">&rarr; Many covariates. Non-linear patterns. Large history available.</p>
+        </div>
+      </div>
+
+      <p class="panel-insight" data-i18n="models.insight">
+        <em>&ldquo;A simple model that understands your data beats a complex one that doesn&rsquo;t.&rdquo;</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SECTION 7 · TAKEAWAYS ──────────────────────────────────── -->
+  <section class="section reveal-section" id="takeaways" aria-label="Key takeaways">
+    <div class="container container--narrow">
+      <div class="section-header">
+        <span class="section-number">09</span>
+        <h2 class="section-title" data-i18n="takeaways.title">What to remember.</h2>
+      </div>
+
+      <div class="closing-statements">
+        <p class="closing-quote" data-i18n="takeaways.q1">"Every forecast is a bet. A well-calibrated bet."</p>
+        <p class="closing-quote" data-i18n="takeaways.q2">"The goal is not certainty. It is structured doubt."</p>
+        <p class="closing-quote" data-i18n="takeaways.q3">"The best forecasters are not always right. They know when they are probably wrong."</p>
+      </div>
+
+      <div class="takeaway-list">
+        <div class="takeaway">
+          <span class="takeaway-num">I</span>
+          <div class="takeaway-body">
+            <p class="takeaway-title" data-i18n="takeaways.t1title">Decompose before you predict.</p>
+            <p class="takeaway-text" data-i18n="takeaways.t1text">Separate trend, seasonality, and noise. Each component needs a different model or assumption. Treating them as one block is the most common source of poor forecasts.</p>
+          </div>
+        </div>
+        <div class="takeaway">
+          <span class="takeaway-num">II</span>
+          <div class="takeaway-body">
+            <p class="takeaway-title" data-i18n="takeaways.t2title">Widen your intervals when the ground shifts.</p>
+            <p class="takeaway-text" data-i18n="takeaways.t2text">Structural breaks invalidate past distributions. When the context changes (regulations, crises, new products), uncertainty must be explicitly widened, not assumed away.</p>
+          </div>
+        </div>
+        <div class="takeaway">
+          <span class="takeaway-num">III</span>
+          <div class="takeaway-body">
+            <p class="takeaway-title" data-i18n="takeaways.t3title">Model the uncertainty, not just the mean.</p>
+            <p class="takeaway-text" data-i18n="takeaways.t3text">A single forecast line is a simplification. The business decision lives in the distribution: in the tails, in the worst cases, in the confidence range. Communicate intervals, not just point estimates.</p>
+          </div>
+        </div>
+      </div>
+
+      <footer class="site-footer">
+        <div class="footer-divider"></div>
+        <p class="footer-credit">
+          Designed &amp; built by
+          <a href="https://www.linkedin.com/in/badreddine-el-khamlichi" target="_blank" rel="noopener noreferrer" class="footer-link">Badreddine El Khamlichi</a>
+          <span data-i18n="footer.role">, Data Scientist</span>
+        </p>
+        <p class="footer-stack">HTML · CSS · JavaScript · Canvas API</p>
+      </footer>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
