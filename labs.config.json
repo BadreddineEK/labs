@@ -79,5 +79,14 @@
     "date": "2026-04-07",
     "color": "#0369a1",
     "status": "live"
+  },
+  {
+    "slug": "fine-tuning-explained",
+    "title": "Fine-Tuning Explained",
+    "description": "Pre-training gives a model knowledge. Fine-tuning gives it a job. From full fine-tuning to LoRA and RLHF — how we adapt LLMs to specific tasks, visualized.",
+    "tags": ["Fine-Tuning", "LLM", "LoRA"],
+    "date": "2026-04-07",
+    "color": "#c2410c",
+    "status": "live"
   }
 ]
