@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streamlit Under the Hood — Labs by Badreddine EK</title>
+  <meta name="description" content="What really happens when you run a Streamlit app — the execution model, re-runs, session state, caching, and how it compares to React." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300..600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --font-display:'Instrument Serif',Georgia,serif;
+      --font-body:'DM Sans',system-ui,sans-serif;
+      --font-mono:ui-monospace,'Cascadia Code',Menlo,monospace;
+      --text-xs:clamp(.75rem,.7rem + .25vw,.875rem);
+      --text-sm:clamp(.875rem,.8rem + .35vw,1rem);
+      --text-base:clamp(1rem,.95rem + .25vw,1.125rem);
+      --text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);
+      --text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+      --text-2xl:clamp(2rem,1.2rem + 2.5vw,3.5rem);
+      --text-3xl:clamp(2.5rem,1rem + 4vw,5rem);
+      --sp1:.25rem;--sp2:.5rem;--sp3:.75rem;--sp4:1rem;--sp5:1.25rem;
+      --sp6:1.5rem;--sp8:2rem;--sp10:2.5rem;--sp12:3rem;--sp16:4rem;--sp24:6rem;
+      --r-sm:.375rem;--r-md:.5rem;--r-lg:.75rem;--r-xl:1rem;--r-full:9999px;
+      --tr:180ms cubic-bezier(.16,1,.3,1);
+    }
+    :root,[data-theme="light"] {
+      --bg:#fff5f7;--surface:#fde8ec;--surface-2:#fff9fa;
+      --border:rgba(225,29,72,.1);--border-acc:rgba(225,29,72,.25);
+      --text:#1a050a;--text-muted:#7a3040;--text-faint:#c9909a;
+      --acc:#e11d48;--acc-h:#be123c;--acc-bg:rgba(225,29,72,.07);
+      --blue:#2563eb;--blue-bg:rgba(37,99,235,.07);--blue-border:rgba(37,99,235,.2);
+      --green:#16a34a;--green-bg:rgba(22,163,74,.07);--green-border:rgba(22,163,74,.2);
+      --orange:#ea580c;--orange-bg:rgba(234,88,12,.07);--orange-border:rgba(234,88,12,.2);
+      --purple:#7c3aed;--purple-bg:rgba(124,58,237,.07);--purple-border:rgba(124,58,237,.2);
+      --sh:0 2px 12px rgba(180,20,50,.07);--shh:0 8px 28px rgba(180,20,50,.12);
+    }
+    [data-theme="dark"] {
+      --bg:#0f0608;--surface:#180a0e;--surface-2:#1e0d12;
+      --border:rgba(225,29,72,.08);--border-acc:rgba(251,113,133,.2);
+      --text:#fde4e9;--text-muted:#a05060;--text-faint:#3d1520;
+      --acc:#fb7185;--acc-h:#fda4af;--acc-bg:rgba(251,113,133,.07);
+      --blue:#60a5fa;--blue-bg:rgba(96,165,250,.07);--blue-border:rgba(96,165,250,.2);
+      --green:#4ade80;--green-bg:rgba(74,222,128,.07);--green-border:rgba(74,222,128,.2);
+      --orange:#fb923c;--orange-bg:rgba(251,146,60,.07);--orange-border:rgba(251,146,60,.2);
+      --purple:#a78bfa;--purple-bg:rgba(167,139,250,.07);--purple-border:rgba(167,139,250,.2);
+      --sh:0 2px 12px rgba(0,0,0,.45);--shh:0 8px 28px rgba(0,0,0,.6);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-padding-top:5rem}
+    body{font-family:var(--font-body);font-size:var(--text-base);color:var(--text);background:var(--bg);line-height:1.65;transition:background var(--tr),color var(--tr)}
+    img,svg,canvas{display:block;max-width:100%}
+    p,li{max-width:68ch;text-wrap:pretty}
+    h1,h2,h3{text-wrap:balance;line-height:1.15}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+    /* NAV */
+    nav.topnav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+    .nav-inner{max-width:920px;margin-inline:auto;padding:var(--sp3) var(--sp6);display:flex;align-items:center;justify-content:space-between;gap:var(--sp4)}
+    .nav-back{display:flex;align-items:center;gap:var(--sp2);font-size:var(--text-sm);color:var(--text-muted);transition:color var(--tr)}
+    .nav-back:hover{color:var(--text)}
+    .nav-right{display:flex;align-items:center;gap:var(--sp4)}
+    .nav-tag{font-size:var(--text-xs);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);background:var(--acc-bg);padding:2px var(--sp3);border-radius:var(--r-full);border:1px solid var(--border-acc)}
+    .theme-btn{width:34px;height:34px;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:color var(--tr),background var(--tr)}
+    .theme-btn:hover{color:var(--text);background:var(--surface-2)}
+
+    /* HERO */
+    .hero{max-width:920px;margin-inline:auto;padding:var(--sp24) var(--sp6) var(--sp16)}
+    .hero-kicker{display:inline-flex;align-items:center;gap:var(--sp2);font-size:var(--text-xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:var(--sp6)}
+    .hero h1{font-family:var(--font-display);font-size:var(--text-3xl);letter-spacing:-.025em;line-height:1.05;margin-bottom:var(--sp6)}
+    .hero h1 em{font-style:italic;color:var(--text-muted)}
+    .hero-sub{font-size:var(--text-lg);color:var(--text-muted);max-width:54ch;line-height:1.65;margin-bottom:var(--sp10)}
+    .hero-meta{display:flex;gap:var(--sp6);flex-wrap:wrap}
+    .meta-item{display:flex;flex-direction:column;gap:2px}
+    .meta-val{font-family:var(--font-display);font-size:var(--text-xl);line-height:1}
+    .meta-lbl{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint)}
+    .meta-sep{width:1px;height:32px;background:var(--border);align-self:center}
+
+    /* LAYOUT */
+    .article{max-width:920px;margin-inline:auto;padding:0 var(--sp6) var(--sp24)}
+    .section{margin-bottom:var(--sp16)}
+    .section-label{display:flex;align-items:center;gap:var(--sp3);margin-bottom:var(--sp8);padding-bottom:var(--sp4);border-bottom:1px solid var(--border)}
+    .section-num{font-family:var(--font-display);font-size:var(--text-xl);color:var(--acc);line-height:1;opacity:.4}
+    .section-title{font-family:var(--font-display);font-size:var(--text-xl);letter-spacing:-.015em}
+    .section-body{display:flex;flex-direction:column;gap:var(--sp6)}
+    .prose{font-size:var(--text-base);color:var(--text-muted);line-height:1.8}
+    .prose strong{color:var(--text);font-weight:600}
+    .prose code{font-family:var(--font-mono);font-size:.85em;background:var(--surface);border:1px solid var(--border);padding:1px 6px;border-radius:var(--r-sm)}
+
+    /* CODE BLOCK */
+    .code-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden}
+    .code-header{padding:var(--sp3) var(--sp5);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .code-lang{font-size:var(--text-xs);font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted)}
+    .code-dots{display:flex;gap:6px}
+    .code-dot{width:10px;height:10px;border-radius:50%}
+    pre{padding:var(--sp5);overflow-x:auto;font-family:var(--font-mono);font-size:var(--text-xs);line-height:1.9;color:var(--text-muted)}
+    pre .kw{color:var(--acc)}
+    pre .fn{color:var(--blue)}
+    pre .str{color:var(--green)}
+    pre .cm{color:var(--text-faint);font-style:italic}
+    pre .dec{color:var(--orange)}
+    pre .num{color:var(--purple)}
+
+    /* RERUN SIMULATOR */
+    .sim-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden}
+    .sim-header{padding:var(--sp4) var(--sp6);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp3)}
+    .sim-title{font-size:var(--text-sm);font-weight:600;color:var(--text)}
+    .sim-controls{display:flex;gap:var(--sp2)}
+    .sim-btn{padding:var(--sp2) var(--sp4);border-radius:var(--r-full);font-size:var(--text-xs);font-weight:500;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;transition:all var(--tr)}
+    .sim-btn:hover{color:var(--text);border-color:var(--acc)}
+    .sim-btn.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
+    .sim-btn.primary:hover{background:var(--acc-h)}
+    .sim-body{display:grid;grid-template-columns:1fr 1fr;gap:0}
+    @media(max-width:600px){.sim-body{grid-template-columns:1fr}}
+    .sim-col{padding:var(--sp5)}
+    .sim-col:first-child{border-right:1px solid var(--border)}
+    .sim-col-title{font-size:var(--text-xs);font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-faint);margin-bottom:var(--sp4)}
+    .exec-line{
+      display:flex;align-items:center;gap:var(--sp3);
+      padding:var(--sp2) var(--sp3);border-radius:var(--r-md);
+      font-family:var(--font-mono);font-size:var(--text-xs);
+      color:var(--text-muted);margin-bottom:2px;
+      border:1px solid transparent;
+      transition:all .25s ease;
+    }
+    .exec-line.running{background:var(--acc-bg);border-color:var(--border-acc);color:var(--text)}
+    .exec-line.done{color:var(--green);}
+    .exec-line.cached{color:var(--orange);background:var(--orange-bg);border-color:var(--orange-border)}
+    .exec-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background .25s ease}
+    .exec-line.running .exec-dot{background:var(--acc)}
+    .exec-line.done .exec-dot{background:var(--green)}
+    .exec-line.cached .exec-dot{background:var(--orange)}
+    .sim-output{padding:var(--sp5);border-top:1px solid var(--border)}
+    .sim-output-title{font-size:var(--text-xs);font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-faint);margin-bottom:var(--sp3)}
+    .output-widget{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp4);display:flex;flex-direction:column;gap:var(--sp3)}
+    .widget-row{display:flex;align-items:center;gap:var(--sp3);font-size:var(--text-sm);color:var(--text-muted)}
+    .widget-val{font-family:var(--font-mono);font-size:var(--text-xl);color:var(--text);font-weight:700;line-height:1;transition:all .3s ease}
+    .rerun-badge{font-size:var(--text-xs);font-weight:600;padding:2px var(--sp3);border-radius:var(--r-full);background:var(--acc-bg);border:1px solid var(--border-acc);color:var(--acc);opacity:0;transition:opacity .3s ease}
+    .rerun-badge.show{opacity:1}
+    .sim-counter{font-size:var(--text-xs);color:var(--text-faint);text-align:center;padding:var(--sp3)}
+
+    /* STATE TABLE */
+    .state-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden}
+    .state-tabs{display:flex;border-bottom:1px solid var(--border)}
+    .state-tab{flex:1;padding:var(--sp3) var(--sp4);font-size:var(--text-xs);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);cursor:pointer;transition:all var(--tr);text-align:center;border-bottom:2px solid transparent}
+    .state-tab.active{color:var(--acc);border-bottom-color:var(--acc)}
+    .state-panel{padding:var(--sp6);display:none;flex-direction:column;gap:var(--sp4)}
+    .state-panel.active{display:flex}
+    .state-row{display:grid;grid-template-columns:160px 1fr;gap:var(--sp4);align-items:start;padding:var(--sp3);border-radius:var(--r-lg)}
+    .state-row:nth-child(odd){background:var(--surface-2)}
+    .state-key{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--acc);font-weight:600}
+    .state-val{font-size:var(--text-xs);color:var(--text-muted);line-height:1.65}
+    .state-val code{font-family:var(--font-mono);font-size:.9em;background:var(--bg);border:1px solid var(--border);padding:0 4px;border-radius:3px;color:var(--text-muted)}
+    .state-val strong{color:var(--text)}
+
+    /* VS REACT */
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp4)}
+    @media(max-width:600px){.compare-grid{grid-template-columns:1fr}}
+    .compare-col{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden}
+    .compare-col-header{padding:var(--sp4) var(--sp5);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:var(--sp3)}
+    .compare-logo{width:28px;height:28px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+    .compare-col-title{font-weight:600;font-size:var(--text-sm);color:var(--text)}
+    .compare-col-body{padding:var(--sp5);display:flex;flex-direction:column;gap:var(--sp3)}
+    .compare-row{display:flex;flex-direction:column;gap:var(--sp1)}
+    .compare-label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint)}
+    .compare-text{font-size:var(--text-sm);color:var(--text-muted);line-height:1.6}
+    .compare-divider{height:1px;background:var(--border);margin:var(--sp1) 0}
+
+    /* CARD GRID */
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:var(--sp4)}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--sp6);display:flex;flex-direction:column;gap:var(--sp3)}
+    .card-icon{font-size:20px}
+    .card-title{font-weight:600;font-size:var(--text-sm);color:var(--text)}
+    .card-body{font-size:var(--text-sm);color:var(--text-muted);line-height:1.65}
+
+    /* CACHE DEMO */
+    .cache-demo{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--sp6);display:flex;flex-direction:column;gap:var(--sp5)}
+    .cache-fn-row{display:flex;align-items:center;gap:var(--sp4);flex-wrap:wrap}
+    .cache-fn-card{flex:1;min-width:180px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp4);display:flex;flex-direction:column;gap:var(--sp2)}
+    .cache-fn-name{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700}
+    .cache-fn-dec{font-size:var(--text-xs);color:var(--text-faint)}
+    .cache-fn-body{font-size:var(--text-xs);color:var(--text-muted);line-height:1.6}
+    .cache-call-btn{padding:var(--sp2) var(--sp5);border-radius:var(--r-full);font-size:var(--text-xs);font-weight:600;border:1px solid var(--border-acc);background:var(--acc-bg);color:var(--acc);cursor:pointer;transition:all var(--tr)}
+    .cache-call-btn:hover{background:var(--acc);color:#fff}
+    .cache-log{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp4);min-height:80px;max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:var(--sp1)}
+    .cache-log-line{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);display:flex;align-items:center;gap:var(--sp2);animation:fadeIn .2s ease}
+    .cache-log-line .tag{padding:1px 6px;border-radius:var(--r-sm);font-size:9px;font-weight:700;letter-spacing:.05em}
+    .tag-run{background:var(--acc-bg);color:var(--acc);border:1px solid var(--border-acc)}
+    .tag-cached{background:var(--orange-bg);color:var(--orange);border:1px solid var(--orange-border)}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+    /* SERIES / TAKEAWAYS / FOOTER */
+    .series-nav{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--sp6);display:flex;flex-direction:column;gap:var(--sp4)}
+    .series-title{font-size:var(--text-xs);font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-faint)}
+    .series-items{display:flex;flex-direction:column;gap:var(--sp2)}
+    .series-item{display:flex;align-items:center;gap:var(--sp3);padding:var(--sp3) var(--sp4);border-radius:var(--r-lg);border:1px solid var(--border);font-size:var(--text-sm);color:var(--text-muted);transition:border-color var(--tr),color var(--tr)}
+    .series-item:hover{border-color:var(--border-acc);color:var(--text)}
+    .series-item.current{background:var(--acc-bg);border-color:var(--border-acc);color:var(--acc)}
+    .series-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .series-num{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);margin-left:auto}
+    .takeaways{background:var(--acc-bg);border:1px solid var(--border-acc);border-radius:var(--r-xl);padding:var(--sp8)}
+    .takeaways h3{font-family:var(--font-display);font-size:var(--text-xl);margin-bottom:var(--sp6)}
+    .takeaways ol{display:flex;flex-direction:column;gap:var(--sp4);padding-left:var(--sp5)}
+    .takeaways li{font-size:var(--text-sm);color:var(--text-muted);line-height:1.7}
+    .takeaways li strong{color:var(--text)}
+    .back-section{max-width:920px;margin-inline:auto;padding:0 var(--sp6) var(--sp16);display:flex;gap:var(--sp4);align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .back-labs{display:inline-flex;align-items:center;gap:var(--sp2);font-size:var(--text-sm);color:var(--text-muted);border:1px solid var(--border);background:var(--surface);padding:var(--sp2) var(--sp4);border-radius:var(--r-full);transition:color var(--tr),border-color var(--tr)}
+    .back-labs:hover{color:var(--text);border-color:var(--acc)}
+    footer{border-top:1px solid var(--border);padding:var(--sp8) var(--sp6)}
+    .footer-inner{max-width:920px;margin-inline:auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--sp4);font-size:var(--text-xs);color:var(--text-faint)}
+    .footer-link{color:var(--text-faint);transition:color var(--tr)}
+    .footer-link:hover{color:var(--text-muted)}
+
+    @media(max-width:640px){
+      .hero{padding-top:var(--sp16)}
+      .nav-inner,.article,.back-section{padding-inline:var(--sp4)}
+      .state-row{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="https://labs.badreddineek.com" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Labs
+    </a>
+    <div class="nav-right">
+      <span class="nav-tag">Streamlit · Python · Data Apps</span>
+      <button class="theme-btn" data-theme-toggle aria-label="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-kicker">
+    <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
+    Interactive Explainer
+  </div>
+  <h1>Streamlit <em>Under the Hood</em></h1>
+  <p class="hero-sub">You write a Python script. A user clicks a button. The entire script re-runs. That's Streamlit. But what exactly happens — line by line, state by state — is what most tutorials never explain.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-val">5</span><span class="meta-lbl">Concepts</span></div>
+    <div class="meta-sep"></div>
+    <div class="meta-item"><span class="meta-val">~7 min</span><span class="meta-lbl">Read</span></div>
+    <div class="meta-sep"></div>
+    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl">Published</span></div>
+  </div>
+</header>
+
+<main class="article">
+
+  <!-- 01 THE EXECUTION MODEL -->
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">01</span>
+      <h2 class="section-title">The execution model</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">Most web frameworks are <strong>event-driven</strong>: a button click fires a specific callback, and only that callback runs. Streamlit works differently. Every user interaction — a slider move, a button click, a text input — triggers a <strong>full re-execution of your entire Python script</strong>, from top to bottom.</p>
+      <p class="prose">This is the single most important thing to understand about Streamlit. It feels counterintuitive at first, but it's what makes Streamlit so simple to write: there's no event system, no callbacks to wire up, no component state to synchronize. The script <em>is</em> the UI.</p>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🔁</div><div class="card-title">Full re-run on interaction</div><div class="card-body">Every widget interaction reruns the script. Streamlit diffs the output and updates only what changed in the browser.</div></div>
+        <div class="card"><div class="card-icon">📜</div><div class="card-title">Script = UI declaration</div><div class="card-body">Your script is a declarative description of the UI state at the moment of execution. No templates, no JSX, just Python top-to-bottom.</div></div>
+        <div class="card"><div class="card-icon">⚡</div><div class="card-title">Smart diffing</div><div class="card-body">Streamlit's frontend React app receives a delta of changes from the server — only the widgets that changed are updated in the DOM.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 RE-RUN SIMULATOR -->
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Watch a re-run happen</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">Here's a minimal Streamlit app. Click the button or move the slider to trigger a re-run and watch which lines execute, which are cached, and what the output looks like after each run.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot" style="background:#ef4444"></div><div class="code-dot" style="background:#f59e0b"></div><div class="code-dot" style="background:#22c55e"></div></div>
+          <span class="code-lang">app.py</span>
+        </div>
+        <pre><span class="kw">import</span> streamlit <span class="kw">as</span> st
+
+<span class="dec">@st.cache_data</span>
+<span class="kw">def</span> <span class="fn">load_data</span>():
+    <span class="cm"># expensive — only runs once</span>
+    <span class="kw">return</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+
+data = <span class="fn">load_data</span>()          <span class="cm"># cached after first run</span>
+n = st.<span class="fn">slider</span>(<span class="str">"Multiplier"</span>, <span class="num">1</span>, <span class="num">10</span>, <span class="num">3</span>)
+
+<span class="kw">if</span> st.<span class="fn">button</span>(<span class="str">"Compute"</span>):
+    result = [x * n <span class="kw">for</span> x <span class="kw">in</span> data]
+    st.<span class="fn">write</span>(<span class="str">f"Result: {result}"</span>)</pre>
+      </div>
+      <div class="sim-wrap">
+        <div class="sim-header">
+          <div class="sim-title">Re-run simulator</div>
+          <div class="sim-controls">
+            <button class="sim-btn" id="sim-slider">Move slider</button>
+            <button class="sim-btn primary" id="sim-button">Click button</button>
+          </div>
+        </div>
+        <div class="sim-body">
+          <div class="sim-col">
+            <div class="sim-col-title">Execution trace</div>
+            <div id="exec-lines"></div>
+          </div>
+          <div class="sim-col">
+            <div class="sim-col-title">Session state</div>
+            <div id="state-lines"></div>
+          </div>
+        </div>
+        <div class="sim-output">
+          <div class="sim-output-title">Widget output</div>
+          <div class="output-widget">
+            <div class="widget-row">
+              <span>Multiplier:</span>
+              <span class="widget-val" id="out-multiplier">3</span>
+            </div>
+            <div class="widget-row">
+              <span>Result:</span>
+              <span class="widget-val" id="out-result">—</span>
+            </div>
+            <div class="rerun-badge" id="rerun-badge">🔁 Re-run #{n}</div>
+          </div>
+        </div>
+        <div class="sim-counter">Re-runs: <span id="rerun-count">0</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 SESSION STATE -->
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Session state</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">Since the script re-runs completely, normal Python variables are reset on every interaction. <strong><code>st.session_state</code></strong> is the escape hatch — a dictionary that persists across re-runs within a user session. It's the only memory a Streamlit app has between executions.</p>
+      <div class="state-wrap">
+        <div class="state-tabs">
+          <div class="state-tab active" data-tab="what">What it is</div>
+          <div class="state-tab" data-tab="how">How to use it</div>
+          <div class="state-tab" data-tab="patterns">Patterns</div>
+        </div>
+        <div class="state-panel active" data-panel="what">
+          <div class="state-row"><div class="state-key">type</div><div class="state-val"><strong>Dict-like object</strong> that persists across re-runs. Lives in server memory, scoped to one browser session.</div></div>
+          <div class="state-row"><div class="state-key">lifetime</div><div class="state-val">Created when the user first connects. Destroyed when the tab closes or the session times out (default: a few minutes of inactivity).</div></div>
+          <div class="state-row"><div class="state-key">access</div><div class="state-val"><code>st.session_state["key"]</code> or <code>st.session_state.key</code> — both work. Initialize with <code>.get()</code> or check with <code>"key" in st.session_state</code>.</div></div>
+          <div class="state-row"><div class="state-key">widgets</div><div class="state-val">Widgets with a <code>key=</code> argument automatically sync their value into <code>st.session_state</code> — you can read <em>and</em> write them.</div></div>
+        </div>
+        <div class="state-panel" data-panel="how">
+          <div class="state-row"><div class="state-key">initialize</div><div class="state-val"><code>if "count" not in st.session_state: st.session_state.count = 0</code> — always guard initialization to avoid overwriting on re-run.</div></div>
+          <div class="state-row"><div class="state-key">increment</div><div class="state-val"><code>st.session_state.count += 1</code> — modify inside a callback or directly in the script body after checking the trigger widget.</div></div>
+          <div class="state-row"><div class="state-key">callbacks</div><div class="state-val">Use <code>on_change=</code> / <code>on_click=</code> to run a function <strong>before</strong> the re-run. State updates inside callbacks are applied first, then the script reruns.</div></div>
+          <div class="state-row"><div class="state-key">reset</div><div class="state-val"><code>del st.session_state["key"]</code> or <code>st.session_state.clear()</code> — use sparingly; prefer explicit resets over full clears.</div></div>
+        </div>
+        <div class="state-panel" data-panel="patterns">
+          <div class="state-row"><div class="state-key">counter</div><div class="state-val">Classic: <code>st.session_state.count += 1</code> on button click — persists the count across re-runs without a database.</div></div>
+          <div class="state-row"><div class="state-key">multi-step form</div><div class="state-val">Store <code>st.session_state.step</code> (0, 1, 2…) and conditionally render sections. Navigate forward/back by updating step.</div></div>
+          <div class="state-row"><div class="state-key">chat history</div><div class="state-val"><code>st.session_state.messages = []</code> then append on each exchange. Render with <code>st.chat_message()</code> in a loop.</div></div>
+          <div class="state-row"><div class="state-key">toggled panels</div><div class="state-val">Store <code>st.session_state.show_advanced = False</code>; flip on button click. Conditionally render the panel.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 CACHING -->
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Caching — the performance lever</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">Since the entire script re-runs on every interaction, expensive operations — loading a large CSV, calling an API, training a model — would run on <em>every single re-run</em>. <strong>Caching</strong> is Streamlit's solution: decorators that memoize function output so it's only recomputed when the inputs change.</p>
+      <div class="cache-demo">
+        <div class="cache-fn-row">
+          <div class="cache-fn-card">
+            <div class="cache-fn-name" style="color:var(--acc)">@st.cache_data</div>
+            <div class="cache-fn-dec">For data objects (DataFrames, lists, dicts)</div>
+            <div class="cache-fn-body">Serializes and caches the return value. Each session gets its own copy. Safe for mutable objects.</div>
+          </div>
+          <div class="cache-fn-card">
+            <div class="cache-fn-name" style="color:var(--blue)">@st.cache_resource</div>
+            <div class="cache-fn-dec">For global resources (DB connections, models)</div>
+            <div class="cache-fn-body">Caches the object itself — shared across all sessions. Use for heavy singletons like ML models or DB connectors.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--sp4);flex-wrap:wrap">
+          <button class="cache-call-btn" id="call-cached">Call load_data() ×3</button>
+          <button class="cache-call-btn" id="call-uncached" style="border-color:var(--blue-border);color:var(--blue);background:var(--blue-bg)">Call without cache ×3</button>
+          <button class="sim-btn" id="clear-cache-log">Clear log</button>
+        </div>
+        <div class="cache-log" id="cache-log">
+          <div class="cache-log-line" style="color:var(--text-faint);font-style:italic">Click a button to simulate function calls…</div>
+        </div>
+      </div>
+      <p class="prose">Cache invalidation happens automatically when the <strong>function's arguments change</strong>, when the <strong>source code changes</strong>, or when you explicitly call <code>st.cache_data.clear()</code>. You can also set a <code>ttl=</code> (time-to-live) to expire cache entries after a set duration.</p>
+    </div>
+  </section>
+
+  <!-- 05 VS REACT -->
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Streamlit vs React</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">Streamlit's architecture looks nothing like a standard React app — yet internally, its frontend <em>is</em> built in React. Understanding the difference clarifies why Streamlit is fast to write but has real architectural tradeoffs at scale.</p>
+      <div class="compare-grid">
+        <div class="compare-col">
+          <div class="compare-col-header">
+            <div class="compare-logo" style="background:var(--acc-bg);color:var(--acc)">St</div>
+            <div class="compare-col-title">Streamlit</div>
+          </div>
+          <div class="compare-col-body">
+            <div class="compare-row"><div class="compare-label">Rendering model</div><div class="compare-text">Full script re-run on every interaction. Server-side Python generates a delta, pushed to frontend via WebSocket.</div></div>
+            <div class="compare-divider"></div>
+            <div class="compare-row"><div class="compare-label">State</div><div class="compare-text"><code>st.session_state</code> — server-side, per-session dict. No client-side state management needed.</div></div>
+            <div class="compare-divider"></div>
+            <div class="compare-row"><div class="compare-label">Interactivity</div><div class="compare-text">Widgets declaratively defined in Python. All logic lives in the script.</div></div>
+            <div class="compare-divider"></div>
+            <div class="compare-row"><div class="compare-label">Best for</div><div class="compare-text">Internal data tools, ML demos, rapid prototyping, dashboards with heavy Python backends.</div></div>
+          </div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-header">
+            <div class="compare-logo" style="background:var(--blue-bg);color:var(--blue)">Re</div>
+            <div class="compare-col-title">React</div>
+          </div>
+          <div class="compare-col-body">
+            <div class="compare-row"><div class="compare-label">Rendering model</div><div class="compare-text">Component-level re-renders triggered by state/prop changes. Virtual DOM diffing. No server round-trip for UI updates.</div></div>
+            <div class="compare-divider"></div>
+            <div class="compare-row"><div class="compare-label">State</div><div class="compare-text">useState, useReducer, Context, Redux — client-side, granular, explicit. Full control, more boilerplate.</div></div>
+            <div class="compare-divider"></div>
+            <div class="compare-row"><div class="compare-label">Interactivity</div><div class="compare-text">Event handlers on individual components. Highly granular control over what updates and when.</div></div>
+            <div class="compare-divider"></div>
+            <div class="compare-row"><div class="compare-label">Best for</div><div class="compare-text">Production web apps, complex UIs, high-traffic public products, real-time experiences.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERIES NAV -->
+  <section class="section">
+    <div class="section-label"><span class="section-num">06</span><h2 class="section-title">More from Labs</h2></div>
+    <div class="section-body">
+      <div class="series-nav">
+        <div class="series-title">Labs — all articles</div>
+        <div class="series-items">
+          <a href="../forecasting-explained" class="series-item"><div class="series-dot" style="background:#0f766e"></div>Forecasting Explained<span class="series-num">01</span></a>
+          <a href="../rag-under-the-hood" class="series-item"><div class="series-dot" style="background:#a78bfa"></div>RAG Under the Hood<span class="series-num">02</span></a>
+          <a href="../the-embedding-space" class="series-item"><div class="series-dot" style="background:#fbbf24"></div>The Embedding Space<span class="series-num">03</span></a>
+          <a href="../attention-visualized" class="series-item"><div class="series-dot" style="background:#38bdf8"></div>Attention, Visualized<span class="series-num">04</span></a>
+          <a href="../how-a-model-learns" class="series-item"><div class="series-dot" style="background:#4ade80"></div>How a Model Learns<span class="series-num">05</span></a>
+          <div class="series-item current"><div class="series-dot" style="background:#fb7185"></div>Streamlit Under the Hood<span class="series-num">06</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAKEAWAYS -->
+  <section class="section">
+    <div class="section-label"><span class="section-num">07</span><h2 class="section-title">What to remember</h2></div>
+    <div class="section-body">
+      <div class="takeaways">
+        <h3>Streamlit in five sentences.</h3>
+        <ol>
+          <li><strong>Every interaction triggers a full script re-run</strong> — this is Streamlit's core contract, not a bug.</li>
+          <li><strong>Widgets are declarative</strong>: their position in the script determines their order in the UI, their return value is their current state.</li>
+          <li><strong><code>st.session_state</code></strong> is the only memory that survives a re-run — use it for counters, form steps, chat history, and toggle states.</li>
+          <li><strong><code>@st.cache_data</code> and <code>@st.cache_resource</code></strong> prevent expensive functions from re-running on every interaction.</li>
+          <li><strong>Streamlit trades control for speed</strong>: it's the fastest path from a Python idea to a shareable data app, at the cost of full frontend flexibility.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="back-section">
+  <a href="https://labs.badreddineek.com" class="back-labs">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to Labs
+  </a>
+  <span style="font-size:var(--text-xs);color:var(--text-faint)">By <a href="https://badreddineek.com" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:3px" target="_blank" rel="noopener noreferrer">Badreddine EK</a></span>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span>labs.badreddineek.com · Streamlit Under the Hood</span>
+    <div style="display:flex;gap:1rem">
+      <a href="https://github.com/BadreddineEK/labs" class="footer-link" target="_blank" rel="noopener noreferrer">Source</a>
+      <a href="https://linkedin.com/in/badreddine-el-khamlichi" class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// THEME
+const html = document.documentElement;
+const toggleBtn = document.querySelector('[data-theme-toggle]');
+let theme = 'dark';
+const sunSVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+const moonSVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+function setIcon(t) { if (toggleBtn) toggleBtn.innerHTML = t === 'dark' ? sunSVG : moonSVG; }
+setIcon(theme);
+if (toggleBtn) toggleBtn.addEventListener('click', () => {
+  theme = theme === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', theme);
+  setIcon(theme);
+});
+
+// ── RE-RUN SIMULATOR ──
+const EXEC_LINES = [
+  { code: 'import streamlit as st', cached: false },
+  { code: '@st.cache_data — load_data()', cached: true },
+  { code: 'data = load_data()', cached: true },
+  { code: 'n = st.slider("Multiplier", …)', cached: false },
+  { code: 'if st.button("Compute"):', cached: false },
+  { code: '  result = [x * n for x in data]', cached: false, conditional: true },
+  { code: '  st.write(f"Result: {result}")', cached: false, conditional: true },
+];
+
+let rerunCount = 0;
+let multiplier = 3;
+let buttonPressed = false;
+let simRunning = false;
+
+function renderExecLines(phase, buttonActive, cached) {
+  const container = document.getElementById('exec-lines');
+  container.innerHTML = EXEC_LINES.map((line, i) => {
+    let cls = '';
+    const isConditional = line.conditional;
+    const show = !isConditional || buttonActive;
+    if (!show) return '';
+    if (phase === 'idle') cls = '';
+    else if (phase === 'running') cls = i <= 2 ? 'done' : (i === 3 ? 'running' : '');
+    else if (phase === 'done') {
+      if (line.cached && cached) cls = 'cached';
+      else cls = 'done';
+    }
+    return `<div class="exec-line ${cls}"><div class="exec-dot"></div>${line.code}</div>`;
+  }).join('');
+}
+
+function renderStateLines(mult, btnActive) {
+  const container = document.getElementById('state-lines');
+  container.innerHTML = `
+    <div class="exec-line done"><div class="exec-dot"></div>n = ${mult}</div>
+    <div class="exec-line ${btnActive ? 'done' : ''}"><div class="exec-dot"></div>button_clicked = ${btnActive}</div>
+    <div class="exec-line"><div class="exec-dot"></div>rerun_count = ${rerunCount}</div>
+  `;
+}
+
+function runSimulation(triggerType) {
+  if (simRunning) return;
+  simRunning = true;
+  rerunCount++;
+  document.getElementById('rerun-count').textContent = rerunCount;
+  if (triggerType === 'slider') multiplier = Math.floor(Math.random() * 9) + 1;
+  const btnActive = triggerType === 'button';
+  if (btnActive) buttonPressed = true;
+
+  const badge = document.getElementById('rerun-badge');
+  badge.textContent = `🔁 Re-run #${rerunCount}`;
+  badge.classList.remove('show');
+
+  // Phase 1: running
+  renderExecLines('running', btnActive, false);
+  renderStateLines(multiplier, btnActive);
+  document.getElementById('out-multiplier').textContent = '…';
+
+  setTimeout(() => {
+    // Phase 2: done
+    renderExecLines('done', btnActive, rerunCount > 1);
+    const result = btnActive ? [1,2,3,4,5].map(x => x * multiplier).join(', ') : '—';
+    document.getElementById('out-multiplier').textContent = multiplier;
+    document.getElementById('out-result').textContent = btnActive ? `[${result}]` : '—';
+    badge.classList.add('show');
+    simRunning = false;
+  }, 800);
+}
+
+document.getElementById('sim-slider').addEventListener('click', () => runSimulation('slider'));
+document.getElementById('sim-button').addEventListener('click', () => runSimulation('button'));
+
+// Init
+renderExecLines('idle', false, false);
+renderStateLines(3, false);
+
+// ── STATE TABS ──
+document.querySelectorAll('.state-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.state-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelector(`[data-panel="${tab.dataset.tab}"]`).classList.add('active');
+  });
+});
+
+// ── CACHE DEMO ──
+let callCount = 0;
+const cacheLog = document.getElementById('cache-log');
+let cachedResult = null;
+
+function addLog(text, type) {
+  if (callCount === 1) cacheLog.innerHTML = '';
+  const line = document.createElement('div');
+  line.className = 'cache-log-line';
+  const tag = document.createElement('span');
+  tag.className = `tag tag-${type}`;
+  tag.textContent = type === 'run' ? 'RAN' : 'CACHED';
+  const txt = document.createElement('span');
+  txt.textContent = text;
+  line.appendChild(tag);
+  line.appendChild(txt);
+  cacheLog.appendChild(line);
+  cacheLog.scrollTop = cacheLog.scrollHeight;
+}
+
+document.getElementById('call-cached').addEventListener('click', () => {
+  callCount++;
+  const t = Date.now();
+  if (!cachedResult) {
+    setTimeout(() => {
+      cachedResult = [1,2,3,4,5];
+      addLog(`load_data() → [1,2,3,4,5]  (${Math.round(Math.random()*80+120)}ms)`, 'run');
+    }, 150);
+    setTimeout(() => addLog('load_data() → [1,2,3,4,5]  (0ms)', 'cached'), 350);
+    setTimeout(() => addLog('load_data() → [1,2,3,4,5]  (0ms)', 'cached'), 500);
+  } else {
+    addLog('load_data() → [1,2,3,4,5]  (0ms)', 'cached');
+    setTimeout(() => addLog('load_data() → [1,2,3,4,5]  (0ms)', 'cached'), 150);
+    setTimeout(() => addLog('load_data() → [1,2,3,4,5]  (0ms)', 'cached'), 280);
+  }
+});
+
+document.getElementById('call-uncached').addEventListener('click', () => {
+  callCount++;
+  [120, 280, 430].forEach((delay, i) => {
+    setTimeout(() => {
+      addLog(`load_data() → [1,2,3,4,5]  (${Math.round(Math.random()*80+100)}ms)`, 'run');
+    }, delay);
+  });
+});
+
+document.getElementById('clear-cache-log').addEventListener('click', () => {
+  cachedResult = null; callCount = 0;
+  cacheLog.innerHTML = '<div class="cache-log-line" style="color:var(--text-faint);font-style:italic">Click a button to simulate function calls…</div>';
+});
+</script>
+</body>
+</html>

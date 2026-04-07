@@ -43,5 +43,14 @@
     "date": "2026-04-07",
     "color": "#16a34a",
     "status": "live"
+  },
+  {
+    "slug": "streamlit-under-the-hood",
+    "title": "Streamlit Under the Hood",
+    "description": "What really happens when you run a Streamlit app — the execution model, re-runs, session state, caching, and how it compares to React.",
+    "tags": ["Streamlit", "Python", "Data Apps"],
+    "date": "2026-04-07",
+    "color": "#e11d48",
+    "status": "live"
   }
 ]
