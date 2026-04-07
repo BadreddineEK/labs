@@ -474,12 +474,7 @@
       </div>
       <div class="hero-divider"></div>
       <div class="hero-stat">
-        <span class="hero-stat-value" id="stat-live">0</span>
-        <span class="hero-stat-label">Live</span>
-      </div>
-      <div class="hero-divider"></div>
-      <div class="hero-stat">
-        <span class="hero-stat-value" id="stat-tags">0</span>
+        <span class="hero-stat-value" id="stat-categories">0</span>
         <span class="hero-stat-label">Topics</span>
       </div>
     </div>
@@ -535,20 +530,18 @@
 
       // Stats
       const total = labs.length;
-      const live = labs.filter(l => l.status === 'live').length;
-      const allTags = [...new Set(labs.flatMap(l => l.tags || []))];
+      const CATEGORY_ORDER = ['Foundations', 'LLMs', 'Data Science', 'Engineering'];
+      const seenCats = [...new Set(labs.map(l => l.category).filter(Boolean))];
+      const categories = [...CATEGORY_ORDER.filter(c => seenCats.includes(c)), ...seenCats.filter(c => !CATEGORY_ORDER.includes(c))];
       document.getElementById('stat-total').textContent = total;
-      document.getElementById('stat-live').textContent = live;
-      document.getElementById('stat-tags').textContent = allTags.length;
-      document.getElementById('section-count').textContent = `${total} piece${total !== 1 ? 's' : ''}`;
+      document.getElementById('stat-categories').textContent = categories.length;
 
       // Filter bar
       const filterBar = document.getElementById('filter-bar');
-      const filters = ['All', ...allTags];
       let activeFilter = 'All';
 
       function renderFilters() {
-        filterBar.innerHTML = filters.map(f =>
+        filterBar.innerHTML = ['All', ...categories].map(f =>
           `<button class="filter-btn${f === activeFilter ? ' active' : ''}" data-filter="${f}">${f}</button>`
         ).join('');
         filterBar.querySelectorAll('.filter-btn').forEach(btn => {
@@ -565,7 +558,7 @@
         const empty = document.getElementById('empty-state');
         const filtered = activeFilter === 'All'
           ? labs
-          : labs.filter(l => (l.tags || []).includes(activeFilter));
+          : labs.filter(l => l.category === activeFilter);
 
         if (filtered.length === 0) {
           grid.innerHTML = '';
@@ -573,6 +566,8 @@
           return;
         }
         empty.style.display = 'none';
+        const countLabel = filtered.length + ' piece' + (filtered.length !== 1 ? 's' : '') + (activeFilter !== 'All' ? ' · ' + activeFilter : '');
+        document.getElementById('section-count').textContent = countLabel;
 
         grid.innerHTML = filtered.map(lab => {
           const isLive = lab.status === 'live';
@@ -590,11 +585,9 @@
               </div>
               <div class="card-footer">
                 <span class="card-date">${date}</span>
-                <span class="card-status-badge ${lab.status}">
-                  <span class="status-dot"></span>
-                  ${isLive ? 'Live' : 'Coming soon'}
-                </span>
-                ${isLive ? '<span class="card-arrow">→</span>' : ''}
+                ${isLive
+                  ? '<span class="card-arrow">→</span>'
+                  : '<span class="card-status-badge coming-soon"><span class="status-dot"></span>Coming soon</span>'}
               </div>
             </a>`;
         }).join('');

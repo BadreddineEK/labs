@@ -4,10 +4,103 @@
     "title": "LLM Agent Anatomy",
     "description": "A bare LLM answers once and stops. An agent reasons, picks tools, observes results, and loops — until the task is done. The full ReAct loop, visualized.",
     "tags": ["LLM", "Agents", "ReAct"],
+    "category": "LLMs",
     "date": "2026-04-07",
     "color": "#7c3aed",
     "status": "live"
   },
+  {
+    "slug": "forecasting-explained",
+    "title": "Forecasting Explained",
+    "description": "What actually happens when a model reads your data and draws a line into the future. Trend, seasonality, noise, ruptures — visualized.",
+    "tags": ["Time Series", "ML", "Data Science"],
+    "category": "Data Science",
+    "date": "2026-04-02",
+    "color": "#0f766e",
+    "status": "live"
+  },
+  {
+    "slug": "rag-under-the-hood",
+    "title": "RAG Under the Hood",
+    "description": "How Retrieval-Augmented Generation actually works: chunking, embeddings, vector search, reranking, and generation — step by step, visualized.",
+    "tags": ["LLM", "AI", "RAG"],
+    "category": "LLMs",
+    "date": "2026-04-07",
+    "color": "#7c3aed",
+    "status": "live"
+  },
+  {
+    "slug": "the-embedding-space",
+    "title": "The Embedding Space",
+    "description": "How a model turns words into numbers — and why the geometry of that space is the foundation of all modern AI. Visualized, interactive.",
+    "tags": ["Embeddings", "NLP", "AI"],
+    "category": "Foundations",
+    "date": "2026-04-07",
+    "color": "#d97706",
+    "status": "live"
+  },
+  {
+    "slug": "attention-visualized",
+    "title": "Attention, Visualized",
+    "description": "What the attention mechanism actually does — Query, Key, Value explained intuitively, with an interactive heatmap you can explore token by token.",
+    "tags": ["Transformers", "Attention", "AI"],
+    "category": "Foundations",
+    "date": "2026-04-07",
+    "color": "#0ea5e9",
+    "status": "live"
+  },
+  {
+    "slug": "how-a-model-learns",
+    "title": "How a Model Learns",
+    "description": "Loss landscapes, gradient descent, backpropagation — why a neural network improves with every step, visualized interactively.",
+    "tags": ["Training", "Backprop", "Deep Learning"],
+    "category": "Foundations",
+    "date": "2026-04-07",
+    "color": "#16a34a",
+    "status": "live"
+  },
+  {
+    "slug": "streamlit-under-the-hood",
+    "title": "Streamlit Under the Hood",
+    "description": "What really happens when you run a Streamlit app — the execution model, re-runs, session state, caching, and how it compares to React.",
+    "tags": ["Streamlit", "Python", "Data Apps"],
+    "category": "Engineering",
+    "date": "2026-04-07",
+    "color": "#e11d48",
+    "status": "live"
+  },
+  {
+    "slug": "overfitting-explained",
+    "title": "Overfitting & Regularization",
+    "description": "Why models memorize instead of learn — and how regularization, dropout, and early stopping fix it. Bias-variance trade-off, visualized interactively.",
+    "tags": ["ML", "Training", "Generalization"],
+    "category": "Foundations",
+    "date": "2026-04-07",
+    "color": "#dc2626",
+    "status": "live"
+  },
+  {
+    "slug": "transformer-architecture",
+    "title": "The Transformer Architecture",
+    "description": "Every modern LLM is built on one 2017 paper. Here is the full architecture — self-attention, multi-head attention, encoder vs decoder — block by block, interactive.",
+    "tags": ["Transformers", "Deep Learning", "LLM"],
+    "category": "Foundations",
+    "date": "2026-04-07",
+    "color": "#0369a1",
+    "status": "live"
+  },
+  {
+    "slug": "fine-tuning-explained",
+    "title": "Fine-Tuning Explained",
+    "description": "Pre-training gives a model knowledge. Fine-tuning gives it a job. From full fine-tuning to LoRA and RLHF — how we adapt LLMs to specific tasks, visualized.",
+    "tags": ["Fine-Tuning", "LLM", "LoRA"],
+    "category": "LLMs",
+    "date": "2026-04-07",
+    "color": "#c2410c",
+    "status": "live"
+  }
+]
+
   {
     "slug": "forecasting-explained",
     "title": "Forecasting Explained",
