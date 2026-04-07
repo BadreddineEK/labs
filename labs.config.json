@@ -1,5 +1,14 @@
 [
   {
+    "slug": "llm-agent-anatomy",
+    "title": "LLM Agent Anatomy",
+    "description": "A bare LLM answers once and stops. An agent reasons, picks tools, observes results, and loops — until the task is done. The full ReAct loop, visualized.",
+    "tags": ["LLM", "Agents", "ReAct"],
+    "date": "2026-04-07",
+    "color": "#7c3aed",
+    "status": "live"
+  },
+  {
     "slug": "forecasting-explained",
     "title": "Forecasting Explained",
     "description": "What actually happens when a model reads your data and draws a line into the future. Trend, seasonality, noise, ruptures — visualized.",
