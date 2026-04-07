@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Agent Anatomy — Labs by Badreddine EK</title>
+  <meta name="description" content="How a LLM agent actually works: the ReAct loop, tools, memory and planning — visualized step by step." />
+  <meta property="og:title" content="LLM Agent Anatomy" />
+  <meta property="og:description" content="How a LLM agent thinks, plans and acts — visualized step by step." />
+  <meta property="og:url" content="https://labs.badreddineek.com/llm-agent-anatomy" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300..600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+      --text-3xl: clamp(2.5rem, 1rem + 4vw, 5rem);
+      --sp1:.25rem;--sp2:.5rem;--sp3:.75rem;--sp4:1rem;--sp5:1.25rem;
+      --sp6:1.5rem;--sp8:2rem;--sp10:2.5rem;--sp12:3rem;--sp16:4rem;--sp24:6rem;
+      --r-sm:.375rem;--r-md:.5rem;--r-lg:.75rem;--r-xl:1rem;--r-full:9999px;
+      --tr:180ms cubic-bezier(.16,1,.3,1);
+    }
+    :root,[data-theme="light"] {
+      --bg:#f7f6f2; --surface:#f0ede8; --surface-2:#faf9f7;
+      --border:rgba(40,37,29,.1); --border-accent:rgba(124,58,237,.2);
+      --text:#1a1814; --text-muted:#6b6a65; --text-faint:#b0afa9;
+      --accent:#7c3aed; --accent-h:#6d28d9; --accent-bg:rgba(124,58,237,.07);
+      --teal:#0f766e; --teal-bg:rgba(15,118,110,.07);
+      --orange:#c2410c; --orange-bg:rgba(194,65,12,.07);
+      --sh:0 2px 12px rgba(40,37,29,.07); --shh:0 8px 28px rgba(40,37,29,.11);
+    }
+    [data-theme="dark"] {
+      --bg:#0d0c0b; --surface:#171614; --surface-2:#1e1d1b;
+      --border:rgba(255,255,255,.07); --border-accent:rgba(167,139,250,.22);
+      --text:#e8e6e2; --text-muted:#78766f; --text-faint:#474441;
+      --accent:#a78bfa; --accent-h:#c4b5fd; --accent-bg:rgba(167,139,250,.08);
+      --teal:#2dd4bf; --teal-bg:rgba(45,212,191,.07);
+      --orange:#fb923c; --orange-bg:rgba(251,146,60,.07);
+      --sh:0 2px 12px rgba(0,0,0,.35); --shh:0 8px 28px rgba(0,0,0,.5);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-padding-top:5rem}
+    body{font-family:var(--font-body);font-size:var(--text-base);color:var(--text);background:var(--bg);line-height:1.65;transition:background var(--tr),color var(--tr)}
+    img,svg{display:block;max-width:100%}
+    p,li{max-width:68ch;text-wrap:pretty}
+    h1,h2,h3{text-wrap:balance;line-height:1.15}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+    nav.topnav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .nav-inner{max-width:860px;margin-inline:auto;padding:var(--sp3) var(--sp6);display:flex;align-items:center;justify-content:space-between;gap:var(--sp4)}
+    .nav-back{display:flex;align-items:center;gap:var(--sp2);font-size:var(--text-sm);color:var(--text-muted);transition:color var(--tr)}
+    .nav-back:hover{color:var(--text)}
+    .nav-back svg{flex-shrink:0}
+    .nav-right{display:flex;align-items:center;gap:var(--sp4)}
+    .nav-tag{font-size:var(--text-xs);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-bg);padding:2px var(--sp3);border-radius:var(--r-full);border:1px solid var(--border-accent)}
+    .theme-btn{width:34px;height:34px;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:color var(--tr),background var(--tr)}
+    .theme-btn:hover{color:var(--text);background:var(--surface-2)}
+
+    .hero{max-width:860px;margin-inline:auto;padding:var(--sp24) var(--sp6) var(--sp16)}
+    .hero-kicker{display:inline-flex;align-items:center;gap:var(--sp2);font-size:var(--text-xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:var(--sp6)}
+    .hero h1{font-family:var(--font-display);font-size:var(--text-3xl);letter-spacing:-.025em;line-height:1.05;margin-bottom:var(--sp6)}
+    .hero h1 em{font-style:italic;color:var(--text-muted)}
+    .hero-sub{font-size:var(--text-lg);color:var(--text-muted);max-width:54ch;line-height:1.65;margin-bottom:var(--sp10)}
+    .hero-meta{display:flex;gap:var(--sp6);flex-wrap:wrap}
+    .meta-item{display:flex;flex-direction:column;gap:2px}
+    .meta-val{font-family:var(--font-display);font-size:var(--text-xl);line-height:1;color:var(--text)}
+    .meta-lbl{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint)}
+    .meta-sep{width:1px;height:32px;background:var(--border);align-self:center}
+
+    .article{max-width:860px;margin-inline:auto;padding:0 var(--sp6) var(--sp24)}
+    .section{margin-bottom:var(--sp16)}
+    .section-label{display:flex;align-items:center;gap:var(--sp3);margin-bottom:var(--sp8);padding-bottom:var(--sp4);border-bottom:1px solid var(--border)}
+    .section-num{font-family:var(--font-display);font-size:var(--text-xl);color:var(--accent);line-height:1;opacity:.4}
+    .section-title{font-family:var(--font-display);font-size:var(--text-xl);letter-spacing:-.015em}
+    .section-body{display:flex;flex-direction:column;gap:var(--sp6)}
+    .prose{font-size:var(--text-base);color:var(--text-muted);line-height:1.75}
+    .prose strong{color:var(--text);font-weight:600}
+    .prose code{font-family:ui-monospace,monospace;font-size:.88em;background:var(--surface);border:1px solid var(--border);padding:1px 5px;border-radius:var(--r-sm)}
+
+    .insights{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:var(--sp4)}
+    .insight-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--sp6);display:flex;flex-direction:column;gap:var(--sp3)}
+    .insight-icon{font-size:22px}
+    .insight-title{font-weight:600;font-size:var(--text-sm);color:var(--text)}
+    .insight-body{font-size:var(--text-sm);color:var(--text-muted);line-height:1.65}
+
+    .loop-wrap{position:relative;padding:var(--sp10) var(--sp4)}
+    .loop-ring{position:relative;width:300px;height:300px;margin:0 auto}
+    .loop-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90px;height:90px;border-radius:50%;background:var(--accent-bg);border:2px solid var(--border-accent);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center}
+    .loop-center-label{font-size:var(--text-xs);font-weight:600;color:var(--accent);letter-spacing:.04em;text-transform:uppercase}
+    .loop-center-sub{font-size:9px;color:var(--text-faint);letter-spacing:.03em}
+    .loop-node{position:absolute;width:80px;height:80px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;cursor:pointer;transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr);border:2px solid var(--border);background:var(--surface)}
+    .loop-node:hover,.loop-node.active{box-shadow:var(--shh)}
+    .loop-node.active{border-color:var(--accent)}
+    .loop-node[data-color="teal"].active{border-color:var(--teal)}
+    .loop-node[data-color="orange"].active{border-color:var(--orange)}
+    .loop-node-icon{font-size:20px}
+    .loop-node-name{font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted)}
+    .loop-node[data-node="reason"]{top:0;left:50%;transform:translateX(-50%)}
+    .loop-node[data-node="reason"]:hover,.loop-node[data-node="reason"].active{transform:translateX(-50%) scale(1.08)}
+    .loop-node[data-node="act"]{top:50%;right:0;transform:translateY(-50%)}
+    .loop-node[data-node="act"]:hover,.loop-node[data-node="act"].active{transform:translateY(-50%) scale(1.08)}
+    .loop-node[data-node="observe"]{bottom:0;left:50%;transform:translateX(-50%)}
+    .loop-node[data-node="observe"]:hover,.loop-node[data-node="observe"].active{transform:translateX(-50%) scale(1.08)}
+    .loop-node[data-node="plan"]{top:50%;left:0;transform:translateY(-50%)}
+    .loop-node[data-node="plan"]:hover,.loop-node[data-node="plan"].active{transform:translateY(-50%) scale(1.08)}
+    .loop-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+    .loop-arrow{fill:none;stroke:var(--border);stroke-width:1.5;stroke-dasharray:4 3;marker-end:url(#arrow)}
+
+    .node-detail{background:var(--surface);border:1px solid var(--border-accent);border-radius:var(--r-xl);padding:var(--sp8);transition:opacity .22s ease}
+    .node-detail h3{font-family:var(--font-display);font-size:var(--text-lg);margin-bottom:var(--sp3)}
+    .node-detail .node-desc{font-size:var(--text-sm);color:var(--text-muted);line-height:1.75;margin-bottom:var(--sp6)}
+    .node-thought{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp5);font-family:ui-monospace,monospace;font-size:var(--text-xs);line-height:1.8;color:var(--text-muted);display:flex;flex-direction:column;gap:var(--sp2)}
+    .thought-label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint)}
+    .thought-reason{color:var(--accent)}
+    .thought-action{color:var(--teal)}
+    .thought-obs{color:var(--orange)}
+
+    .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:var(--sp3)}
+    .tool-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--sp5);display:flex;align-items:flex-start;gap:var(--sp3);transition:border-color var(--tr),background var(--tr);cursor:default}
+    .tool-card:hover{border-color:var(--border-accent);background:var(--accent-bg)}
+    .tool-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+    .tool-name{font-size:var(--text-sm);font-weight:600;color:var(--text);margin-bottom:2px}
+    .tool-desc{font-size:var(--text-xs);color:var(--text-muted);line-height:1.55}
+
+    .memory-stack{display:flex;flex-direction:column;gap:var(--sp3)}
+    .mem-row{display:flex;align-items:center;gap:var(--sp4);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp4) var(--sp5)}
+    .mem-badge{width:34px;height:34px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .mem-badge.short{background:var(--accent-bg)}
+    .mem-badge.long{background:var(--teal-bg)}
+    .mem-badge.episodic{background:var(--orange-bg)}
+    .mem-info{flex:1}
+    .mem-title{font-size:var(--text-sm);font-weight:600;color:var(--text);margin-bottom:2px}
+    .mem-body{font-size:var(--text-xs);color:var(--text-muted);line-height:1.5}
+    .mem-tag{font-size:9px;text-transform:uppercase;letter-spacing:.07em;padding:2px var(--sp2);border-radius:var(--r-full);border:1px solid var(--border);color:var(--text-faint);flex-shrink:0}
+
+    .trace-wrap{display:flex;flex-direction:column;gap:0}
+    .trace-step{display:flex;gap:var(--sp4);padding:var(--sp4) 0;position:relative}
+    .trace-step:not(:last-child)::after{content:'';position:absolute;left:16px;top:42px;width:1px;height:calc(100% - 16px);background:var(--border)}
+    .trace-dot{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid var(--border);background:var(--surface);z-index:1}
+    .trace-dot.reason{border-color:var(--accent);background:var(--accent-bg)}
+    .trace-dot.act{border-color:var(--teal);background:var(--teal-bg)}
+    .trace-dot.obs{border-color:var(--orange);background:var(--orange-bg)}
+    .trace-dot.final{border-color:var(--text-muted);background:var(--surface-2)}
+    .trace-content{flex:1;padding-top:4px}
+    .trace-label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+    .trace-label.reason{color:var(--accent)}
+    .trace-label.act{color:var(--teal)}
+    .trace-label.obs{color:var(--orange)}
+    .trace-label.final{color:var(--text-muted)}
+    .trace-text{font-size:var(--text-sm);color:var(--text-muted);line-height:1.6;font-family:ui-monospace,monospace}
+
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp4)}
+    @media(max-width:560px){.compare-grid{grid-template-columns:1fr}}
+    .compare-col{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--sp6)}
+    .compare-col.agent{border-color:var(--border-accent)}
+    .compare-head{font-family:var(--font-display);font-size:var(--text-lg);margin-bottom:var(--sp4);color:var(--text)}
+    .compare-head.agent{color:var(--accent)}
+    .compare-list{display:flex;flex-direction:column;gap:var(--sp3)}
+    .compare-item{display:flex;align-items:flex-start;gap:var(--sp2);font-size:var(--text-sm);color:var(--text-muted);line-height:1.55}
+    .compare-item::before{content:'·';color:var(--text-faint);flex-shrink:0;margin-top:1px}
+    .compare-item.agent::before{content:'✦';color:var(--accent);font-size:10px}
+
+    .takeaways{background:var(--accent-bg);border:1px solid var(--border-accent);border-radius:var(--r-xl);padding:var(--sp8)}
+    .takeaways h3{font-family:var(--font-display);font-size:var(--text-xl);margin-bottom:var(--sp6)}
+    .takeaways ol{display:flex;flex-direction:column;gap:var(--sp4);padding-left:var(--sp5)}
+    .takeaways li{font-size:var(--text-sm);color:var(--text-muted);line-height:1.7}
+    .takeaways li strong{color:var(--text)}
+
+    .back-section{max-width:860px;margin-inline:auto;padding:0 var(--sp6) var(--sp16);display:flex;gap:var(--sp4);align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .back-labs{display:inline-flex;align-items:center;gap:var(--sp2);font-size:var(--text-sm);color:var(--text-muted);border:1px solid var(--border);background:var(--surface);padding:var(--sp2) var(--sp4);border-radius:var(--r-full);transition:color var(--tr),border-color var(--tr)}
+    .back-labs:hover{color:var(--text);border-color:var(--accent)}
+    .back-label{font-size:var(--text-xs);color:var(--text-faint)}
+    footer{border-top:1px solid var(--border);padding:var(--sp8) var(--sp6)}
+    .footer-inner{max-width:860px;margin-inline:auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--sp4);font-size:var(--text-xs);color:var(--text-faint)}
+    .footer-link{color:var(--text-faint);transition:color var(--tr)}
+    .footer-link:hover{color:var(--text-muted)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .trace-step{animation:fadeUp .35s cubic-bezier(.16,1,.3,1) both}
+    .trace-step:nth-child(1){animation-delay:.05s}.trace-step:nth-child(2){animation-delay:.15s}.trace-step:nth-child(3){animation-delay:.25s}.trace-step:nth-child(4){animation-delay:.35s}.trace-step:nth-child(5){animation-delay:.45s}.trace-step:nth-child(6){animation-delay:.55s}.trace-step:nth-child(7){animation-delay:.65s}
+
+    @media(max-width:640px){
+      .hero{padding-top:var(--sp16)}
+      .nav-inner,.article,.back-section{padding-inline:var(--sp4)}
+      .loop-ring{width:260px;height:260px}
+      .loop-node{width:68px;height:68px}
+      .loop-center{width:76px;height:76px}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="https://labs.badreddineek.com" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Labs
+    </a>
+    <div class="nav-right">
+      <span class="nav-tag">LLM · Agents · ReAct</span>
+      <button class="theme-btn" data-theme-toggle aria-label="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-kicker">
+    <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
+    Interactive Explainer
+  </div>
+  <h1>LLM Agent <em>Anatomy</em></h1>
+  <p class="hero-sub">A bare LLM answers once and stops. An agent reasons, picks tools, observes results, and loops — until the task is done. Here is exactly what happens inside that loop.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-val">6</span><span class="meta-lbl">Sections</span></div>
+    <div class="meta-sep"></div>
+    <div class="meta-item"><span class="meta-val">~6 min</span><span class="meta-lbl">Read</span></div>
+    <div class="meta-sep"></div>
+    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl">Published</span></div>
+  </div>
+</header>
+
+<main class="article">
+
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">01</span>
+      <h2 class="section-title">LLM vs Agent — what changes</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">A plain LLM is a <strong>stateless function</strong>: you send a prompt, it returns text. That's it. It cannot browse the web, run code, query a database, or remember what happened ten minutes ago.</p>
+      <p class="prose">An agent wraps the same LLM inside a <strong>control loop</strong>. The model is no longer the product — it becomes the reasoning engine that decides what to do next. The agent supplies it with tools, memory, and a feedback mechanism so it can iterate until the task is solved.</p>
+      <div class="compare-grid">
+        <div class="compare-col">
+          <div class="compare-head">Bare LLM</div>
+          <div class="compare-list">
+            <div class="compare-item">One-shot: prompt → text</div>
+            <div class="compare-item">No tools, no actions</div>
+            <div class="compare-item">No memory between calls</div>
+            <div class="compare-item">Cannot verify its own output</div>
+            <div class="compare-item">Hallucinate freely</div>
+          </div>
+        </div>
+        <div class="compare-col agent">
+          <div class="compare-head agent">LLM Agent</div>
+          <div class="compare-list">
+            <div class="compare-item agent">Loop: reason → act → observe</div>
+            <div class="compare-item agent">Tools: web, code, APIs, DB…</div>
+            <div class="compare-item agent">Short-term + long-term memory</div>
+            <div class="compare-item agent">Observes results and self-corrects</div>
+            <div class="compare-item agent">Grounded in real-world feedback</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">02</span>
+      <h2 class="section-title">The ReAct loop — click to explore</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">The dominant pattern is <strong>ReAct</strong> (Reasoning + Acting). At each step, the agent writes a thought, chooses an action, receives an observation, and decides whether to stop or loop again. Click each node to see what it does.</p>
+      <div class="loop-wrap">
+        <div class="loop-ring" role="group" aria-label="ReAct loop nodes">
+          <svg class="loop-svg" viewBox="0 0 300 300" aria-hidden="true">
+            <defs>
+              <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 z" fill="var(--text-faint)"/>
+              </marker>
+            </defs>
+            <path class="loop-arrow" d="M 195 55 Q 260 80 245 150" marker-end="url(#arrow)"/>
+            <path class="loop-arrow" d="M 245 195 Q 230 265 165 255" marker-end="url(#arrow)"/>
+            <path class="loop-arrow" d="M 105 255 Q 50 240 55 175" marker-end="url(#arrow)"/>
+            <path class="loop-arrow" d="M 55 120 Q 65 50 135 45" marker-end="url(#arrow)"/>
+          </svg>
+          <div class="loop-center">
+            <div style="font-size:22px">🧠</div>
+            <div class="loop-center-label">LLM</div>
+            <div class="loop-center-sub">reasoning core</div>
+          </div>
+          <div class="loop-node active" data-node="reason" data-color="accent" role="button" tabindex="0" aria-label="Reason step">
+            <div class="loop-node-icon">💭</div>
+            <div class="loop-node-name">Reason</div>
+          </div>
+          <div class="loop-node" data-node="act" data-color="teal" role="button" tabindex="0" aria-label="Act step">
+            <div class="loop-node-icon">⚡</div>
+            <div class="loop-node-name">Act</div>
+          </div>
+          <div class="loop-node" data-node="observe" data-color="orange" role="button" tabindex="0" aria-label="Observe step">
+            <div class="loop-node-icon">👁️</div>
+            <div class="loop-node-name">Observe</div>
+          </div>
+          <div class="loop-node" data-node="plan" data-color="accent" role="button" tabindex="0" aria-label="Plan step">
+            <div class="loop-node-icon">🗺️</div>
+            <div class="loop-node-name">Plan</div>
+          </div>
+        </div>
+      </div>
+      <div class="node-detail" id="node-detail">
+        <h3 id="node-title">Reason</h3>
+        <p class="node-desc" id="node-desc">The LLM looks at the task, the conversation history, and the available tools. It writes a Thought — an internal monologue that makes its reasoning explicit. This is the most important step: the quality of the thought directly determines the quality of the action that follows.</p>
+        <div class="node-thought" id="node-thought">
+          <span class="thought-label">Example thought</span>
+          <span class="thought-reason">Thought: The user wants the current EUR/USD rate. My training data is outdated. I should use the search tool to get a real-time quote rather than guessing.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Tools — the agent's hands</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">Without tools, an agent is still just a LLM. Tools are the bridge between the model's reasoning and the real world. Each tool is a <strong>function signature</strong> the LLM can call by name — it never executes code directly, it only returns structured JSON describing which tool to invoke and with what parameters.</p>
+      <div class="tools-grid">
+        <div class="tool-card"><div class="tool-icon">🔍</div><div><div class="tool-name">Web Search</div><div class="tool-desc">Query a search engine and retrieve live results. Defeats knowledge cutoff.</div></div></div>
+        <div class="tool-card"><div class="tool-icon">🐍</div><div><div class="tool-name">Code Executor</div><div class="tool-desc">Run Python snippets in a sandbox. Essential for math, data processing, plots.</div></div></div>
+        <div class="tool-card"><div class="tool-icon">📄</div><div><div class="tool-name">RAG / Retriever</div><div class="tool-desc">Query a private knowledge base. Grounds answers in your own documents.</div></div></div>
+        <div class="tool-card"><div class="tool-icon">🗄️</div><div><div class="tool-name">SQL / Database</div><div class="tool-desc">Translate natural language to SQL and fetch structured data in real time.</div></div></div>
+        <div class="tool-card"><div class="tool-icon">🌐</div><div><div class="tool-name">HTTP / APIs</div><div class="tool-desc">Call any REST endpoint — weather, finance, CRMs, internal microservices.</div></div></div>
+        <div class="tool-card"><div class="tool-icon">📅</div><div><div class="tool-name">Calendar / Email</div><div class="tool-desc">Read and write real-world systems. Enables fully autonomous task delegation.</div></div></div>
+      </div>
+      <p class="prose">The LLM sees each tool as a JSON schema: name, description, and typed parameters. It outputs a structured <code>tool_call</code> object — the execution layer (LangChain, LlamaIndex, etc.) runs the actual function and feeds the result back as an <strong>Observation</strong>.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Memory — what the agent remembers</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">Memory is what separates an agent from a stateless chatbot. Agents use <strong>four types of memory</strong>, each with a different scope and latency. Most production agents combine at least two of them.</p>
+      <div class="memory-stack">
+        <div class="mem-row"><div class="mem-badge short">📝</div><div class="mem-info"><div class="mem-title">In-context (working memory)</div><div class="mem-body">The current prompt window: task description, conversation history, tool results. Fast but bounded — when the window fills up, old content is dropped.</div></div><div class="mem-tag">Volatile</div></div>
+        <div class="mem-row"><div class="mem-badge long">🗂️</div><div class="mem-info"><div class="mem-title">External (long-term memory)</div><div class="mem-body">A vector database or key-value store that persists across sessions. The agent retrieves relevant memories at the start of each task via semantic search.</div></div><div class="mem-tag">Persistent</div></div>
+        <div class="mem-row"><div class="mem-badge episodic">🎞️</div><div class="mem-info"><div class="mem-title">Episodic (trace memory)</div><div class="mem-body">A log of past Thought → Action → Observation traces. Used for self-reflection: the agent can learn from its own failures in previous runs.</div></div><div class="mem-tag">Semi-persistent</div></div>
+        <div class="mem-row"><div class="mem-badge" style="background:rgba(100,100,100,.1)">⚙️</div><div class="mem-info"><div class="mem-title">Procedural (skills / tools)</div><div class="mem-body">The tool schemas and system prompt encode what the agent knows how to do — implicit procedural memory that shapes every decision.</div></div><div class="mem-tag">Static</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">05</span>
+      <h2 class="section-title">A full agent trace</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose">Here is what a complete ReAct trace looks like for the question: <strong>"What is the current EUR/USD rate and how does it compare to last week?"</strong></p>
+      <div class="trace-wrap">
+        <div class="trace-step"><div class="trace-dot reason">💭</div><div class="trace-content"><div class="trace-label reason">Thought #1</div><div class="trace-text">I need the current EUR/USD exchange rate. My knowledge cutoff makes this unreliable from memory. I'll call the search tool.</div></div></div>
+        <div class="trace-step"><div class="trace-dot act">⚡</div><div class="trace-content"><div class="trace-label act">Action #1</div><div class="trace-text">search({ query: "EUR USD exchange rate today April 2026" })</div></div></div>
+        <div class="trace-step"><div class="trace-dot obs">👁️</div><div class="trace-content"><div class="trace-label obs">Observation #1</div><div class="trace-text">EUR/USD = 1.0842 as of April 7, 2026 09:15 UTC. Source: Reuters.</div></div></div>
+        <div class="trace-step"><div class="trace-dot reason">💭</div><div class="trace-content"><div class="trace-label reason">Thought #2</div><div class="trace-text">Good. Now I need last week's rate (March 31) to compute the delta. I'll run a second search.</div></div></div>
+        <div class="trace-step"><div class="trace-dot act">⚡</div><div class="trace-content"><div class="trace-label act">Action #2</div><div class="trace-text">search({ query: "EUR USD exchange rate March 31 2026" })</div></div></div>
+        <div class="trace-step"><div class="trace-dot obs">👁️</div><div class="trace-content"><div class="trace-label obs">Observation #2</div><div class="trace-text">EUR/USD closed at 1.0791 on March 31, 2026. Source: Bloomberg.</div></div></div>
+        <div class="trace-step"><div class="trace-dot reason">💭</div><div class="trace-content"><div class="trace-label reason">Thought #3</div><div class="trace-text">Delta = 1.0842 − 1.0791 = +0.0051 (+0.47%). I have enough to answer. No more tool calls needed.</div></div></div>
+        <div class="trace-step"><div class="trace-dot final">✅</div><div class="trace-content"><div class="trace-label final">Final Answer</div><div class="trace-text">EUR/USD is currently 1.0842 (Apr 7). Last week it was 1.0791 (Mar 31). The euro strengthened by +0.47% over the past week.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">06</span>
+      <h2 class="section-title">What to remember</h2>
+    </div>
+    <div class="section-body">
+      <div class="insights">
+        <div class="insight-card"><div class="insight-icon">🔁</div><div class="insight-title">The loop is the product</div><div class="insight-body">The LLM is not the agent — the loop is. The model is just the reasoning engine inside it.</div></div>
+        <div class="insight-card"><div class="insight-icon">🛑</div><div class="insight-title">Stopping condition matters</div><div class="insight-body">Without a clear stopping criterion an agent loops indefinitely. Always define a max-step budget.</div></div>
+        <div class="insight-card"><div class="insight-icon">🧰</div><div class="insight-title">Tools define capability</div><div class="insight-body">Adding a code executor multiplies what an agent can do by an order of magnitude.</div></div>
+        <div class="insight-card"><div class="insight-icon">🔍</div><div class="insight-title">Observability is critical</div><div class="insight-body">Always log the full Thought → Action → Observation trace. It's the only way to debug a wrong answer.</div></div>
+        <div class="insight-card"><div class="insight-icon">⚠️</div><div class="insight-title">Failure modes are different</div><div class="insight-body">Agents fail in novel ways: infinite loops, wrong tool selection, context overflow. Classical evals don't cover this.</div></div>
+        <div class="insight-card"><div class="insight-icon">📐</div><div class="insight-title">Prompt engineering still matters</div><div class="insight-body">The system prompt defines tools, stopping rules, and output format. A weak system prompt produces a weak agent.</div></div>
+      </div>
+      <div class="takeaways">
+        <h3>The agent in five sentences.</h3>
+        <ol>
+          <li><strong>The LLM is the reasoning core</strong> — it writes thoughts and decides actions, but never executes them directly.</li>
+          <li><strong>Tools extend its reach</strong> — web search, code execution, databases. Each is a typed function the model calls by name.</li>
+          <li><strong>Observations close the loop</strong> — tool results are fed back as context so the model can update its plan and iterate.</li>
+          <li><strong>Memory gives it persistence</strong> — in-context for short tasks, external vector stores for long-running agents.</li>
+          <li><strong>The trace is everything</strong> — Thought → Action → Observation is what you debug, eval, and optimize in production.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="back-section">
+  <a href="https://labs.badreddineek.com" class="back-labs">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to Labs
+  </a>
+  <span class="back-label">By <a href="https://badreddineek.com" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:3px" target="_blank" rel="noopener noreferrer">Badreddine EK</a></span>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span>labs.badreddineek.com · LLM Agent Anatomy</span>
+    <div style="display:flex;gap:1rem">
+      <a href="https://github.com/BadreddineEK/labs" class="footer-link" target="_blank" rel="noopener noreferrer">Source</a>
+      <a href="https://linkedin.com/in/badreddine-el-khamlichi" class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const html = document.documentElement;
+const toggleBtn = document.querySelector('[data-theme-toggle]');
+let theme = html.getAttribute('data-theme') || 'dark';
+const sunSVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+const moonSVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+function setThemeIcon(t){ if(toggleBtn) toggleBtn.innerHTML = t==='dark' ? sunSVG : moonSVG; }
+setThemeIcon(theme);
+if(toggleBtn) toggleBtn.addEventListener('click', () => {
+  theme = theme==='dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', theme);
+  setThemeIcon(theme);
+});
+
+const NODES = {
+  reason: {
+    title: 'Reason',
+    desc: 'The LLM looks at the task, history, and available tools. It writes a <strong>Thought</strong> — an internal monologue that makes its reasoning explicit. The quality of the thought directly determines the quality of the action that follows.',
+    thought: '<span class="thought-label">Example thought</span><span class="thought-reason">Thought: The user wants the current EUR/USD rate. My training data is outdated. I should use the search tool to get a real-time quote rather than guessing.</span>'
+  },
+  act: {
+    title: 'Act',
+    desc: 'Based on the thought, the LLM outputs a structured <strong>tool call</strong> — a JSON object with the tool name and its arguments. It does not execute anything itself. The orchestration layer (LangChain, AutoGen, etc.) intercepts this and runs the actual function.',
+    thought: '<span class="thought-label">Example action</span><span class="thought-action">Action: search\nAction Input: { "query": "EUR USD exchange rate today April 2026" }</span>'
+  },
+  observe: {
+    title: 'Observe',
+    desc: 'The result of the tool call is injected back into the context as an <strong>Observation</strong>. The model reads what the tool returned — a search result, code output, or database row — and decides its next step based on this new information.',
+    thought: '<span class="thought-label">Example observation</span><span class="thought-obs">Observation: EUR/USD = 1.0842 as of April 7, 2026 09:15 UTC. Source: Reuters Markets.</span>'
+  },
+  plan: {
+    title: 'Plan',
+    desc: 'After observing, the model decides: is the task complete? If yes, emit a <strong>Final Answer</strong>. If not, write a new Thought and iterate. This self-evaluation step is what makes the loop intelligent — the model dynamically adjusts its plan based on what it has learned.',
+    thought: '<span class="thought-label">Planning decision</span><span class="thought-reason">Thought: I have the current rate (1.0842). I still need last week\'s rate to compute the delta. I will run one more search before answering.</span>'
+  }
+};
+
+function activateNode(key) {
+  document.querySelectorAll('.loop-node').forEach(el => {
+    el.classList.toggle('active', el.dataset.node === key);
+  });
+  const data = NODES[key];
+  const detail = document.getElementById('node-detail');
+  detail.style.opacity = '0';
+  setTimeout(() => {
+    document.getElementById('node-title').textContent = data.title;
+    document.getElementById('node-desc').innerHTML = data.desc;
+    document.getElementById('node-thought').innerHTML = data.thought;
+    detail.style.opacity = '1';
+    detail.style.transition = 'opacity .22s ease';
+  }, 120);
+}
+
+document.querySelectorAll('.loop-node').forEach(el => {
+  el.addEventListener('click', () => activateNode(el.dataset.node));
+  el.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') activateNode(el.dataset.node); });
+});
+
+activateNode('reason');
+</script>
+</body>
+</html>
