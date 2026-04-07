@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Embedding Space — Labs by Badreddine EK</title>
-  <meta name="description" content="How a model turns words into numbers — and why the geometry of that space is the foundation of all modern AI." />
+  <meta name="description" content="How a model turns words into numbers, and why the geometry of that space is the foundation of all modern AI." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300..600&display=swap" rel="stylesheet" />
@@ -139,6 +139,8 @@
     .back-section{max-width:900px;margin-inline:auto;padding:0 var(--sp6) var(--sp16);display:flex;gap:var(--sp4);align-items:center;justify-content:space-between;flex-wrap:wrap}
     .back-labs{display:inline-flex;align-items:center;gap:var(--sp2);font-size:var(--text-sm);color:var(--text-muted);border:1px solid var(--border);background:var(--surface);padding:var(--sp2) var(--sp4);border-radius:var(--r-full);transition:color var(--tr),border-color var(--tr)}
     .back-labs:hover{color:var(--text);border-color:var(--acc)}
+    .lang-btn{height:34px;padding:0 var(--sp3);border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:var(--text-xs);font-weight:600;letter-spacing:.05em;transition:color var(--tr),background var(--tr)}
+    .lang-btn:hover{color:var(--text);background:var(--surface-2)}
     footer{border-top:1px solid var(--border);padding:var(--sp8) var(--sp6)}
     .footer-inner{max-width:900px;margin-inline:auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--sp4);font-size:var(--text-xs);color:var(--text-faint)}
     .footer-link{color:var(--text-faint);transition:color var(--tr)}
@@ -162,6 +164,7 @@
     </a>
     <div class="nav-right">
       <span class="nav-tag">Embeddings · NLP · AI</span>
+      <button class="lang-btn" id="lang-toggle" aria-label="Switch language">FR</button>
       <button class="theme-btn" data-theme-toggle aria-label="Toggle theme">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
@@ -172,16 +175,18 @@
 <header class="hero">
   <div class="hero-kicker">
     <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
-    Interactive Explainer
+    <span data-i18n="kicker">Interactive Explainer</span>
   </div>
-  <h1>The Embedding <em>Space</em></h1>
-  <p class="hero-sub">Words are not numbers. But to reason about language, a model must make them so. This is the story of how meaning becomes geometry — and why it works.</p>
+  <h1 data-i18n="h1-en" class="lang-en">The Embedding <em>Space</em></h1>
+  <h1 data-i18n="h1-fr" class="lang-fr" style="display:none">L'espace des <em>embeddings</em></h1>
+  <p class="hero-sub lang-en">Words are not numbers. But to reason about language, a model must make them so. This is the story of how meaning becomes geometry.</p>
+  <p class="hero-sub lang-fr" style="display:none">Les mots ne sont pas des nombres. Pourtant, pour raisonner sur le langage, un modèle doit les transformer en vecteurs. Voici comment le sens devient géométrie.</p>
   <div class="hero-meta">
-    <div class="meta-item"><span class="meta-val">5</span><span class="meta-lbl">Concepts</span></div>
+    <div class="meta-item"><span class="meta-val">6</span><span class="meta-lbl" data-i18n="meta-concepts">Concepts</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">~6 min</span><span class="meta-lbl">Read</span></div>
+    <div class="meta-item"><span class="meta-val">~7 min</span><span class="meta-lbl" data-i18n="meta-read">Read</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl">Published</span></div>
+    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl" data-i18n="meta-published">Published</span></div>
   </div>
 </header>
 
@@ -190,15 +195,20 @@
   <section class="section">
     <div class="section-label">
       <span class="section-num">01</span>
-      <h2 class="section-title">The problem: words aren't numbers</h2>
+      <h2 class="section-title lang-en">The problem: words aren't numbers</h2>
+      <h2 class="section-title lang-fr" style="display:none">Le problème : les mots ne sont pas des nombres</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Neural networks compute with numbers. But language is made of words. The naive approach — assign each word an integer — creates a flat encoding where <strong>"cat" = 4281 and "dog" = 4282</strong>, implying they're barely related. That's wrong.</p>
-      <p class="prose">What we need is a representation where <strong>similar words are close to each other</strong>, and the relationships between words are preserved geometrically. That's exactly what an embedding is: a dense vector of real numbers encoding meaning in its structure.</p>
+      <p class="prose lang-en">Neural networks compute with numbers. Language is made of words. The naive fix is to assign each word an integer, but that gives you a flat encoding where <strong>"cat" = 4281 and "dog" = 4282</strong>, which implies they're barely related. That's wrong.</p>
+      <p class="prose lang-fr" style="display:none">Les réseaux de neurones travaillent avec des nombres. Le langage est fait de mots. L'approche naïve est d'assigner un entier à chaque mot, mais ça donne un encodage plat où <strong>"chat" = 4281 et "chien" = 4282</strong>, ce qui implique qu'ils n'ont presque rien en commun. C'est faux.</p>
+      <p class="prose lang-en">But before a model can even embed a word, it needs to break text into smaller units called <strong>tokens</strong>. Words like "unbelievable" get split into sub-pieces like "un", "believ", "able". This tokenization step happens first, and each token gets its own embedding vector.</p>
+      <p class="prose lang-fr" style="display:none">Mais avant même d'embedder un mot, le modèle doit découper le texte en unités plus petites appelées <strong>tokens</strong>. Un mot comme "incroyable" peut être découpé en "in", "croyable". Cette tokenisation se passe en amont, et chaque token reçoit son propre vecteur d'embedding.</p>
+      <p class="prose lang-en">What we actually need is a representation where <strong>similar tokens end up close together</strong>, and where the structure between concepts is preserved in the geometry of the space. That's what an embedding is: a dense vector of real numbers where position carries meaning.</p>
+      <p class="prose lang-fr" style="display:none">Ce dont on a besoin, c'est une représentation où <strong>les tokens similaires sont proches</strong>, et où les relations entre concepts se retrouvent dans la géométrie de l'espace. C'est ça, un embedding : un vecteur dense de nombres réels dont la position porte du sens.</p>
       <div class="card-grid">
-        <div class="card"><div class="card-icon">🔢</div><div class="card-title">One-hot encoding (naive)</div><div class="card-body">Each word is a vector of zeros with a single 1. With 50k words, each vector has 50k dimensions. No similarity is captured — every word is equidistant from every other.</div></div>
-        <div class="card"><div class="card-icon">🧲</div><div class="card-title">Dense embedding (learned)</div><div class="card-body">Each word maps to a compact vector of ~768 floats, learned from context. Similar words cluster together. Opposite concepts sit far apart. Relationships become directions.</div></div>
-        <div class="card"><div class="card-icon">📐</div><div class="card-title">Geometry as semantics</div><div class="card-body">In embedding space, arithmetic works on meaning. <em>king − man + woman ≈ queen</em>. The concept of "royalty" is an encodable direction in vector space.</div></div>
+        <div class="card"><div class="card-icon">🔢</div><div class="card-title lang-en">One-hot encoding (naive)</div><div class="card-title lang-fr" style="display:none">Encodage one-hot (naïf)</div><div class="card-body lang-en">Each word becomes a vector of zeros with a single 1. With a 50k-word vocabulary, every vector has 50k dimensions. No similarity is captured at all.</div><div class="card-body lang-fr" style="display:none">Chaque mot devient un vecteur de zéros avec un seul 1. Avec un vocabulaire de 50k mots, chaque vecteur a 50k dimensions. Aucune similarité n'est capturée.</div></div>
+        <div class="card"><div class="card-icon">🧲</div><div class="card-title lang-en">Dense embedding (learned)</div><div class="card-title lang-fr" style="display:none">Embedding dense (appris)</div><div class="card-body lang-en">Each token maps to a compact vector of around 768 floats, learned from context. Similar tokens cluster together. Relationships become directions in space.</div><div class="card-body lang-fr" style="display:none">Chaque token est représenté par un vecteur compact d'environ 768 flottants, appris depuis le contexte. Les tokens similaires se regroupent. Les relations deviennent des directions dans l'espace.</div></div>
+        <div class="card"><div class="card-icon">📐</div><div class="card-title lang-en">Geometry as semantics</div><div class="card-title lang-fr" style="display:none">La géométrie comme sémantique</div><div class="card-body lang-en">In embedding space, arithmetic works on meaning. <em>king − man + woman ≈ queen</em>. The concept of "royalty" is a direction you can navigate by adding and subtracting vectors.</div><div class="card-body lang-fr" style="display:none">Dans l'espace des embeddings, l'arithmétique fonctionne sur le sens. <em>roi − homme + femme ≈ reine</em>. Le concept de "royauté" est une direction que l'on peut parcourir en additionnant et soustrayant des vecteurs.</div></div>
       </div>
     </div>
   </section>
@@ -206,29 +216,34 @@
   <section class="section">
     <div class="section-label">
       <span class="section-num">02</span>
-      <h2 class="section-title">Exploring the space</h2>
+      <h2 class="section-title lang-en">Exploring the space</h2>
+      <h2 class="section-title lang-fr" style="display:none">Explorer l'espace</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Embedding spaces are high-dimensional — typically 768 or 1536 dimensions. We project down to 2D using <strong>t-SNE or UMAP</strong> to visualize structure. The clusters and distances that appear reflect real semantic relationships the model learned from raw text.</p>
+      <p class="prose lang-en">Embedding spaces are high-dimensional, typically 768 or 1536 dimensions. To visualize structure, we project down to 2D using techniques like <strong>t-SNE or UMAP</strong>. The clusters that appear reflect semantic relationships the model learned purely from reading text.</p>
+      <p class="prose lang-fr" style="display:none">Les espaces d'embeddings sont à très haute dimension, généralement 768 ou 1536 dimensions. Pour les visualiser, on les projette en 2D avec des techniques comme <strong>t-SNE ou UMAP</strong>. Les clusters qui apparaissent reflètent les relations sémantiques apprises par le modèle.</p>
       <div class="viz-panel">
         <div class="viz-tabs" role="tablist">
-          <div class="viz-tab active" data-tab="cluster" role="tab">Semantic clusters</div>
-          <div class="viz-tab" data-tab="similarity" role="tab">Cosine similarity</div>
+          <div class="viz-tab active" data-tab="cluster" role="tab"><span class="lang-en">Semantic clusters</span><span class="lang-fr" style="display:none">Clusters sémantiques</span></div>
+          <div class="viz-tab" data-tab="similarity" role="tab"><span class="lang-en">Cosine similarity</span><span class="lang-fr" style="display:none">Similarité cosinus</span></div>
         </div>
         <div class="viz-content active" id="tab-cluster">
-          <p class="viz-desc">A 2D projection of 25 words. Words in the same semantic family cluster naturally — the model was never told what a "fruit" or "country" is. It learned structure from context alone. Hover a dot to highlight its label.</p>
+          <p class="viz-desc lang-en">A hand-placed 2D illustration of 25 words, positioned to mirror the structure real t-SNE projections reveal. Words from the same semantic family naturally cluster together. The model is never told what a "fruit" or a "country" is. It figures out the groupings from context alone. Hover a dot to see its label.</p>
+          <p class="viz-desc lang-fr" style="display:none">Une illustration 2D de 25 mots, positionnés manuellement pour reproduire la structure que révèlent de vraies projections t-SNE. Les mots de la même famille sémantique se regroupent naturellement. Le modèle n'est jamais informé de ce qu'est un "fruit" ou un "pays". Il déduit ces regroupements du contexte. Survolez un point pour voir son label.</p>
           <canvas id="cluster-canvas" height="300"></canvas>
         </div>
         <div class="viz-content" id="tab-similarity">
-          <p class="viz-desc">Pick a query word and see how closely related other words are, measured by cosine similarity (1 = identical direction, 0 = orthogonal, −1 = opposite).</p>
+          <p class="viz-desc lang-en">Pick a query word and see how closely related other words are, measured by cosine similarity (1 = identical direction, 0 = orthogonal, -1 = opposite). Values shown are approximate, based on published Word2Vec results.</p>
+          <p class="viz-desc lang-fr" style="display:none">Choisissez un mot et voyez à quel point les autres mots lui sont proches, mesurés par similarité cosinus (1 = même direction, 0 = orthogonal, -1 = opposé). Les valeurs affichées sont approximatives, basées sur des résultats Word2Vec publiés.</p>
           <div class="sim-tabs" id="sim-tabs"></div>
           <div class="sim-grid">
             <div>
-              <div class="query-pill">📍 Query: <span id="query-word">king</span></div>
+              <div class="query-pill">📍 <span class="lang-en">Query:</span><span class="lang-fr" style="display:none">Mot :</span> <span id="query-word">king</span></div>
               <div class="sim-word-list" id="sim-list"></div>
             </div>
             <div style="display:flex;flex-direction:column;gap:var(--sp4)">
-              <p class="viz-desc" style="margin:0">Cosine similarity measures the <strong>angle</strong> between two vectors — not their distance. Two words can be far apart in absolute terms but point in the same direction, making them semantically close.</p>
+              <p class="viz-desc lang-en" style="margin:0">Cosine similarity measures the <strong>angle</strong> between two vectors, not their distance. Two words can be far apart in absolute position but point in the same direction, making them semantically close.</p>
+              <p class="viz-desc lang-fr" style="display:none;margin:0">La similarité cosinus mesure l'<strong>angle</strong> entre deux vecteurs, pas leur distance. Deux mots peuvent être très éloignés en position absolue mais pointer dans la même direction, les rendant sémantiquement proches.</p>
               <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp4);font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);line-height:2">
                 cos(θ) = <span style="color:var(--acc)">A · B</span> / (<span style="color:var(--blue)">‖A‖</span> × <span style="color:var(--green)">‖B‖</span>)
               </div>
@@ -242,33 +257,40 @@
   <section class="section">
     <div class="section-label">
       <span class="section-num">03</span>
-      <h2 class="section-title">Arithmetic on meaning</h2>
+      <h2 class="section-title lang-en">Arithmetic on meaning</h2>
+      <h2 class="section-title lang-fr" style="display:none">L'arithmétique du sens</h2>
     </div>
     <div class="section-body">
-      <p class="prose">The most striking property of embedding spaces is that <strong>relationships become directions</strong>. The vector offset from "man" to "woman" encodes gender. From "France" to "Paris" encodes capital. You can add and subtract these directions and land on semantically correct answers.</p>
+      <p class="prose lang-en">The most surprising property of embedding spaces is that <strong>relationships become directions</strong>. The vector offset from "man" to "woman" encodes gender. The offset from "France" to "Paris" encodes capital city. You can add and subtract these offsets and land on semantically correct answers.</p>
+      <p class="prose lang-fr" style="display:none">La propriété la plus surprenante des espaces d'embeddings est que <strong>les relations deviennent des directions</strong>. Le déplacement de "homme" vers "femme" encode le genre. Le déplacement de "France" vers "Paris" encode la relation capitale. On peut additionner et soustraire ces déplacements pour obtenir des réponses sémantiquement correctes.</p>
       <div class="analogy-box">
-        <div style="font-size:var(--text-sm);color:var(--text-muted)">Click the colored words to swap them and explore different analogies.</div>
+        <div style="font-size:var(--text-sm);color:var(--text-muted)" class="lang-en">Choose from 5 pre-built analogies by clicking the colored words.</div>
+        <div style="font-size:var(--text-sm);color:var(--text-muted)" class="lang-fr" style="display:none">Choisissez parmi 5 analogies pré-construites en cliquant sur les mots colorés.</div>
         <div class="analogy-equation" id="analogy-eq"></div>
         <div class="analogy-hint" id="analogy-hint"></div>
       </div>
-      <p class="prose">This is a consistent geometric property — not cherry-picked magic. The model learns that <strong>"capital of"</strong> is a direction in space, just as <strong>"plural of"</strong> or <strong>"past tense of"</strong> are directions. Language structure is baked into geometry during training.</p>
+      <p class="prose lang-en">This is not cherry-picked magic. The model learns that "capital of" is a consistent direction in space, just like "plural of" or "past tense of". Language structure ends up baked into geometry during training.</p>
+      <p class="prose lang-fr" style="display:none">Ce n'est pas un tour de passe-passe. Le modèle apprend que "capitale de" est une direction cohérente dans l'espace, tout comme "pluriel de" ou "passé de". La structure du langage finit par être encodée dans la géométrie pendant l'entraînement.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="section-label">
       <span class="section-num">04</span>
-      <h2 class="section-title">How we got here</h2>
+      <h2 class="section-title lang-en">How we got here</h2>
+      <h2 class="section-title lang-fr" style="display:none">Comment on en est arrivés là</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Embeddings didn't arrive fully formed. They evolved over two decades as models learned to capture increasingly rich representations of language.</p>
+      <p class="prose lang-en">Embeddings did not appear fully formed. They evolved over two decades as researchers learned to capture increasingly rich representations of language.</p>
+      <p class="prose lang-fr" style="display:none">Les embeddings ne sont pas apparus d'un coup. Ils ont évolué sur deux décennies, au fil des avancées des chercheurs pour capturer des représentations de plus en plus riches du langage.</p>
       <div class="timeline">
-        <div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2003</div><div class="tl-title">Neural language models — Bengio et al.</div><div class="tl-desc">First demonstration that a neural network could learn distributed word representations as a side effect of predicting the next token. The embedding idea was born.</div></div></div>
-        <div class="tl-item"><div class="tl-dot filled">W</div><div class="tl-body"><div class="tl-year">2013</div><div class="tl-title">Word2Vec — Mikolov et al., Google</div><div class="tl-desc">Efficient shallow networks (CBOW & Skip-gram) trained on billions of words. First public demonstration of the <em>king − man + woman = queen</em> analogy. Made embeddings accessible to the world.</div><div class="tl-badge">Breakthrough</div></div></div>
-        <div class="tl-item"><div class="tl-dot">G</div><div class="tl-body"><div class="tl-year">2014</div><div class="tl-title">GloVe — Stanford NLP</div><div class="tl-desc">Combined global co-occurrence statistics with local context learning, encoding both word frequency and semantic relationships more faithfully than Word2Vec alone.</div></div></div>
-        <div class="tl-item"><div class="tl-dot">🔤</div><div class="tl-body"><div class="tl-year">2018</div><div class="tl-title">ELMo — contextual embeddings</div><div class="tl-desc">The same word now gets a <em>different</em> embedding depending on its context. "Bank" in "river bank" vs. "national bank" produces two distinct vectors. A fundamental leap.</div></div></div>
-        <div class="tl-item"><div class="tl-dot filled">B</div><div class="tl-body"><div class="tl-year">2018–2019</div><div class="tl-title">BERT & transformer embeddings</div><div class="tl-desc">Attention mechanisms let every token attend to every other token. Embeddings became deeply contextual, encoding syntax, semantics, and pragmatics simultaneously.</div><div class="tl-badge">Breakthrough</div></div></div>
-        <div class="tl-item"><div class="tl-dot">🌍</div><div class="tl-body"><div class="tl-year">2022 → now</div><div class="tl-title">Modern text embeddings — OpenAI, Cohere, Mistral…</div><div class="tl-desc">Dedicated encoder models with contrastive training objectives. 1536-dimensional vectors that power RAG, semantic search, and classification at scale.</div></div></div>
+        <div class="tl-item"><div class="tl-dot">📊</div><div class="tl-body"><div class="tl-year">2003</div><div class="tl-title lang-en">Neural language models (Bengio et al.)</div><div class="tl-title lang-fr" style="display:none">Modèles de langage neuronaux (Bengio et al.)</div><div class="tl-desc lang-en">First proof that a neural network could learn distributed word representations as a side effect of predicting the next token. The embedding idea was there from the start.</div><div class="tl-desc lang-fr" style="display:none">Première preuve qu'un réseau peut apprendre des représentations distribuées des mots comme effet secondaire de la prédiction du token suivant. L'idée d'embedding était déjà là.</div></div></div>
+        <div class="tl-item"><div class="tl-dot filled">W</div><div class="tl-body"><div class="tl-year">2013</div><div class="tl-title">Word2Vec (Mikolov et al., Google)</div><div class="tl-desc lang-en">Efficient shallow networks (CBOW and Skip-gram) trained on billions of words. First public demo of the <em>king − man + woman = queen</em> analogy. Made embeddings accessible.</div><div class="tl-desc lang-fr" style="display:none">Réseaux peu profonds (CBOW et Skip-gram) entraînés sur des milliards de mots. Première démonstration publique de l'analogie <em>roi − homme + femme = reine</em>. A rendu les embeddings accessibles.</div><div class="tl-badge lang-en">Breakthrough</div><div class="tl-badge lang-fr" style="display:none">Percée</div></div></div>
+        <div class="tl-item"><div class="tl-dot">G</div><div class="tl-body"><div class="tl-year">2014</div><div class="tl-title">GloVe (Stanford NLP)</div><div class="tl-desc lang-en">Combined global co-occurrence statistics with local context, encoding word frequency and semantic relationships more faithfully than Word2Vec alone.</div><div class="tl-desc lang-fr" style="display:none">Combine statistiques de co-occurrence globales et contexte local, encodant fréquence et relations sémantiques plus fidèlement que Word2Vec seul.</div></div></div>
+        <div class="tl-item"><div class="tl-dot">F</div><div class="tl-body"><div class="tl-year">2016</div><div class="tl-title">FastText (Meta AI)</div><div class="tl-desc lang-en">First model to embed sub-word pieces (character n-grams) instead of whole words. "unhappiness" became the sum of "un", "happiness", "ness". Rare words and typos suddenly had reasonable representations.</div><div class="tl-desc lang-fr" style="display:none">Premier modèle à embedder des sous-mots (n-grammes de caractères) plutôt que des mots entiers. "malheureux" devient la somme de "mal", "heureux". Les mots rares et les fautes de frappe obtiennent enfin des représentations raisonnables.</div></div></div>
+        <div class="tl-item"><div class="tl-dot">🔤</div><div class="tl-body"><div class="tl-year">2018</div><div class="tl-title">ELMo (contextual embeddings)</div><div class="tl-desc lang-en">The same word now gets a different embedding depending on its context. "Bank" in "river bank" versus "national bank" produces two distinct vectors. A fundamental shift.</div><div class="tl-desc lang-fr" style="display:none">Un même mot reçoit désormais un embedding différent selon son contexte. "Volant" dans "volant de voiture" et "volant de badminton" produit deux vecteurs distincts. Un changement fondamental.</div></div></div>
+        <div class="tl-item"><div class="tl-dot filled">B</div><div class="tl-body"><div class="tl-year">2018 – 2019</div><div class="tl-title lang-en">BERT and transformer embeddings</div><div class="tl-title lang-fr" style="display:none">BERT et les embeddings Transformer</div><div class="tl-desc lang-en">Attention mechanisms let every token attend to every other. Embeddings became deeply contextual, encoding syntax, semantics, and pragmatics at the same time.</div><div class="tl-desc lang-fr" style="display:none">Les mécanismes d'attention permettent à chaque token d'interagir avec tous les autres. Les embeddings deviennent profondément contextuels, encodant syntaxe, sémantique et pragmatique simultanément.</div><div class="tl-badge lang-en">Breakthrough</div><div class="tl-badge lang-fr" style="display:none">Percée</div></div></div>
+        <div class="tl-item"><div class="tl-dot">🌍</div><div class="tl-body"><div class="tl-year">2022 and on</div><div class="tl-title lang-en">Modern text embeddings (OpenAI, Cohere, Mistral, BGE...)</div><div class="tl-title lang-fr" style="display:none">Embeddings modernes (OpenAI, Cohere, Mistral, BGE...)</div><div class="tl-desc lang-en">Dedicated encoder models trained with contrastive objectives. Vectors of 1536 dimensions or more, powering RAG pipelines, semantic search, and classification at scale. Models like text-embedding-3, E5, and BGE set the current standard.</div><div class="tl-desc lang-fr" style="display:none">Modèles encodeurs dédiés, entraînés avec des objectifs contrastifs. Vecteurs de 1536 dimensions ou plus, alimentant pipelines RAG, recherche sémantique et classification à grande échelle. Des modèles comme text-embedding-3, E5 et BGE définissent le standard actuel.</div></div></div>
       </div>
     </div>
   </section>
@@ -276,17 +298,43 @@
   <section class="section">
     <div class="section-label">
       <span class="section-num">05</span>
-      <h2 class="section-title">What to remember</h2>
+      <h2 class="section-title lang-en">Where you'll see this</h2>
+      <h2 class="section-title lang-fr" style="display:none">Où vous rencontrerez tout ça</h2>
+    </div>
+    <div class="section-body">
+      <p class="prose lang-en">Embeddings are not an abstract concept. They are the engine running behind most things you interact with in modern AI.</p>
+      <p class="prose lang-fr" style="display:none">Les embeddings ne sont pas un concept abstrait. Ils constituent le moteur derrière la plupart des systèmes d'IA modernes que vous utilisez.</p>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">📚</div><div class="card-title lang-en">RAG (Retrieval-Augmented Generation)</div><div class="card-title lang-fr" style="display:none">RAG (génération augmentée par récupération)</div><div class="card-body lang-en">Every time a chatbot retrieves relevant documents before answering, it computes cosine similarity between the query embedding and thousands of stored document embeddings, in milliseconds.</div><div class="card-body lang-fr" style="display:none">Chaque fois qu'un chatbot récupère des documents avant de répondre, il calcule la similarité cosinus entre l'embedding de la question et des milliers d'embeddings de documents stockés, en quelques millisecondes.</div></div>
+        <div class="card"><div class="card-icon">🔍</div><div class="card-title lang-en">Semantic search</div><div class="card-title lang-fr" style="display:none">Recherche sémantique</div><div class="card-body lang-en">Traditional search matches keywords. Semantic search matches meaning. A query for "how to fix a slow laptop" will surface articles about performance optimization even if they don't contain those exact words.</div><div class="card-body lang-fr" style="display:none">La recherche traditionnelle fait correspondre des mots-clés. La recherche sémantique fait correspondre du sens. Une requête sur "comment réparer un ordinateur lent" remonte des articles sur l'optimisation des performances même sans les mots exacts.</div></div>
+        <div class="card"><div class="card-icon">🏷️</div><div class="card-title lang-en">Classification without labels</div><div class="card-title lang-fr" style="display:none">Classification sans labels</div><div class="card-body lang-en">You can classify text into categories you never trained on by comparing embeddings against label descriptions. "Is this review positive?" becomes a similarity measure between the review and the word "positive".</div><div class="card-body lang-fr" style="display:none">Vous pouvez classer du texte dans des catégories jamais vues en comparant des embeddings à des descriptions de labels. "Cet avis est-il positif ?" devient une mesure de similarité entre l'avis et le mot "positif".</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">
+      <span class="section-num">06</span>
+      <h2 class="section-title lang-en">What to remember</h2>
+      <h2 class="section-title lang-fr" style="display:none">Ce qu'il faut retenir</h2>
     </div>
     <div class="section-body">
       <div class="takeaways">
-        <h3>Five sentences on embeddings.</h3>
+        <h3 class="lang-en">Six sentences on embeddings.</h3>
+        <h3 class="lang-fr" style="display:none">Six phrases sur les embeddings.</h3>
         <ol>
-          <li><strong>An embedding is a dense vector</strong> of real numbers encoding the meaning of a word, sentence, or document.</li>
-          <li><strong>Similar meanings are close</strong> in vector space — closeness is measured by cosine similarity, not Euclidean distance.</li>
-          <li><strong>Relationships are directions</strong> — you can add and subtract vectors to navigate concepts like gender, tense, or geography.</li>
-          <li><strong>Modern embeddings are contextual</strong> — the same word gets a different vector depending on its surrounding tokens.</li>
-          <li><strong>Embeddings power everything</strong> in modern AI: RAG, semantic search, classification, recommendation, and clustering.</li>
+          <li class="lang-en"><strong>Text is first split into tokens</strong>, not whole words. Sub-word tokenization (BPE, WordPiece) means rare words are still representable.</li>
+          <li class="lang-fr" style="display:none"><strong>Le texte est d'abord découpé en tokens</strong>, pas en mots entiers. La tokenisation par sous-mots (BPE, WordPiece) permet de représenter même les mots rares.</li>
+          <li class="lang-en"><strong>An embedding is a dense vector</strong> of real numbers encoding the meaning of a token, sentence, or document.</li>
+          <li class="lang-fr" style="display:none"><strong>Un embedding est un vecteur dense</strong> de nombres réels encodant le sens d'un token, d'une phrase ou d'un document.</li>
+          <li class="lang-en"><strong>Similar meanings are close</strong> in vector space. Closeness is measured by cosine similarity, not Euclidean distance.</li>
+          <li class="lang-fr" style="display:none"><strong>Les sens similaires sont proches</strong> dans l'espace vectoriel. La proximité se mesure par similarité cosinus, pas par distance euclidienne.</li>
+          <li class="lang-en"><strong>Relationships are directions</strong>. You can add and subtract vectors to navigate concepts like gender, tense, or geography.</li>
+          <li class="lang-fr" style="display:none"><strong>Les relations sont des directions</strong>. On peut additionner et soustraire des vecteurs pour naviguer dans des concepts comme le genre, le temps ou la géographie.</li>
+          <li class="lang-en"><strong>Modern embeddings are contextual</strong>. The same word gets a different vector depending on the surrounding tokens.</li>
+          <li class="lang-fr" style="display:none"><strong>Les embeddings modernes sont contextuels</strong>. Un même mot reçoit un vecteur différent selon les tokens qui l'entourent.</li>
+          <li class="lang-en"><strong>Embeddings power everything</strong> in modern AI: RAG, semantic search, classification, recommendation, and clustering.</li>
+          <li class="lang-fr" style="display:none"><strong>Les embeddings alimentent tout</strong> dans l'IA moderne : RAG, recherche sémantique, classification, recommandation et clustering.</li>
         </ol>
       </div>
     </div>
@@ -297,7 +345,8 @@
 <div class="back-section">
   <a href="../" class="back-labs">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Back to Labs
+    <span class="lang-en">Back to Labs</span>
+    <span class="lang-fr" style="display:none">Retour aux Labs</span>
   </a>
   <span style="font-size:var(--text-xs);color:var(--text-faint)">By <a href="https://badreddineek.com" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:3px" target="_blank" rel="noopener noreferrer">Badreddine EK</a></span>
 </div>
@@ -315,6 +364,9 @@
 <script>
 const html=document.documentElement;
 const toggleBtn=document.querySelector('[data-theme-toggle]');
+const langToggle=document.getElementById('lang-toggle');
+
+// ── THEME ──
 let theme=localStorage.getItem('labs-theme')||'light';
 const sunSVG=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
 const moonSVG=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
@@ -322,7 +374,22 @@ function setIcon(t){if(toggleBtn)toggleBtn.innerHTML=t==='dark'?sunSVG:moonSVG;}
 html.setAttribute('data-theme',theme);setIcon(theme);
 if(toggleBtn)toggleBtn.addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';html.setAttribute('data-theme',theme);localStorage.setItem('labs-theme',theme);setIcon(theme);setTimeout(drawCluster,50);});
 
-// CLUSTER
+// ── LANGUAGE ──
+let lang=localStorage.getItem('labs-embedding-lang')||'en';
+function applyLang(){
+  document.querySelectorAll('.lang-en').forEach(el=>el.style.display=lang==='en'?'':'none');
+  document.querySelectorAll('.lang-fr').forEach(el=>el.style.display=lang==='fr'?'':'none');
+  langToggle.textContent=lang==='en'?'FR':'EN';
+  html.setAttribute('lang',lang);
+}
+applyLang();
+langToggle.addEventListener('click',()=>{
+  lang=lang==='en'?'fr':'en';
+  localStorage.setItem('labs-embedding-lang',lang);
+  applyLang();
+});
+
+// ── CLUSTER ──
 const WORDS=[
   {w:'cat',x:.16,y:.22,g:'animal'},{w:'dog',x:.24,y:.31,g:'animal'},
   {w:'bird',x:.12,y:.40,g:'animal'},{w:'horse',x:.08,y:.28,g:'animal'},{w:'fish',x:.20,y:.47,g:'animal'},
@@ -340,7 +407,7 @@ const GL={animal:'🐾 Animals',fruit:'🍎 Fruits',royalty:'👑 Royalty',count
 let hov=null;
 const cc=document.getElementById('cluster-canvas');
 const ctx2=cc.getContext('2d');
-function gt(){return html.getAttribute('data-theme')||'dark';}
+function gt(){return html.getAttribute('data-theme')||'light';}
 function drawCluster(){
   const t=gt(),dpr=window.devicePixelRatio||1;
   const W=cc.offsetWidth,H=300;
@@ -383,7 +450,7 @@ cc.addEventListener('mouseleave',()=>{hov=null;drawCluster();});
 new ResizeObserver(()=>drawCluster()).observe(cc);
 drawCluster();
 
-// VIZ TABS
+// ── VIZ TABS ──
 document.querySelectorAll('.viz-tab').forEach(tab=>{
   tab.addEventListener('click',()=>{
     const t=tab.dataset.tab;
@@ -393,7 +460,7 @@ document.querySelectorAll('.viz-tab').forEach(tab=>{
   });
 });
 
-// SIMILARITY
+// ── SIMILARITY ──
 const SIM={
   king:[{w:'queen',s:.94},{w:'prince',s:.88},{w:'duke',s:.79},{w:'man',s:.62},{w:'France',s:.41},{w:'apple',s:.12},{w:'token',s:.08}],
   Paris:[{w:'France',s:.96},{w:'Berlin',s:.91},{w:'Italy',s:.85},{w:'Spain',s:.82},{w:'queen',s:.38},{w:'banana',s:.14},{w:'model',s:.09}],
@@ -412,7 +479,7 @@ function renderSimList(){
     <div class="sim-row" style="animation:fadeUp .3s ${i*40}ms both">
       <span class="sim-word">${item.w}</span>
       <div class="sim-track"><div class="sim-fill" style="width:${item.s*100}%"></div></div>
-      <span class="sim-score">${item.s.toFixed(2)}</span>
+      <span class="sim-score">~${item.s.toFixed(2)}</span>
     </div>`).join('');
 }
 const ks=document.createElement('style');
@@ -420,13 +487,13 @@ ks.textContent='@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{op
 document.head.appendChild(ks);
 renderSimTabs();renderSimList();
 
-// ANALOGIES
+// ── ANALOGIES ──
 const ANALOGIES=[
-  {a:'king',b:'man',c:'woman',r:'queen',hint:'Direction: gender'},
-  {a:'Paris',b:'France',c:'Germany',r:'Berlin',hint:'Direction: capital city'},
-  {a:'walked',b:'walk',c:'run',r:'ran',hint:'Direction: past tense'},
-  {a:'bigger',b:'big',c:'tall',r:'taller',hint:'Direction: comparative form'},
-  {a:'Tokyo',b:'Japan',c:'France',r:'Paris',hint:'Direction: capital city'},
+  {a:'king',b:'man',c:'woman',r:'queen',hintEn:'Direction: gender',hintFr:'Direction : genre'},
+  {a:'Paris',b:'France',c:'Germany',r:'Berlin',hintEn:'Direction: capital city',hintFr:'Direction : capitale'},
+  {a:'walked',b:'walk',c:'run',r:'ran',hintEn:'Direction: past tense',hintFr:'Direction : passé'},
+  {a:'bigger',b:'big',c:'tall',r:'taller',hintEn:'Direction: comparative form',hintFr:'Direction : comparatif'},
+  {a:'Tokyo',b:'Japan',c:'France',r:'Paris',hintEn:'Direction: capital city',hintFr:'Direction : capitale'},
 ];
 const A_OPT={a:ANALOGIES.map(x=>x.a),b:ANALOGIES.map(x=>x.b),c:ANALOGIES.map(x=>x.c)};
 let curA=0;
@@ -435,13 +502,13 @@ function renderAnalogy(){
   const eq=document.getElementById('analogy-eq');
   eq.innerHTML=`
     <div class="word-chip blue" data-slot="a">${an.a}<div class="analogy-selector">${A_OPT.a.map(w=>`<div class="sel-option" data-val="${w}">${w}</div>`).join('')}</div></div>
-    <span class="op-sign">−</span>
+    <span class="op-sign">-</span>
     <div class="word-chip pink" data-slot="b">${an.b}<div class="analogy-selector">${A_OPT.b.map(w=>`<div class="sel-option" data-val="${w}">${w}</div>`).join('')}</div></div>
     <span class="op-sign">+</span>
     <div class="word-chip green" data-slot="c">${an.c}<div class="analogy-selector">${A_OPT.c.map(w=>`<div class="sel-option" data-val="${w}">${w}</div>`).join('')}</div></div>
     <span class="op-sign">=</span>
     <div class="word-chip result">${an.r}</div>`;
-  document.getElementById('analogy-hint').textContent='✦ '+an.hint;
+  document.getElementById('analogy-hint').textContent='* '+(lang==='fr'?an.hintFr:an.hintEn);
   eq.querySelectorAll('[data-slot]').forEach(chip=>{
     chip.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('[data-slot]').forEach(c=>c.classList.remove('open'));chip.classList.toggle('open');});
     chip.querySelectorAll('.sel-option').forEach(opt=>{
@@ -455,6 +522,9 @@ function renderAnalogy(){
 }
 renderAnalogy();
 document.addEventListener('click',()=>document.querySelectorAll('[data-slot]').forEach(c=>c.classList.remove('open')));
+
+// re-render analogy hint on lang switch so it updates immediately
+langToggle.addEventListener('click',()=>renderAnalogy());
 </script>
 </body>
 </html>
