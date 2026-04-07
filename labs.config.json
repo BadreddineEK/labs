@@ -25,5 +25,14 @@
     "date": "2026-04-07",
     "color": "#d97706",
     "status": "live"
+  },
+  {
+    "slug": "attention-visualized",
+    "title": "Attention, Visualized",
+    "description": "What the attention mechanism actually does — Query, Key, Value explained intuitively, with an interactive heatmap you can explore token by token.",
+    "tags": ["Transformers", "Attention", "AI"],
+    "date": "2026-04-07",
+    "color": "#0ea5e9",
+    "status": "live"
   }
 ]
