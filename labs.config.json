@@ -16,5 +16,14 @@
     "date": "2026-04-07",
     "color": "#7c3aed",
     "status": "live"
+  },
+  {
+    "slug": "the-embedding-space",
+    "title": "The Embedding Space",
+    "description": "How a model turns words into numbers — and why the geometry of that space is the foundation of all modern AI. Visualized, interactive.",
+    "tags": ["Embeddings", "NLP", "AI"],
+    "date": "2026-04-07",
+    "color": "#d97706",
+    "status": "live"
   }
 ]
