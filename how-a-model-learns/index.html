@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -194,7 +194,7 @@
 
 <nav class="topnav">
   <div class="nav-inner">
-    <a href="https://labs.badreddineek.com" class="nav-back">
+    <a href="../" class="nav-back">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       Labs
     </a>
@@ -407,7 +407,7 @@
 </main>
 
 <div class="back-section">
-  <a href="https://labs.badreddineek.com" class="back-labs">
+  <a href="../" class="back-labs">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     Back to Labs
   </a>
@@ -428,14 +428,15 @@
 // THEME
 const html = document.documentElement;
 const toggleBtn = document.querySelector('[data-theme-toggle]');
-let theme = 'dark';
+let theme = localStorage.getItem('labs-theme') || 'light';
 const sunSVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
 const moonSVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
 function setIcon(t) { if (toggleBtn) toggleBtn.innerHTML = t === 'dark' ? sunSVG : moonSVG; }
-setIcon(theme);
+html.setAttribute('data-theme', theme); setIcon(theme);
 if (toggleBtn) toggleBtn.addEventListener('click', () => {
   theme = theme === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', theme);
+  localStorage.setItem('labs-theme', theme);
   setIcon(theme);
   drawLandscape();
   drawLRCharts();

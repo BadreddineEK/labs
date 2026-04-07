@@ -1705,7 +1705,7 @@ function initThemeToggle() {
 
   // Respect system preference on first load
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const saved = localStorage.getItem('fe-theme');
+  const saved = localStorage.getItem('labs-theme');
   const initial = saved || (prefersDark ? 'dark' : 'light');
   document.documentElement.setAttribute('data-theme', initial);
 
@@ -1713,7 +1713,7 @@ function initThemeToggle() {
     const current = document.documentElement.getAttribute('data-theme');
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('fe-theme', next);
+    localStorage.setItem('labs-theme', next);
 
     // Redraw all canvases with updated colors
     setTimeout(() => {
