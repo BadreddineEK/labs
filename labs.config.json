@@ -7,5 +7,14 @@
     "date": "2026-04-02",
     "color": "#0f766e",
     "status": "live"
+  },
+  {
+    "slug": "rag-under-the-hood",
+    "title": "RAG Under the Hood",
+    "description": "How Retrieval-Augmented Generation actually works: chunking, embeddings, vector search, reranking, and generation — step by step, visualized.",
+    "tags": ["LLM", "AI", "RAG"],
+    "date": "2026-04-07",
+    "color": "#7c3aed",
+    "status": "live"
   }
 ]
