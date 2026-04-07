@@ -70,5 +70,14 @@
     "date": "2026-04-07",
     "color": "#dc2626",
     "status": "live"
+  },
+  {
+    "slug": "transformer-architecture",
+    "title": "The Transformer Architecture",
+    "description": "Every modern LLM is built on one 2017 paper. Here is the full architecture — self-attention, multi-head attention, encoder vs decoder — block by block, interactive.",
+    "tags": ["Transformers", "Deep Learning", "LLM"],
+    "date": "2026-04-07",
+    "color": "#0369a1",
+    "status": "live"
   }
 ]
