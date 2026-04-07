@@ -61,5 +61,14 @@
     "date": "2026-04-07",
     "color": "#e11d48",
     "status": "live"
+  },
+  {
+    "slug": "overfitting-explained",
+    "title": "Overfitting & Regularization",
+    "description": "Why models memorize instead of learn — and how regularization, dropout, and early stopping fix it. Bias-variance trade-off, visualized interactively.",
+    "tags": ["ML", "Training", "Generalization"],
+    "date": "2026-04-07",
+    "color": "#dc2626",
+    "status": "live"
   }
 ]
