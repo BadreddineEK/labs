@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fine-Tuning Explained — Labs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="light"]{
+  --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;
+  --color-surface-offset:#f0ede8;--color-border:oklch(from #28251d l c h / 0.12);
+  --color-text:#28251d;--color-text-muted:#7a7974;--color-text-faint:#bab9b4;
+  --color-primary:#ea580c;--color-primary-hover:#c2410c;
+  --color-accent:#7c3aed;--color-accent-light:oklch(from #7c3aed l c h / 0.12);
+  --color-green:#16a34a;--color-green-light:oklch(from #16a34a l c h / 0.1);
+  --color-divider:#dcd9d5;
+  --shadow-sm:0 1px 2px oklch(0.2 0.01 80/0.06);
+  --shadow-md:0 4px 12px oklch(0.2 0.01 80/0.1);
+  --shadow-lg:0 12px 32px oklch(0.2 0.01 80/0.15);
+  --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;--radius-full:9999px;
+  --font-display:'Instrument Serif',Georgia,serif;
+  --font-body:'DM Sans','Helvetica Neue',sans-serif;
+  --text-xs:clamp(0.75rem,0.7rem + 0.25vw,0.875rem);
+  --text-sm:clamp(0.875rem,0.8rem + 0.35vw,1rem);
+  --text-base:clamp(1rem,0.95rem + 0.25vw,1.125rem);
+  --text-lg:clamp(1.125rem,1rem + 0.75vw,1.5rem);
+  --text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+  --text-2xl:clamp(2rem,1.2rem + 2.5vw,3.5rem);
+  --text-hero:clamp(2.5rem,0.5rem + 6vw,6rem);
+  --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;
+  --space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;--space-20:5rem;
+  --content-default:960px;--content-wide:1200px;--content-narrow:640px;
+  --transition:180ms cubic-bezier(0.16,1,0.3,1);
+}
+[data-theme="dark"]{
+  --color-bg:#0f0e0d;--color-surface:#161513;--color-surface-2:#1c1b19;
+  --color-surface-offset:#222120;--color-border:oklch(from #cdccca l c h / 0.1);
+  --color-text:#e8e6e3;--color-text-muted:#8a8885;--color-text-faint:#4a4948;
+  --color-primary:#fb923c;--color-primary-hover:#f97316;
+  --color-accent:#a78bfa;--color-accent-light:oklch(from #a78bfa l c h / 0.12);
+  --color-green:#4ade80;--color-green-light:oklch(from #4ade80 l c h / 0.1);
+  --color-divider:#2a2927;
+  --shadow-sm:0 1px 2px oklch(0 0 0/0.3);--shadow-md:0 4px 12px oklch(0 0 0/0.4);--shadow-lg:0 12px 32px oklch(0 0 0/0.5);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-padding-top:80px}
+body{min-height:100dvh;font-family:var(--font-body);font-size:var(--text-base);color:var(--color-text);background:var(--color-bg);line-height:1.6}
+img,svg{display:block;max-width:100%}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.15;font-family:var(--font-display)}
+p{text-wrap:pretty;max-width:68ch}
+a,button,[role="button"]{transition:color var(--transition),background var(--transition),border-color var(--transition),box-shadow var(--transition),opacity var(--transition)}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
+::selection{background:oklch(from var(--color-primary) l c h / 0.25);color:var(--color-text)}
+:focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm)}
+.container{max-width:var(--content-default);margin-inline:auto;padding-inline:var(--space-4)}
+.container--wide{max-width:var(--content-wide)}
+.container--narrow{max-width:var(--content-narrow)}
+nav{position:sticky;top:0;z-index:100;background:oklch(from var(--color-bg) l c h / 0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--color-border);padding:var(--space-4) 0}
+.nav-inner{max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-4);display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+.nav-logo{display:flex;align-items:center;gap:var(--space-2);text-decoration:none;color:var(--color-text);font-size:var(--text-sm);font-weight:600;letter-spacing:-0.01em}
+.nav-right{display:flex;align-items:center;gap:var(--space-4)}
+.nav-back{font-size:var(--text-sm);color:var(--color-text-muted);text-decoration:none;display:flex;align-items:center;gap:var(--space-1)}
+.nav-back:hover{color:var(--color-text)}
+.theme-toggle{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);color:var(--color-text-muted)}
+.theme-toggle:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.hero{padding:clamp(var(--space-12),8vw,var(--space-20)) 0 var(--space-12)}
+.hero-tag{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--space-6)}
+.hero-tag::before{content:'';width:24px;height:2px;background:var(--color-primary);border-radius:var(--radius-full)}
+.hero h1{font-size:var(--text-hero);line-height:1;margin-bottom:var(--space-6);letter-spacing:-0.02em}
+.hero h1 em{font-style:italic;color:var(--color-primary)}
+.hero-lead{font-size:var(--text-lg);color:var(--color-text-muted);max-width:52ch;margin-bottom:var(--space-8)}
+.hero-meta{display:flex;align-items:center;gap:var(--space-6);flex-wrap:wrap;border-top:1px solid var(--color-border);padding-top:var(--space-6)}
+.hero-meta-item{display:flex;flex-direction:column;gap:var(--space-1)}
+.hero-meta-label{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);font-weight:600}
+.hero-meta-value{font-size:var(--text-sm);color:var(--color-text-muted)}
+.section{padding:clamp(var(--space-10),6vw,var(--space-20)) 0;border-top:1px solid var(--color-border)}
+.section-label{font-size:var(--text-xs);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--space-4)}
+.section-title{font-size:var(--text-2xl);letter-spacing:-0.02em;margin-bottom:var(--space-4);line-height:1.1}
+.section-lead{font-size:var(--text-base);color:var(--color-text-muted);max-width:58ch;margin-bottom:var(--space-10)}
+.concepts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:var(--space-4)}
+.concept-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6);transition:transform var(--transition),box-shadow var(--transition)}
+.concept-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.concept-num{font-size:var(--text-xs);font-weight:700;letter-spacing:0.08em;color:var(--color-primary);margin-bottom:var(--space-3)}
+.concept-card h3{font-size:var(--text-lg);margin-bottom:var(--space-3)}
+.concept-card p{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.6}
+.concept-tag{display:inline-flex;margin-top:var(--space-4);padding:var(--space-1) var(--space-3);background:var(--color-accent-light);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600;color:var(--color-accent)}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-4);margin-top:var(--space-8)}
+.compare-col{border-radius:var(--radius-xl);padding:var(--space-6);border:1px solid var(--color-border)}
+.compare-col.highlight{border-color:oklch(from var(--color-primary) l c h / 0.4);background:oklch(from var(--color-primary) l c h / 0.05)}
+.compare-col h4{font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-4)}
+.compare-col ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-3)}
+.compare-col li{font-size:var(--text-sm);color:var(--color-text-muted);display:flex;align-items:flex-start;gap:var(--space-2)}
+.compare-col li::before{content:'·';color:var(--color-primary);font-weight:700;flex-shrink:0;line-height:1.6}
+.compare-badge{display:inline-flex;margin-bottom:var(--space-3);padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:700;letter-spacing:0.05em;text-transform:uppercase}
+.badge-from-scratch{background:oklch(from #a78bfa l c h / 0.15);color:var(--color-accent)}
+.badge-fine-tune{background:oklch(from var(--color-primary) l c h / 0.15);color:var(--color-primary)}
+.badge-prompt{background:oklch(from var(--color-green) l c h / 0.15);color:var(--color-green)}
+.lora-diagram{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-8);overflow-x:auto}
+.process-steps{display:flex;flex-direction:column;gap:0}
+.process-step{display:grid;grid-template-columns:48px 1fr;gap:var(--space-6);padding:var(--space-8) 0;border-bottom:1px solid var(--color-border)}
+.process-step:last-child{border-bottom:none}
+.step-counter{width:48px;height:48px;border-radius:var(--radius-full);background:oklch(from var(--color-primary) l c h / 0.12);display:flex;align-items:center;justify-content:center;font-size:var(--text-base);font-weight:700;color:var(--color-primary);flex-shrink:0;font-family:var(--font-display)}
+.step-content h3{font-size:var(--text-lg);margin-bottom:var(--space-3)}
+.step-content p{font-size:var(--text-sm);color:var(--color-text-muted);max-width:none;margin-bottom:var(--space-3)}
+.step-code{padding:var(--space-3) var(--space-4);background:var(--color-surface-offset);border-radius:var(--radius-md);font-family:monospace;font-size:var(--text-xs);color:var(--color-accent);line-height:1.8;word-break:break-all}
+.playground{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-8)}
+.playground-controls{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-8)}
+.method-btn{padding:var(--space-2) var(--space-5);border-radius:var(--radius-full);border:1px solid var(--color-border);font-size:var(--text-sm);font-weight:500;background:var(--color-surface-2);cursor:pointer;transition:all var(--transition)}
+.method-btn:hover,.method-btn.active{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+.playground-visual{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6)}
+.metric-block{background:var(--color-surface-offset);border-radius:var(--radius-lg);padding:var(--space-6)}
+.metric-block h4{font-size:var(--text-sm);font-weight:700;color:var(--color-text-muted);margin-bottom:var(--space-4);text-transform:uppercase;letter-spacing:0.06em}
+.metric-row{display:grid;grid-template-columns:110px 1fr 52px;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3)}
+.metric-label{font-size:var(--text-xs);color:var(--color-text-muted)}
+.bar-track{height:8px;background:var(--color-surface-2);border-radius:var(--radius-full);overflow:hidden}
+.bar-fill{height:100%;border-radius:var(--radius-full);transition:width 500ms cubic-bezier(0.16,1,0.3,1)}
+.bar-fill.orange{background:var(--color-primary)}
+.bar-fill.purple{background:var(--color-accent)}
+.bar-fill.green{background:var(--color-green)}
+.metric-val{font-size:var(--text-xs);color:var(--color-text-muted);font-variant-numeric:tabular-nums;text-align:right}
+.method-description{grid-column:1/-1;background:oklch(from var(--color-primary) l c h / 0.06);border:1px solid oklch(from var(--color-primary) l c h / 0.2);border-radius:var(--radius-lg);padding:var(--space-4);font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-2)}
+.formulas{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:var(--space-4)}
+.formula-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6)}
+.formula-card h4{font-size:var(--text-base);font-weight:600;margin-bottom:var(--space-3)}
+.formula-eq{font-family:monospace;font-size:var(--text-xs);padding:var(--space-3) var(--space-4);background:var(--color-surface-offset);border-radius:var(--radius-md);color:var(--color-accent);margin-bottom:var(--space-3);word-break:break-all;line-height:1.8}
+.formula-card p{font-size:var(--text-sm);color:var(--color-text-muted)}
+.timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{display:grid;grid-template-columns:100px 1fr;gap:var(--space-6);padding:var(--space-6) 0;border-bottom:1px solid var(--color-border)}
+.timeline-item:last-child{border-bottom:none}
+.timeline-year{font-size:var(--text-sm);font-weight:700;color:var(--color-primary);padding-top:2px}
+.timeline-content h4{font-size:var(--text-base);font-weight:600;margin-bottom:var(--space-1)}
+.timeline-content p{font-size:var(--text-sm);color:var(--color-text-muted)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 500ms ease,transform 500ms ease}
+.reveal.visible{opacity:1;transform:none}
+footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin-top:var(--space-20)}
+.footer-inner{max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-4);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4)}
+.footer-left p{font-size:var(--text-sm);color:var(--color-text-muted)}
+.footer-left a{color:var(--color-primary);text-decoration:none}
+.footer-right{font-size:var(--text-sm);color:var(--color-text-faint)}
+@media(max-width:768px){
+  .compare-grid{grid-template-columns:1fr}
+  .playground-visual{grid-template-columns:1fr}
+  .timeline-item{grid-template-columns:1fr;gap:var(--space-2)}
+  .process-step{grid-template-columns:1fr;gap:var(--space-3)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Labs logo">
+        <rect width="28" height="28" rx="7" fill="var(--color-primary)" opacity="0.15"/>
+        <path d="M7 14h4l3-6 4 12 3-6h4" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>labs</span>
+    </a>
+    <div class="nav-right">
+      <a href="../index.html" class="nav-back">← All explainers</a>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-tag">LLM · Adaptation</div>
+      <h1>Fine-<em>Tuning</em><br>Explained</h1>
+      <p class="hero-lead">A pre-trained model knows the world — but it doesn't know your task. Fine-tuning bridges that gap. From full retraining to LoRA, here is every method with its trade-offs.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Published</span>
+          <span class="hero-meta-value">April 2026</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Reading time</span>
+          <span class="hero-meta-value">~12 min</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Tags</span>
+          <span class="hero-meta-value">LoRA · PEFT · RLHF · SFT</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-label">The core idea</p>
+      <h2 class="section-title">Why fine-tune at all?</h2>
+      <p class="section-lead">Pre-training gives a model broad knowledge. Fine-tuning gives it a specific behaviour, style, or domain expertise — in a fraction of the compute.</p>
+      <div class="concepts-grid">
+        <div class="concept-card reveal">
+          <p class="concept-num">01</p>
+          <h3>Domain Specialisation</h3>
+          <p>A base model trained on the internet does not speak medical radiology, legal contracts, or your internal data format. Fine-tuning adapts the distribution to your domain.</p>
+          <div class="concept-tag">Domain shift</div>
+        </div>
+        <div class="concept-card reveal">
+          <p class="concept-num">02</p>
+          <h3>Instruction Following</h3>
+          <p>A raw LLM completes text — it does not follow instructions. Supervised Fine-Tuning (SFT) on prompt-response pairs teaches the model to behave like an assistant.</p>
+          <div class="concept-tag">SFT</div>
+        </div>
+        <div class="concept-card reveal">
+          <p class="concept-num">03</p>
+          <h3>Style & Format Control</h3>
+          <p>Always respond in JSON? Use a specific tone? Fine-tuning hard-bakes output format into the model weights — more reliable than prompting alone.</p>
+          <div class="concept-tag">Output control</div>
+        </div>
+        <div class="concept-card reveal">
+          <p class="concept-num">04</p>
+          <h3>Reducing Inference Cost</h3>
+          <p>A fine-tuned small model (7B) can match or beat a prompted large model (70B) on a narrow task — at 10× less inference cost. This is a real production argument.</p>
+          <div class="concept-tag">Efficiency</div>
+        </div>
+        <div class="concept-card reveal">
+          <p class="concept-num">05</p>
+          <h3>Alignment & Safety</h3>
+          <p>RLHF (Reinforcement Learning from Human Feedback) is fine-tuning with a human-preference reward signal. It turned GPT-3 into ChatGPT — alignment over raw scale.</p>
+          <div class="concept-tag">RLHF</div>
+        </div>
+        <div class="concept-card reveal">
+          <p class="concept-num">06</p>
+          <h3>Data Privacy</h3>
+          <p>Calling a closed API leaks your data. A locally fine-tuned model runs entirely on-premise — critical for healthcare, finance, and enterprise use cases.</p>
+          <div class="concept-tag">On-premise</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--wide">
+      <p class="section-label">Method selection</p>
+      <h2 class="section-title">Train from scratch vs Fine-tune vs Prompt</h2>
+      <p class="section-lead">Three fundamentally different strategies. The right choice depends on data availability, budget, and how different your task is from pre-training.</p>
+      <div class="compare-grid reveal">
+        <div class="compare-col">
+          <span class="compare-badge badge-from-scratch">From scratch</span>
+          <h4>Pre-training</h4>
+          <ul>
+            <li>Billions of tokens required</li>
+            <li>Millions of $ in compute</li>
+            <li>Full control of the distribution</li>
+            <li>Only justified for foundational models</li>
+            <li>OpenAI, Google, Mistral territory</li>
+          </ul>
+        </div>
+        <div class="compare-col highlight">
+          <span class="compare-badge badge-fine-tune">Recommended</span>
+          <h4>Fine-tuning</h4>
+          <ul>
+            <li>1k – 100k labelled examples</li>
+            <li>Hours to days of training</li>
+            <li>Modifies (some) model weights</li>
+            <li>Best accuracy on narrow tasks</li>
+            <li>SFT, LoRA, QLoRA, RLHF</li>
+          </ul>
+        </div>
+        <div class="compare-col">
+          <span class="compare-badge badge-prompt">No training</span>
+          <h4>Prompting / RAG</h4>
+          <ul>
+            <li>Zero labelled examples needed</li>
+            <li>Instant to deploy</li>
+            <li>Weights unchanged</li>
+            <li>Limited by context window</li>
+            <li>Best for dynamic knowledge</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-label">The key innovation</p>
+      <h2 class="section-title">LoRA — Low-Rank Adaptation</h2>
+      <p class="section-lead">Instead of updating all 7 billion parameters, LoRA freezes the original weights and injects tiny trainable matrices. 99% of memory saved, almost no quality loss.</p>
+      <div class="lora-diagram reveal">
+        <svg width="700" height="320" viewBox="0 0 700 320" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
+          <rect x="40" y="80" width="180" height="160" rx="12" fill="oklch(from #a78bfa l c h / 0.08)" stroke="oklch(from #a78bfa l c h / 0.35)" stroke-width="1.5"/>
+          <text x="130" y="148" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="22" font-weight="700" fill="#a78bfa">W₀</text>
+          <text x="130" y="172" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#a78bfa" opacity="0.8">d × d matrix</text>
+          <text x="130" y="190" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#8a8885">Frozen — not updated</text>
+          <text x="130" y="58" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="#a78bfa" letter-spacing="1">ORIGINAL WEIGHTS</text>
+          <text x="248" y="168" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="28" font-weight="300" fill="var(--color-text-faint)">+</text>
+          <rect x="280" y="60" width="120" height="80" rx="10" fill="oklch(from #fb923c l c h / 0.1)" stroke="oklch(from #fb923c l c h / 0.4)" stroke-width="1.5"/>
+          <text x="340" y="98" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#fb923c">B</text>
+          <text x="340" y="116" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#fb923c" opacity="0.8">d × r</text>
+          <text x="340" y="40" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="#fb923c" letter-spacing="1">LORA ADAPTER</text>
+          <rect x="280" y="180" width="120" height="80" rx="10" fill="oklch(from #fb923c l c h / 0.1)" stroke="oklch(from #fb923c l c h / 0.4)" stroke-width="1.5"/>
+          <text x="340" y="218" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#fb923c">A</text>
+          <text x="340" y="236" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#fb923c" opacity="0.8">r × d</text>
+          <line x1="408" y1="100" x2="440" y2="100" stroke="var(--color-text-faint)" stroke-width="1" stroke-dasharray="3 2"/>
+          <text x="445" y="104" font-family="DM Sans,sans-serif" font-size="11" fill="var(--color-text-faint)">rank r ≪ d</text>
+          <text x="445" y="118" font-family="DM Sans,sans-serif" font-size="10" fill="var(--color-text-faint)">(e.g. r=8, d=4096)</text>
+          <defs>
+            <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="var(--color-text-faint)"/>
+            </marker>
+          </defs>
+          <path d="M408 160 L490 160" stroke="var(--color-text-faint)" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="490" y="110" width="170" height="100" rx="12" fill="oklch(from #4ade80 l c h / 0.06)" stroke="oklch(from #4ade80 l c h / 0.3)" stroke-width="1.5"/>
+          <text x="575" y="155" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#4ade80" font-weight="600">h = W₀x + BAx</text>
+          <text x="575" y="175" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#8a8885">Merged at inference</text>
+          <text x="575" y="90" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="#4ade80" letter-spacing="1">OUTPUT</text>
+          <text x="340" y="292" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="var(--color-text-faint)">Trainable params: 2 × r × d  vs  d² for full fine-tuning</text>
+          <text x="340" y="308" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#fb923c">Example: r=8, d=4096 → 65k params vs 16.7M  (×256 reduction)</text>
+        </svg>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:var(--space-4);margin-top:var(--space-6)">
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6)" class="reveal">
+          <h4 style="font-size:var(--text-base);margin-bottom:var(--space-3)">Why low-rank works</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-text-muted)">Weight updates during fine-tuning have a low intrinsic rank — the update ΔW lies in a small subspace of the full parameter space. LoRA exploits this directly.</p>
+        </div>
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6)" class="reveal">
+          <h4 style="font-size:var(--text-base);margin-bottom:var(--space-3)">QLoRA = LoRA + Quantization</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-text-muted)">QLoRA loads the base model in 4-bit NF4, keeping adapters in 16-bit. A 65B model fits on a single 48GB GPU. Fine-tuning on a consumer setup becomes possible.</p>
+        </div>
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6)" class="reveal">
+          <h4 style="font-size:var(--text-base);margin-bottom:var(--space-3)">Merging at inference</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-text-muted)">Once trained, LoRA adapters can be merged into the original weights (W = W₀ + BA), adding zero inference latency. Or keep them separate and swap tasks at runtime.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--narrow">
+      <p class="section-label">Step by step</p>
+      <h2 class="section-title">How a fine-tuning run works</h2>
+      <p class="section-lead">From raw data to a deployed model — the 6 stages every practitioner goes through.</p>
+      <div class="process-steps">
+        <div class="process-step reveal">
+          <div class="step-counter">1</div>
+          <div class="step-content">
+            <h3>Collect & format your dataset</h3>
+            <p>For instruction tuning, you need prompt-completion pairs. The standard is JSONL with {"instruction", "input", "output"} fields. Quality beats quantity — 1k clean examples beat 100k noisy ones.</p>
+            <div class="step-code">{"instruction": "Summarise this report", "input": "Q4 sales declined 12%...", "output": "Q4 sales fell 12% due to..."}</div>
+          </div>
+        </div>
+        <div class="process-step reveal">
+          <div class="step-counter">2</div>
+          <div class="step-content">
+            <h3>Choose your base model</h3>
+            <p>The base model determines the ceiling of your fine-tune. Llama 3, Mistral 7B, Qwen 2.5 are the go-to open-source bases. For classification or embedding tasks, BERT-class models are often better.</p>
+            <div class="step-code">from transformers import AutoModelForCausalLM
+model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-v0.3")</div>
+          </div>
+        </div>
+        <div class="process-step reveal">
+          <div class="step-counter">3</div>
+          <div class="step-content">
+            <h3>Configure the PEFT adapter (LoRA)</h3>
+            <p>Define rank r, alpha (scaling), and which modules to target. Typically: q_proj, v_proj in attention layers. Dropout 0.05–0.1 to regularise.</p>
+            <div class="step-code">from peft import LoraConfig
+config = LoraConfig(r=16, lora_alpha=32, target_modules=["q_proj","v_proj"], lora_dropout=0.05, bias="none", task_type="CAUSAL_LM")</div>
+          </div>
+        </div>
+        <div class="process-step reveal">
+          <div class="step-counter">4</div>
+          <div class="step-content">
+            <h3>Train with SFTTrainer</h3>
+            <p>Hugging Face TRL's SFTTrainer handles data collation, gradient accumulation, and logging. Use bf16 on modern GPUs. A typical run: 3 epochs, learning rate 2e-4, cosine scheduler.</p>
+            <div class="step-code">from trl import SFTTrainer
+trainer = SFTTrainer(model=model, train_dataset=dataset, peft_config=config, ...)
+trainer.train()</div>
+          </div>
+        </div>
+        <div class="process-step reveal">
+          <div class="step-counter">5</div>
+          <div class="step-content">
+            <h3>Evaluate on held-out set</h3>
+            <p>Track loss on a validation split. For generation tasks, use ROUGE, BLEU or human evaluation. For classification, standard accuracy/F1. Watch for overfitting on small datasets.</p>
+            <div class="step-code">trainer.evaluate()
+# => {"eval_loss": 0.83, "eval_rouge1": 0.61, ...}</div>
+          </div>
+        </div>
+        <div class="process-step reveal">
+          <div class="step-counter">6</div>
+          <div class="step-content">
+            <h3>Merge & deploy</h3>
+            <p>Merge the LoRA adapters into the base model for zero-latency inference, then export to GGUF (llama.cpp) or ONNX. Deploy via vLLM, Ollama, or Hugging Face Inference Endpoints.</p>
+            <div class="step-code">merged = model.merge_and_unload()
+merged.save_pretrained("./my-fine-tuned-model")</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-label">Interactive comparison</p>
+      <h2 class="section-title">Method trade-offs at a glance</h2>
+      <p class="section-lead">Select a fine-tuning method to compare its compute, memory, and quality trade-offs.</p>
+      <div class="playground">
+        <div class="playground-controls" id="methodControls">
+          <button class="method-btn active" data-method="full">Full Fine-Tuning</button>
+          <button class="method-btn" data-method="lora">LoRA</button>
+          <button class="method-btn" data-method="qlora">QLoRA</button>
+          <button class="method-btn" data-method="sft">SFT only</button>
+          <button class="method-btn" data-method="rlhf">RLHF</button>
+        </div>
+        <div class="playground-visual">
+          <div class="metric-block">
+            <h4>Resource requirements</h4>
+            <div class="metric-row">
+              <span class="metric-label">GPU Memory</span>
+              <div class="bar-track"><div class="bar-fill orange" id="bar-memory" style="width:0%"></div></div>
+              <span class="metric-val" id="val-memory">—</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Training time</span>
+              <div class="bar-track"><div class="bar-fill orange" id="bar-time" style="width:0%"></div></div>
+              <span class="metric-val" id="val-time">—</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Data needed</span>
+              <div class="bar-track"><div class="bar-fill orange" id="bar-data" style="width:0%"></div></div>
+              <span class="metric-val" id="val-data">—</span>
+            </div>
+          </div>
+          <div class="metric-block">
+            <h4>Output quality</h4>
+            <div class="metric-row">
+              <span class="metric-label">Task accuracy</span>
+              <div class="bar-track"><div class="bar-fill purple" id="bar-accuracy" style="width:0%"></div></div>
+              <span class="metric-val" id="val-accuracy">—</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">vs. base model</span>
+              <div class="bar-track"><div class="bar-fill purple" id="bar-gain" style="width:0%"></div></div>
+              <span class="metric-val" id="val-gain">—</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Catastrophic forget</span>
+              <div class="bar-track"><div class="bar-fill green" id="bar-forget" style="width:0%"></div></div>
+              <span class="metric-val" id="val-forget">—</span>
+            </div>
+          </div>
+          <div class="method-description" id="methodDesc">Select a method above to see details.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-label">The math</p>
+      <h2 class="section-title">Key equations</h2>
+      <p class="section-lead">Four equations that define the modern fine-tuning landscape.</p>
+      <div class="formulas">
+        <div class="formula-card reveal">
+          <h4>LoRA weight update</h4>
+          <div class="formula-eq">h = W₀x + ΔWx = W₀x + BAx<br>where B ∈ ℝ^(d×r), A ∈ ℝ^(r×d), r ≪ d</div>
+          <p>A is initialised with Gaussian, B with zeros — so ΔW = 0 at start. Only A and B are updated during training.</p>
+        </div>
+        <div class="formula-card reveal">
+          <h4>LoRA scaling</h4>
+          <div class="formula-eq">ΔW = (α / r) · BA</div>
+          <p>α controls the magnitude of the adaptation. Setting α = 2r is a common heuristic. Increasing α boosts the adapter signal relative to the frozen weights.</p>
+        </div>
+        <div class="formula-card reveal">
+          <h4>RLHF reward objective</h4>
+          <div class="formula-eq">max E[r(x,y)] - β · KL[π_θ(y|x) || π_ref(y|x)]</div>
+          <p>Maximise reward from the human preference model while staying close (KL divergence) to the original SFT policy. β controls the balance.</p>
+        </div>
+        <div class="formula-card reveal">
+          <h4>DPO loss (simpler RLHF)</h4>
+          <div class="formula-eq">L_DPO = -log σ(β log[π_θ(y_w)/π_ref(y_w)] - β log[π_θ(y_l)/π_ref(y_l)])</div>
+          <p>Direct Preference Optimisation skips the reward model entirely. Train directly on (chosen, rejected) pairs — used in Llama 3, Mistral, and most 2026 alignment pipelines.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--narrow">
+      <p class="section-label">History</p>
+      <h2 class="section-title">From transfer learning to PEFT</h2>
+      <p class="section-lead">How fine-tuning evolved from a niche technique to the core of modern AI deployment.</p>
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-year">2018</div>
+          <div class="timeline-content">
+            <h4>BERT & GPT — transfer learning takes off</h4>
+            <p>Pre-train on large corpora, fine-tune on downstream tasks. Full fine-tuning on all layers becomes the standard recipe.</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-year">2021</div>
+          <div class="timeline-content">
+            <h4>Prefix Tuning & Adapter layers</h4>
+            <p>First PEFT methods: freeze the model, add small trainable modules. Showed that &lt;1% of parameters can carry most of the fine-tuning signal.</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-year">2021</div>
+          <div class="timeline-content">
+            <h4>InstructGPT — RLHF alignment</h4>
+            <p>OpenAI fine-tunes GPT-3 with human feedback. SFT + reward model + PPO. A 1.3B InstructGPT outperforms a 175B GPT-3 on human preference. Alignment > scale.</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-year">2022</div>
+          <div class="timeline-content">
+            <h4>LoRA (Hu et al., Microsoft)</h4>
+            <p>Low-Rank Adaptation shows that fine-tuning with 0.1–1% of parameters matches full fine-tuning on most tasks. The PEFT landscape shifts entirely.</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-year">2023</div>
+          <div class="timeline-content">
+            <h4>QLoRA — democratisation</h4>
+            <p>4-bit quantisation + LoRA. A 65B model on one consumer GPU. Fine-tuning stops being a hyperscaler exclusive. The open-source wave begins.</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-year">2024–26</div>
+          <div class="timeline-content">
+            <h4>DPO, ORPO, SimPO — RLHF without RL</h4>
+            <p>Alignment without reward models. DPO, used in Llama 3 and Mistral, achieves RLHF quality at SFT cost. The standard recipe in 2026 production pipelines.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <p>Part of <a href="../index.html">labs.badreddineek.com</a> — visual explainers by <a href="https://github.com/BadreddineEK" target="_blank" rel="noopener">Badreddine El Khamlichi</a></p>
+    </div>
+    <div class="footer-right">Built with curiosity &amp; clean code</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
+  let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  r.setAttribute('data-theme',d);
+  if(t)t.addEventListener('click',()=>{
+    d=d==='dark'?'light':'dark';
+    r.setAttribute('data-theme',d);
+    t.innerHTML=d==='dark'
+      ?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+      :'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+  });
+})();
+
+const methodData = {
+  full: {
+    memory: 100, memLabel: "Very high (×4 params)",
+    time: 100, timeLabel: "Days / weeks",
+    data: 90, dataLabel: "10k–1M examples",
+    accuracy: 98, accLabel: "Best possible",
+    gain: 95, gainLabel: "+30–50% vs base",
+    forget: 90, forgetLabel: "High risk",
+    desc: "Full Fine-Tuning updates every single weight in the model. Maximum expressiveness, but requires massive GPU memory (optimizer states alone are 2× the model size). Rarely justified except for large distribution shifts or when you have millions of labelled examples."
+  },
+  lora: {
+    memory: 25, memLabel: "Low (r/d ratio)",
+    time: 30, timeLabel: "Hours",
+    data: 50, dataLabel: "1k–50k examples",
+    accuracy: 90, accLabel: "Near-full quality",
+    gain: 85, gainLabel: "+25–45% vs base",
+    forget: 20, forgetLabel: "Very low risk",
+    desc: "LoRA freezes all original weights and injects trainable rank-r matrices at target layers (typically q_proj, v_proj). Only 0.1–1% of parameters are trained. Near-full fine-tuning quality at a fraction of the cost. The default choice for most production use cases."
+  },
+  qlora: {
+    memory: 12, memLabel: "Minimal (4-bit base)",
+    time: 40, timeLabel: "Hours (slower kernels)",
+    data: 50, dataLabel: "1k–50k examples",
+    accuracy: 87, accLabel: "Slightly below LoRA",
+    gain: 82, gainLabel: "+22–42% vs base",
+    forget: 20, forgetLabel: "Very low risk",
+    desc: "QLoRA loads the base model in 4-bit NF4 quantisation and keeps LoRA adapters in bfloat16. A 70B model fits on a single 48GB GPU. Slight quality trade-off vs standard LoRA due to quantisation noise, but the memory reduction enables hardware-constrained fine-tuning."
+  },
+  sft: {
+    memory: 40, memLabel: "Moderate",
+    time: 20, timeLabel: "Minutes–hours",
+    data: 60, dataLabel: "1k–100k pairs",
+    accuracy: 80, accLabel: "Good for instruction",
+    gain: 70, gainLabel: "+20–35% on tasks",
+    forget: 50, forgetLabel: "Moderate risk",
+    desc: "Supervised Fine-Tuning (SFT) trains on prompt-response pairs with standard cross-entropy loss. This is the first stage that turns a raw language model into an instruction follower — before RLHF. Often combined with LoRA (SFT+LoRA is the most common recipe in 2025)."
+  },
+  rlhf: {
+    memory: 70, memLabel: "High (3 models active)",
+    time: 85, timeLabel: "Days",
+    data: 80, dataLabel: "10k human ratings",
+    accuracy: 95, accLabel: "Best alignment",
+    gain: 92, gainLabel: "ChatGPT-level align",
+    forget: 40, forgetLabel: "Managed via KL",
+    desc: "RLHF requires three simultaneous models: the policy (what you're training), a reference policy (frozen SFT model), and a reward model trained on human preferences. PPO or GRPO optimises the policy to maximise reward while staying close to the reference. Expensive but state-of-the-art for alignment. Often replaced by DPO in 2025."
+  }
+};
+
+function animateBar(id, valId, pct, label) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if(el) el.style.width = pct + '%';
+    const vEl = document.getElementById(valId);
+    if(vEl) vEl.textContent = label;
+  }, 50);
+}
+
+function setMethod(key) {
+  document.querySelectorAll('.method-btn').forEach(b => b.classList.toggle('active', b.dataset.method === key));
+  const d = methodData[key];
+  animateBar('bar-memory', 'val-memory', d.memory, d.memLabel);
+  animateBar('bar-time', 'val-time', d.time, d.timeLabel);
+  animateBar('bar-data', 'val-data', d.data, d.dataLabel);
+  animateBar('bar-accuracy', 'val-accuracy', d.accuracy, d.accLabel);
+  animateBar('bar-gain', 'val-gain', d.gain, d.gainLabel);
+  animateBar('bar-forget', 'val-forget', d.forget, d.forgetLabel);
+  const desc = document.getElementById('methodDesc');
+  if(desc) desc.textContent = d.desc;
+}
+
+document.querySelectorAll('.method-btn').forEach(btn => {
+  btn.addEventListener('click', () => setMethod(btn.dataset.method));
+});
+setMethod('full');
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
