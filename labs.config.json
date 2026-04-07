@@ -34,5 +34,14 @@
     "date": "2026-04-07",
     "color": "#0ea5e9",
     "status": "live"
+  },
+  {
+    "slug": "how-a-model-learns",
+    "title": "How a Model Learns",
+    "description": "Loss landscapes, gradient descent, backpropagation — why a neural network improves with every step, visualized interactively.",
+    "tags": ["Training", "Backprop", "Deep Learning"],
+    "date": "2026-04-07",
+    "color": "#16a34a",
+    "status": "live"
   }
 ]
