@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How a Model Learns — Labs by Badreddine EK</title>
-  <meta name="description" content="Loss landscapes, gradient descent, backpropagation — why a neural network improves with every step, visualized interactively." />
+  <title>How a Model Learns - Labs by Badreddine EK</title>
+  <meta name="description" content="Loss landscapes, gradient descent, backpropagation - why a neural network improves with every step, visualized interactively." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300..600&display=swap" rel="stylesheet" />
@@ -177,6 +177,8 @@
     .back-section{max-width:900px;margin-inline:auto;padding:0 var(--sp6) var(--sp16);display:flex;gap:var(--sp4);align-items:center;justify-content:space-between;flex-wrap:wrap}
     .back-labs{display:inline-flex;align-items:center;gap:var(--sp2);font-size:var(--text-sm);color:var(--text-muted);border:1px solid var(--border);background:var(--surface);padding:var(--sp2) var(--sp4);border-radius:var(--r-full);transition:color var(--tr),border-color var(--tr)}
     .back-labs:hover{color:var(--text);border-color:var(--acc)}
+    .lang-btn{padding:var(--sp1) var(--sp3);border-radius:var(--r-full);font-size:var(--text-xs);font-weight:600;letter-spacing:.04em;border:1px solid var(--border-acc);color:var(--acc);background:var(--acc-bg);cursor:pointer;transition:all var(--tr)}
+    .lang-btn:hover{background:var(--acc);color:#fff}
     footer{border-top:1px solid var(--border);padding:var(--sp8) var(--sp6)}
     .footer-inner{max-width:900px;margin-inline:auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--sp4);font-size:var(--text-xs);color:var(--text-faint)}
     .footer-link{color:var(--text-faint);transition:color var(--tr)}
@@ -199,7 +201,8 @@
       Labs
     </a>
     <div class="nav-right">
-      <span class="nav-tag">Training · Backprop · Deep Learning</span>
+      <span class="nav-tag">Training &middot; Backprop &middot; Deep Learning</span>
+      <button class="lang-btn" id="lang-toggle">FR</button>
       <button class="theme-btn" data-theme-toggle aria-label="Toggle theme">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
@@ -210,16 +213,18 @@
 <header class="hero">
   <div class="hero-kicker">
     <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
-    Interactive Explainer
+    <span class="lang-en">Interactive Explainer</span>
+    <span class="lang-fr" style="display:none">Explainer interactif</span>
   </div>
   <h1>How a Model <em>Learns</em></h1>
-  <p class="hero-sub">A model doesn't start smart. It starts random, makes mistakes, measures how wrong it was, and adjusts — millions of times. Here's what that actually looks like.</p>
+  <p class="hero-sub lang-en">A model doesn't start smart. It starts random, makes mistakes, measures how wrong it was, and adjusts - millions of times. Here's what that actually looks like.</p>
+  <p class="hero-sub lang-fr" style="display:none">Un mod&#232;le ne commence pas intelligent. Il part al&#233;atoire, fait des erreurs, mesure &#224; quel point il s'est tromp&#233;, et s'ajuste - des millions de fois. Voici &#224; quoi &#231;a ressemble concr&#232;tement.</p>
   <div class="hero-meta">
-    <div class="meta-item"><span class="meta-val">5</span><span class="meta-lbl">Concepts</span></div>
+    <div class="meta-item"><span class="meta-val">5</span><span class="meta-lbl lang-en">Concepts</span><span class="meta-lbl lang-fr" style="display:none">Concepts</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">~8 min</span><span class="meta-lbl">Read</span></div>
+    <div class="meta-item"><span class="meta-val">~8 min</span><span class="meta-lbl lang-en">Read</span><span class="meta-lbl lang-fr" style="display:none">Lecture</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl">Published</span></div>
+    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl lang-en">Published</span><span class="meta-lbl lang-fr" style="display:none">Publi&#233;</span></div>
   </div>
 </header>
 
@@ -229,15 +234,34 @@
   <section class="section">
     <div class="section-label">
       <span class="section-num">01</span>
-      <h2 class="section-title">What is a loss?</h2>
+      <h2 class="section-title lang-en">What is a loss?</h2>
+      <h2 class="section-title lang-fr" style="display:none">Qu'est-ce qu'une loss?</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Before a model can improve, it needs to know <strong>how wrong it is</strong>. The loss function is that measure — a single number that summarizes the gap between what the model predicted and what the correct answer was. The smaller the loss, the better the model.</p>
-      <p class="prose">Common loss functions include <strong>Mean Squared Error</strong> (MSE) for regression tasks — the average squared difference between predictions and targets — and <strong>Cross-Entropy</strong> for classification — how surprised the model was by the correct label given its probability distribution.</p>
+      <p class="prose lang-en">Before a model can improve, it needs to know <strong>how wrong it is</strong>. The loss function is that measure - a single number that summarizes the gap between what the model predicted and what the correct answer was. The smaller the loss, the better the model.</p>
+      <p class="prose lang-fr" style="display:none">Avant qu'un mod&#232;le puisse s'am&#233;liorer, il doit savoir <strong>&#224; quel point il se trompe</strong>. La fonction de loss est cette mesure - un seul nombre qui r&#233;sume l'&#233;cart entre ce que le mod&#232;le a pr&#233;dit et la bonne r&#233;ponse. Plus la loss est faible, meilleur est le mod&#232;le.</p>
+      <p class="prose lang-en">Common loss functions include <strong>Mean Squared Error</strong> (MSE) for regression tasks - the average squared difference between predictions and targets - and <strong>Cross-Entropy</strong> for classification - how surprised the model was by the correct label given its probability distribution.</p>
+      <p class="prose lang-fr" style="display:none">Les fonctions de loss courantes incluent l'<strong>Erreur Quadratique Moyenne</strong> (MSE) pour la r&#233;gression - la diff&#233;rence quadratique moyenne entre pr&#233;dictions et cibles - et la <strong>Cross-Entropie</strong> pour la classification - &#224; quel point le mod&#232;le &#233;tait surpris par la bonne &#233;tiquette.</p>
       <div class="card-grid">
-        <div class="card"><div class="card-icon">🎯</div><div class="card-title">The goal</div><div class="card-body">Minimize the loss over the entire training dataset. Every training step is one small move toward a lower loss.</div></div>
-        <div class="card"><div class="card-icon">📐</div><div class="card-title">MSE Loss</div><div class="card-body">L = (1/n) Σ(ŷ − y)². Penalizes large errors heavily due to squaring. Standard for regression.</div></div>
-        <div class="card"><div class="card-icon">🔀</div><div class="card-title">Cross-Entropy</div><div class="card-body">L = −Σ y·log(ŷ). Measures how confident the model was about the right class. Standard for classification.</div></div>
+        <div class="card">
+          <div class="card-icon">&#127919;</div>
+          <div class="card-title lang-en">The goal</div>
+          <div class="card-title lang-fr" style="display:none">L'objectif</div>
+          <div class="card-body lang-en">Minimize the loss over the entire training dataset. Every training step is one small move toward a lower loss.</div>
+          <div class="card-body lang-fr" style="display:none">Minimiser la loss sur tout le jeu de donn&#233;es d'entra&#238;nement. Chaque &#233;tape est un petit pas vers une loss plus faible.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128208;</div>
+          <div class="card-title">MSE Loss</div>
+          <div class="card-body lang-en">L = (1/n) &#931;(&#375; &#8722; y)&#178;. Penalizes large errors heavily due to squaring. Standard for regression.</div>
+          <div class="card-body lang-fr" style="display:none">L = (1/n) &#931;(&#375; &#8722; y)&#178;. P&#233;nalise fortement les grandes erreurs par le carr&#233;. Standard pour la r&#233;gression.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128260;</div>
+          <div class="card-title">Cross-Entropy</div>
+          <div class="card-body lang-en">L = &#8722;&#931; y&#183;log(&#375;). Measures how confident the model was about the right class. Standard for classification.</div>
+          <div class="card-body lang-fr" style="display:none">L = &#8722;&#931; y&#183;log(&#375;). Mesure &#224; quel point le mod&#232;le &#233;tait s&#251;r de la bonne classe. Standard pour la classification.</div>
+        </div>
       </div>
     </div>
   </section>
@@ -246,26 +270,39 @@
   <section class="section">
     <div class="section-label">
       <span class="section-num">02</span>
-      <h2 class="section-title">The loss landscape</h2>
+      <h2 class="section-title lang-en">The loss landscape</h2>
+      <h2 class="section-title lang-fr" style="display:none">Le paysage de la loss</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Imagine plotting the loss for every possible combination of two weights. You'd get a surface — a <strong>loss landscape</strong>. The training goal is to find the lowest valley. With millions of parameters, this surface is impossibly high-dimensional, but the intuition stays the same: navigate downhill.</p>
+      <p class="prose lang-en">Imagine plotting the loss for every possible combination of two weights. You'd get a surface - a <strong>loss landscape</strong>. The training goal is to find the lowest valley. With millions of parameters, this surface is impossibly high-dimensional, but the intuition stays the same: navigate downhill.</p>
+      <p class="prose lang-fr" style="display:none">Imaginez tracer la loss pour chaque combinaison possible de deux poids. Vous obtiendriez une surface - un <strong>paysage de loss</strong>. L'objectif de l'entra&#238;nement est de trouver la vall&#233;e la plus basse. Avec des millions de param&#232;tres, cette surface est impossiblement multidimensionnelle, mais l'intuition reste la m&#234;me: naviguer vers le bas.</p>
       <div class="canvas-wrap">
         <div class="canvas-header">
-          <div class="canvas-title">Loss landscape — click to place your starting point</div>
+          <div class="canvas-title lang-en">Loss landscape - click to place your starting point</div>
+          <div class="canvas-title lang-fr" style="display:none">Paysage de loss - cliquez pour choisir votre point de d&#233;part</div>
           <div class="canvas-controls">
-            <button class="ctrl-btn active" data-shape="valley">Valley</button>
-            <button class="ctrl-btn" data-shape="saddle">Saddle point</button>
-            <button class="ctrl-btn" data-shape="rough">Rough terrain</button>
+            <button class="ctrl-btn active" data-shape="valley">
+              <span class="lang-en">Valley</span>
+              <span class="lang-fr" style="display:none">Vall&#233;e</span>
+            </button>
+            <button class="ctrl-btn" data-shape="saddle">
+              <span class="lang-en">Saddle point</span>
+              <span class="lang-fr" style="display:none">Point selle</span>
+            </button>
+            <button class="ctrl-btn" data-shape="rough">
+              <span class="lang-en">Rough terrain</span>
+              <span class="lang-fr" style="display:none">Terrain accident&#233;</span>
+            </button>
           </div>
         </div>
         <canvas id="landscape-canvas" width="800" height="320"></canvas>
         <div class="loss-readout">
-          <div class="readout-item"><span class="readout-val" id="pos-w1">—</span><span class="readout-lbl">Weight 1</span></div>
-          <div class="readout-item"><span class="readout-val" id="pos-w2">—</span><span class="readout-lbl">Weight 2</span></div>
-          <div class="readout-item"><span class="readout-val" id="pos-loss">—</span><span class="readout-lbl">Loss</span></div>
+          <div class="readout-item"><span class="readout-val" id="pos-w1">-</span><span class="readout-lbl">Weight 1</span></div>
+          <div class="readout-item"><span class="readout-val" id="pos-w2">-</span><span class="readout-lbl">Weight 2</span></div>
+          <div class="readout-item"><span class="readout-val" id="pos-loss">-</span><span class="readout-lbl">Loss</span></div>
         </div>
-        <div class="canvas-hint">Click anywhere on the surface to place a starting point and watch gradient descent run</div>
+        <div class="canvas-hint lang-en">Click anywhere on the surface to place a starting point and watch gradient descent run. Values are illustrative.</div>
+        <div class="canvas-hint lang-fr" style="display:none">Cliquez n'importe o&#249; sur la surface pour placer un point de d&#233;part et observer la descente de gradient. Les valeurs sont illustratives.</div>
       </div>
     </div>
   </section>
@@ -274,27 +311,34 @@
   <section class="section">
     <div class="section-label">
       <span class="section-num">03</span>
-      <h2 class="section-title">Gradient descent</h2>
+      <h2 class="section-title lang-en">Gradient descent</h2>
+      <h2 class="section-title lang-fr" style="display:none">La descente de gradient</h2>
     </div>
     <div class="section-body">
-      <p class="prose">The gradient is the direction of <strong>steepest ascent</strong> in the loss landscape. To minimize the loss, we move in the <em>opposite</em> direction — downhill. We scale that step by a small constant called the <strong>learning rate (η)</strong>, which controls how far we move each step.</p>
-      <p class="prose">The update rule is simple: <code>w ← w − η · ∇L(w)</code>. Too large a learning rate and you overshoot the minimum, bouncing around or diverging. Too small and training takes forever. Finding the right value — or using a scheduler to adapt it — is one of the most important practical decisions in training.</p>
+      <p class="prose lang-en">The gradient is the direction of <strong>steepest ascent</strong> in the loss landscape. To minimize the loss, we move in the <em>opposite</em> direction - downhill. We scale that step by a small constant called the <strong>learning rate (&#951;)</strong>, which controls how far we move each step.</p>
+      <p class="prose lang-fr" style="display:none">Le gradient est la direction de <strong>mont&#233;e la plus raide</strong> dans le paysage de loss. Pour minimiser la loss, on se d&#233;place dans la direction <em>oppos&#233;e</em> - vers le bas. On met &#224; l'&#233;chelle ce pas par une petite constante appel&#233;e le <strong>taux d'apprentissage (&#951;)</strong>, qui contr&#244;le la distance parcourue &#224; chaque &#233;tape.</p>
+      <p class="prose lang-en">The update rule is: <code>w &#8592; w &#8722; &#951; &#183; &#8711;L(w)</code>. Too large a learning rate and you overshoot the minimum, bouncing around or diverging. Too small and training takes forever. Finding the right value - or using a scheduler to adapt it - is one of the most important practical decisions in training.</p>
+      <p class="prose lang-fr" style="display:none">La r&#232;gle de mise &#224; jour est: <code>w &#8592; w &#8722; &#951; &#183; &#8711;L(w)</code>. Un taux trop grand et on d&#233;passe le minimum, en rebondissant. Trop petit et l'entra&#238;nement prend une &#233;ternit&#233;. Trouver la bonne valeur - ou utiliser un scheduler pour l'adapter - est l'une des d&#233;cisions pratiques les plus importantes.</p>
       <div class="training-wrap">
         <div class="training-controls">
-          <button class="btn-primary" id="train-btn">▶ Run training</button>
+          <button class="btn-primary" id="train-btn">
+            <span class="lang-en">&#9654; Run training</span>
+            <span class="lang-fr" style="display:none">&#9654; Lancer l'entra&#238;nement</span>
+          </button>
           <button class="btn-reset" id="reset-btn">Reset</button>
           <div class="lr-wrap">
-            <label for="lr-slider">Learning rate:</label>
+            <label for="lr-slider" class="lang-en">Learning rate:</label>
+            <label for="lr-slider" class="lang-fr" style="display:none">Taux d'apprentissage:</label>
             <input type="range" id="lr-slider" min="1" max="10" value="3" step="1" style="width:100px" />
             <span id="lr-val">0.03</span>
           </div>
         </div>
         <canvas id="loss-chart" width="800" height="160"></canvas>
         <div class="epoch-info">
-          <div class="epoch-stat"><span class="epoch-stat-val" id="ep-num">0</span><span class="epoch-stat-lbl">Epoch</span></div>
-          <div class="epoch-stat"><span class="epoch-stat-val" id="ep-loss">—</span><span class="epoch-stat-lbl">Current Loss</span></div>
-          <div class="epoch-stat"><span class="epoch-stat-val" id="ep-delta">—</span><span class="epoch-stat-lbl">Δ Loss</span></div>
-          <div class="epoch-stat"><span class="epoch-stat-val" id="ep-status">—</span><span class="epoch-stat-lbl">Status</span></div>
+          <div class="epoch-stat"><span class="epoch-stat-val" id="ep-num">0</span><span class="epoch-stat-lbl lang-en">Epoch</span><span class="epoch-stat-lbl lang-fr" style="display:none">&#201;poque</span></div>
+          <div class="epoch-stat"><span class="epoch-stat-val" id="ep-loss">-</span><span class="epoch-stat-lbl lang-en">Current Loss</span><span class="epoch-stat-lbl lang-fr" style="display:none">Loss actuelle</span></div>
+          <div class="epoch-stat"><span class="epoch-stat-val" id="ep-delta">-</span><span class="epoch-stat-lbl">&#916; Loss</span></div>
+          <div class="epoch-stat"><span class="epoch-stat-val" id="ep-status">-</span><span class="epoch-stat-lbl">Status</span></div>
         </div>
       </div>
     </div>
@@ -304,16 +348,19 @@
   <section class="section">
     <div class="section-label">
       <span class="section-num">04</span>
-      <h2 class="section-title">Backpropagation</h2>
+      <h2 class="section-title lang-en">Backpropagation</h2>
+      <h2 class="section-title lang-fr" style="display:none">La r&#233;tropropagation</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Gradient descent tells us which direction to move. But how do we compute the gradient across millions of parameters in a deep network? <strong>Backpropagation</strong> is the answer — it applies the chain rule of calculus to efficiently propagate the error signal backwards through every layer.</p>
+      <p class="prose lang-en">Gradient descent tells us which direction to move. But how do we compute the gradient across millions of parameters in a deep network? <strong>Backpropagation</strong> is the answer - it applies the chain rule of calculus to efficiently propagate the error signal backwards through every layer.</p>
+      <p class="prose lang-fr" style="display:none">La descente de gradient indique dans quelle direction se d&#233;placer. Mais comment calculer le gradient sur des millions de param&#232;tres dans un r&#233;seau profond? La <strong>r&#233;tropropagation</strong> est la r&#233;ponse - elle applique la r&#232;gle de cha&#238;ne du calcul pour propager efficacement le signal d'erreur en arri&#232;re &#224; travers chaque couche.</p>
       <div class="backprop-wrap">
         <div class="bp-step-nav" id="bp-nav"></div>
         <div class="bp-diagram" id="bp-diagram"></div>
         <div class="bp-desc" id="bp-desc"></div>
       </div>
-      <p class="prose">Backprop is why deep learning is computationally feasible. Without it, computing the gradient for each parameter individually would require <em>n+1</em> forward passes for a model with <em>n</em> parameters. Backprop does it in just <strong>one forward + one backward pass</strong>.</p>
+      <p class="prose lang-en">Backprop is why deep learning is computationally feasible. Without it, computing the gradient for each parameter individually would require <em>n+1</em> forward passes for a model with <em>n</em> parameters. Backprop does it in just <strong>one forward + one backward pass</strong>.</p>
+      <p class="prose lang-fr" style="display:none">La r&#233;tropropagation est pourquoi le deep learning est faisable en pratique. Sans elle, calculer le gradient param&#232;tre par param&#232;tre n&#233;cessiterait <em>n+1</em> passes avant pour un mod&#232;le avec <em>n</em> param&#232;tres. La r&#233;tropropagation le fait en une seule <strong>passe avant + une passe arri&#232;re</strong>.</p>
     </div>
   </section>
 
@@ -321,85 +368,143 @@
   <section class="section">
     <div class="section-label">
       <span class="section-num">05</span>
-      <h2 class="section-title">Learning rate matters</h2>
+      <h2 class="section-title lang-en">Learning rate matters</h2>
+      <h2 class="section-title lang-fr" style="display:none">Le taux d'apprentissage compte</h2>
     </div>
     <div class="section-body">
-      <p class="prose">The learning rate is the single most impactful hyperparameter in training. It determines the size of each gradient step. Too high and the optimization diverges; too low and it converges agonizingly slowly or gets stuck in shallow local minima.</p>
+      <p class="prose lang-en">The learning rate is the single most impactful hyperparameter in training. It determines the size of each gradient step. Too high and the optimization diverges; too low and it converges slowly or gets stuck in shallow local minima.</p>
+      <p class="prose lang-fr" style="display:none">Le taux d'apprentissage est l'hyperparam&#232;tre le plus impactant de l'entra&#238;nement. Il d&#233;termine la taille de chaque pas de gradient. Trop &#233;lev&#233; et l'optimisation diverge; trop faible et elle converge lentement ou reste bloqu&#233;e dans des minima locaux peu profonds.</p>
       <div class="lr-compare">
         <div class="lr-card">
-          <span class="lr-badge" style="color:var(--red);border-color:rgba(248,113,113,.3);background:var(--red-bg)">Too high</span>
-          <div class="lr-title">η = 0.9</div>
+          <span class="lr-badge" style="color:var(--red);border-color:rgba(248,113,113,.3);background:var(--red-bg)">
+            <span class="lang-en">Too high</span>
+            <span class="lang-fr" style="display:none">Trop &#233;lev&#233;</span>
+          </span>
+          <div class="lr-title">&#951; = 0.9</div>
           <canvas class="lr-mini-chart" id="lr-high"></canvas>
-          <div class="lr-body">Loss oscillates wildly. The optimizer overshoots the minimum on every step, unable to converge.</div>
+          <div class="lr-body lang-en">Loss oscillates wildly. The optimizer overshoots the minimum on every step, unable to converge.</div>
+          <div class="lr-body lang-fr" style="display:none">La loss oscille fortement. L'optimiseur d&#233;passe le minimum &#224; chaque pas, incapable de converger.</div>
         </div>
         <div class="lr-card" style="border-color:var(--border-acc)">
-          <span class="lr-badge" style="color:var(--acc);border-color:rgba(74,222,128,.3);background:var(--acc-bg)">Just right</span>
-          <div class="lr-title">η = 0.03</div>
+          <span class="lr-badge" style="color:var(--acc);border-color:rgba(74,222,128,.3);background:var(--acc-bg)">
+            <span class="lang-en">Just right</span>
+            <span class="lang-fr" style="display:none">Juste bien</span>
+          </span>
+          <div class="lr-title">&#951; = 0.03</div>
           <canvas class="lr-mini-chart" id="lr-good"></canvas>
-          <div class="lr-body">Loss decreases smoothly and converges to a low value. This is the sweet spot.</div>
+          <div class="lr-body lang-en">Loss decreases smoothly and converges to a low value. This is the sweet spot.</div>
+          <div class="lr-body lang-fr" style="display:none">La loss diminue r&#233;guli&#232;rement et converge vers une valeur basse. C'est la zone id&#233;ale.</div>
         </div>
         <div class="lr-card">
-          <span class="lr-badge" style="color:var(--warm);border-color:rgba(251,191,36,.3);background:var(--warm-bg)">Too low</span>
-          <div class="lr-title">η = 0.001</div>
+          <span class="lr-badge" style="color:var(--warm);border-color:rgba(251,191,36,.3);background:var(--warm-bg)">
+            <span class="lang-en">Too low</span>
+            <span class="lang-fr" style="display:none">Trop bas</span>
+          </span>
+          <div class="lr-title">&#951; = 0.001</div>
           <canvas class="lr-mini-chart" id="lr-low"></canvas>
-          <div class="lr-body">Loss decreases, but painfully slowly. Training could take 100x longer to reach the same loss.</div>
+          <div class="lr-body lang-en">Loss decreases, but painfully slowly. Training could take 100x longer to reach the same loss.</div>
+          <div class="lr-body lang-fr" style="display:none">La loss diminue, mais douloureusement lentement. L'entra&#238;nement pourrait prendre 100x plus longtemps.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SERIES NAV -->
+  <!-- 06 WHERE THIS MATTERS -->
   <section class="section">
     <div class="section-label">
       <span class="section-num">06</span>
-      <h2 class="section-title">Where this fits</h2>
+      <h2 class="section-title lang-en">Where this matters</h2>
+      <h2 class="section-title lang-fr" style="display:none">O&#249; &#231;a compte vraiment</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Training is the engine that gives meaning to every other concept in this series. Embeddings only become useful after they've been trained. Attention weights only specialize after backprop has tuned them across millions of examples. RAG retrieval only works because the retriever and generator were trained end-to-end.</p>
-      <div class="series-nav">
-        <div class="series-title">Labs — AI Foundations series</div>
-        <div class="series-items">
-          <a href="../the-embedding-space" class="series-item">
-            <div class="series-dot" style="background:#fbbf24"></div>
-            The Embedding Space — words become vectors
-            <span class="series-num">03</span>
-          </a>
-          <a href="../attention-visualized" class="series-item">
-            <div class="series-dot" style="background:#38bdf8"></div>
-            Attention, Visualized — vectors attend to each other
-            <span class="series-num">04</span>
-          </a>
-          <div class="series-item current">
-            <div class="series-dot" style="background:#4ade80"></div>
-            How a Model Learns — gradients tune the weights
-            <span class="series-num">05</span>
-          </div>
-          <a href="../rag-under-the-hood" class="series-item">
-            <div class="series-dot" style="background:#a78bfa"></div>
-            RAG Under the Hood — retrieval meets generation
-            <span class="series-num">02</span>
-          </a>
+      <p class="prose lang-en">Understanding the training loop changes how you work with models in practice - not just as a black box but as a system you can reason about.</p>
+      <p class="prose lang-fr" style="display:none">Comprendre la boucle d'entra&#238;nement change la fa&#231;on dont vous travaillez avec les mod&#232;les en pratique - pas juste comme une bo&#238;te noire mais comme un syst&#232;me sur lequel vous pouvez raisonner.</p>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">&#129520;</div>
+          <div class="card-title lang-en">Fine-tuning</div>
+          <div class="card-title lang-fr" style="display:none">Fine-tuning</div>
+          <div class="card-body lang-en">Fine-tuning runs the same training loop on a small domain-specific dataset. The loss is computed on your examples; gradients update the weights. Using a small learning rate preserves pretrained knowledge while adapting to new data.</div>
+          <div class="card-body lang-fr" style="display:none">Le fine-tuning ex&#233;cute la m&#234;me boucle d'entra&#238;nement sur un petit jeu de donn&#233;es domain-specific. La loss est calcul&#233;e sur vos exemples; les gradients mettent &#224; jour les poids. Un petit taux d'apprentissage pr&#233;serve le savoir pr&#233;-entra&#238;n&#233; tout en s'adaptant aux nouvelles donn&#233;es.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128200;</div>
+          <div class="card-title lang-en">Loss curves as diagnostics</div>
+          <div class="card-title lang-fr" style="display:none">Courbes de loss comme diagnostics</div>
+          <div class="card-body lang-en">A training loss that falls but a validation loss that rises signals overfitting. A loss that plateaus early suggests too small a learning rate. Reading loss curves is the first skill of any practitioner.</div>
+          <div class="card-body lang-fr" style="display:none">Une loss d'entra&#238;nement qui baisse mais une loss de validation qui monte signale un surapprentissage. Une loss qui stagne t&#244;t sugg&#232;re un taux d'apprentissage trop faible. Lire les courbes de loss est la premi&#232;re comp&#233;tence de tout praticien.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#9889;</div>
+          <div class="card-title lang-en">LoRA and efficient training</div>
+          <div class="card-title lang-fr" style="display:none">LoRA et entra&#238;nement efficace</div>
+          <div class="card-body lang-en">LoRA freezes the original weights and only trains small adapter matrices. The loss, gradients, and backprop are identical - just applied to a much smaller parameter space. Same algorithm, smaller footprint.</div>
+          <div class="card-body lang-fr" style="display:none">LoRA g&#232;le les poids originaux et n'entra&#238;ne que de petites matrices d'adaptation. La loss, les gradients et la r&#233;tropropagation sont identiques - juste appliqu&#233;s &#224; un espace de param&#232;tres beaucoup plus petit. M&#234;me algorithme, empreinte r&#233;duite.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TAKEAWAYS -->
+  <!-- 07 TAKEAWAYS -->
   <section class="section">
     <div class="section-label">
       <span class="section-num">07</span>
-      <h2 class="section-title">What to remember</h2>
+      <h2 class="section-title lang-en">Key takeaways</h2>
+      <h2 class="section-title lang-fr" style="display:none">Points cl&#233;s &#224; retenir</h2>
     </div>
     <div class="section-body">
       <div class="takeaways">
-        <h3>Training in five sentences.</h3>
+        <h3 class="lang-en">Training in five sentences.</h3>
+        <h3 class="lang-fr" style="display:none">L'entra&#238;nement en cinq phrases.</h3>
         <ol>
-          <li><strong>The loss function</strong> measures how wrong the model is — a single number the optimizer tries to minimize.</li>
-          <li><strong>The loss landscape</strong> is a high-dimensional surface; training is the process of navigating to its lowest point.</li>
-          <li><strong>Gradient descent</strong> updates weights in the direction opposite to the gradient — always moving downhill.</li>
-          <li><strong>Backpropagation</strong> computes gradients efficiently through the chain rule in one forward + one backward pass.</li>
-          <li><strong>The learning rate</strong> controls step size — the single most impactful hyperparameter in practice.</li>
+          <li>
+            <p class="lang-en"><strong>The loss function</strong> measures how wrong the model is - a single number the optimizer tries to minimize.</p>
+            <p class="lang-fr" style="display:none"><strong>La fonction de loss</strong> mesure &#224; quel point le mod&#232;le se trompe - un seul nombre que l'optimiseur essaie de minimiser.</p>
+          </li>
+          <li>
+            <p class="lang-en"><strong>The loss landscape</strong> is a high-dimensional surface; training navigates to its lowest point.</p>
+            <p class="lang-fr" style="display:none"><strong>Le paysage de loss</strong> est une surface multidimensionnelle; l'entra&#238;nement navigue vers son point le plus bas.</p>
+          </li>
+          <li>
+            <p class="lang-en"><strong>Gradient descent</strong> updates weights in the direction opposite to the gradient - always moving downhill.</p>
+            <p class="lang-fr" style="display:none"><strong>La descente de gradient</strong> met &#224; jour les poids dans la direction oppos&#233;e au gradient - toujours vers le bas.</p>
+          </li>
+          <li>
+            <p class="lang-en"><strong>Backpropagation</strong> computes gradients efficiently via the chain rule in one forward + one backward pass.</p>
+            <p class="lang-fr" style="display:none"><strong>La r&#233;tropropagation</strong> calcule les gradients efficacement via la r&#232;gle de cha&#238;ne en une passe avant + une passe arri&#232;re.</p>
+          </li>
+          <li>
+            <p class="lang-en"><strong>The learning rate</strong> controls step size - the single most impactful hyperparameter in practice.</p>
+            <p class="lang-fr" style="display:none"><strong>Le taux d'apprentissage</strong> contr&#244;le la taille du pas - l'hyperparam&#232;tre le plus impactant en pratique.</p>
+          </li>
         </ol>
+      </div>
+
+      <div class="series-nav" style="margin-top:var(--sp8)">
+        <div class="series-title lang-en">Labs - AI Foundations series</div>
+        <div class="series-title lang-fr" style="display:none">Labs - S&#233;rie Fondations IA</div>
+        <div class="series-items">
+          <a href="../the-embedding-space" class="series-item">
+            <div class="series-dot" style="background:#fbbf24"></div>
+            <span class="lang-en">The Embedding Space - words become vectors</span>
+            <span class="lang-fr" style="display:none">L'espace des embeddings - les mots deviennent des vecteurs</span>
+          </a>
+          <a href="../attention-visualized" class="series-item">
+            <div class="series-dot" style="background:#38bdf8"></div>
+            <span class="lang-en">Attention, Visualized - vectors attend to each other</span>
+            <span class="lang-fr" style="display:none">Attention, Visualis&#233;e - les vecteurs s'observent mutuellement</span>
+          </a>
+          <a href="../transformer-architecture" class="series-item">
+            <div class="series-dot" style="background:#a78bfa"></div>
+            <span class="lang-en">The Transformer Architecture - the full picture</span>
+            <span class="lang-fr" style="display:none">L'architecture Transformer - vue d'ensemble</span>
+          </a>
+          <div class="series-item current">
+            <div class="series-dot" style="background:#4ade80"></div>
+            <span class="lang-en">How a Model Learns - gradients tune the weights</span>
+            <span class="lang-fr" style="display:none">Comment un mod&#232;le apprend - les gradients ajustent les poids</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -409,7 +514,8 @@
 <div class="back-section">
   <a href="../" class="back-labs">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Back to Labs
+    <span class="lang-en">Back to Labs</span>
+    <span class="lang-fr" style="display:none">Retour aux Labs</span>
   </a>
   <span style="font-size:var(--text-xs);color:var(--text-faint)">By <a href="https://badreddineek.com" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:3px" target="_blank" rel="noopener noreferrer">Badreddine EK</a></span>
 </div>
@@ -425,6 +531,23 @@
 </footer>
 
 <script>
+(function(){
+  const btn=document.getElementById('lang-toggle');
+  let lang=localStorage.getItem('labs-model-learns-lang')||'en';
+  function applyLang(){
+    document.querySelectorAll('.lang-en').forEach(el=>el.style.display=lang==='en'?'':'none');
+    document.querySelectorAll('.lang-fr').forEach(el=>el.style.display=lang==='fr'?'':'none');
+    btn.textContent=lang==='en'?'FR':'EN';
+  }
+  applyLang();
+  btn.addEventListener('click',()=>{
+    lang=lang==='en'?'fr':'en';
+    localStorage.setItem('labs-model-learns-lang',lang);
+    applyLang();
+    if(typeof renderBP==='function') renderBP();
+  });
+})();
+
 // THEME
 const html = document.documentElement;
 const toggleBtn = document.querySelector('[data-theme-toggle]');
@@ -656,16 +779,21 @@ function trainStep() {
   if (loss < 0.012 || epoch > 200) stopTraining();
 }
 
+function trainBtnLabel(state) {
+  const fr = (localStorage.getItem('labs-model-learns-lang') || 'en') === 'fr';
+  if (state === 'run') return fr ? '&#9654; Lancer l\'entra&#238;nement' : '&#9654; Run training';
+  return fr ? '&#9646;&#9646; Pause' : '&#9646;&#9646; Pause';
+}
 function stopTraining() {
   clearInterval(trainInterval);
   running = false;
-  document.getElementById('train-btn').textContent = '▶ Run training';
+  document.getElementById('train-btn').innerHTML = trainBtnLabel('run');
 }
 
 document.getElementById('train-btn').addEventListener('click', () => {
   if (running) { stopTraining(); return; }
   running = true;
-  document.getElementById('train-btn').textContent = '⏸ Pause';
+  document.getElementById('train-btn').innerHTML = trainBtnLabel('pause');
   trainInterval = setInterval(trainStep, 60);
 });
 
@@ -685,30 +813,39 @@ document.getElementById('lr-slider').addEventListener('input', () => {
 drawLossChart();
 
 // ── BACKPROP ──
+const isLangFR = () => (localStorage.getItem('labs-model-learns-lang') || 'en') === 'fr';
 const BP_STEPS = [
   {
-    label: 'Forward pass',
+    label: () => isLangFR() ? 'Passe avant' : 'Forward pass',
     active: ['fwd','fwd','fwd'],
     arrows: ['fwd','fwd'],
-    desc: '<strong>Forward pass:</strong> Input data flows through the network layer by layer. Each layer applies its weights and activation function. The final layer produces a prediction ŷ.'
+    desc: () => isLangFR()
+      ? '<strong>Passe avant:</strong> Les donn&eacute;es d\'entr&eacute;e traversent le r&eacute;seau couche par couche. Chaque couche applique ses poids et sa fonction d\'activation. La couche finale produit une pr&eacute;diction &ycirc;.'
+      : '<strong>Forward pass:</strong> Input data flows through the network layer by layer. Each layer applies its weights and activation function. The final layer produces a prediction &ycirc;.'
   },
   {
-    label: 'Compute loss',
+    label: () => isLangFR() ? 'Calcul de la loss' : 'Compute loss',
     active: ['fwd','fwd','loss'],
     arrows: ['fwd','loss'],
-    desc: '<strong>Compute loss:</strong> The loss function compares the prediction ŷ with the ground truth y and outputs a scalar L — a single number representing how wrong the model was.'
+    desc: () => isLangFR()
+      ? '<strong>Calcul de la loss:</strong> La fonction de loss compare la pr&eacute;diction &ycirc; avec la vraie valeur y et produit un scalaire L - un seul nombre repr&eacute;sentant l\'erreur du mod&egrave;le.'
+      : '<strong>Compute loss:</strong> The loss function compares the prediction &ycirc; with the ground truth y and outputs a scalar L - a single number representing how wrong the model was.'
   },
   {
-    label: 'Backward pass',
+    label: () => isLangFR() ? 'Passe arri\u00e8re' : 'Backward pass',
     active: ['bwd','bwd','loss'],
     arrows: ['bwd','bwd'],
-    desc: '<strong>Backward pass (backprop):</strong> The gradient ∂L/∂w is computed for every weight using the chain rule. The error signal flows <em>backwards</em> through each layer, accumulating gradients.'
+    desc: () => isLangFR()
+      ? '<strong>Passe arri&egrave;re (r&eacute;tropropagation):</strong> Le gradient &part;L/&part;w est calcul&eacute; pour chaque poids via la r&egrave;gle de cha&icirc;ne. Le signal d\'erreur remonte <em>en arri&egrave;re</em> &#224; travers chaque couche.'
+      : '<strong>Backward pass (backprop):</strong> The gradient &part;L/&part;w is computed for every weight using the chain rule. The error signal flows <em>backwards</em> through each layer, accumulating gradients.'
   },
   {
-    label: 'Weight update',
+    label: () => isLangFR() ? 'Mise \u00e0 jour des poids' : 'Weight update',
     active: ['update','update','update'],
     arrows: ['update','update'],
-    desc: '<strong>Weight update:</strong> Each weight is nudged in the direction that reduces loss: w ← w − η · ∂L/∂w. This is one training step. Repeat thousands of times and the model converges.'
+    desc: () => isLangFR()
+      ? '<strong>Mise &agrave; jour des poids:</strong> Chaque poids est ajust&eacute; dans la direction qui r&eacute;duit la loss: w &larr; w - &eta; &middot; &part;L/&part;w. C\'est une &eacute;tape d\'entra&icirc;nement. R&eacute;p&eacute;ter des milliers de fois et le mod&egrave;le converge.'
+      : '<strong>Weight update:</strong> Each weight is nudged in the direction that reduces loss: w &larr; w - &eta; &middot; &part;L/&part;w. This is one training step. Repeat thousands of times and the model converges.'
   }
 ];
 
@@ -718,7 +855,7 @@ let bpStep = 0;
 function renderBP() {
   const nav = document.getElementById('bp-nav');
   nav.innerHTML = BP_STEPS.map((s, i) =>
-    `<button class="bp-step-btn ${i === bpStep ? 'active' : ''}" data-bpi="${i}">${s.label}</button>`
+    `<button class="bp-step-btn ${i === bpStep ? 'active' : ''}" data-bpi="${i}">${s.label()}</button>`
   ).join('');
   nav.querySelectorAll('.bp-step-btn').forEach(btn => {
     btn.addEventListener('click', () => { bpStep = parseInt(btn.dataset.bpi); renderBP(); });
@@ -727,20 +864,19 @@ function renderBP() {
   const step = BP_STEPS[bpStep];
   const diagram = document.getElementById('bp-diagram');
   let html2 = '';
-  NODES.forEach((name, i) => {
+  const nodeLabels = isLangFR() ? ['Entr\u00e9e','Cach\u00e9e','Sortie','Loss'] : ['Input','Hidden','Output','Loss'];
+  nodeLabels.forEach((name, i) => {
     const cls = step.active[i] ? `active-${step.active[i]}` : '';
-    const icons = ['⬡','⬡','⬡','△'];
+    const icons = ['\u2B21','\u2B21','\u2B21','\u25B3'];
     html2 += `<div class="bp-node"><div class="bp-circle ${cls}">${icons[i]}</div><div class="bp-label">${name}</div></div>`;
-    if (i < NODES.length - 1) {
-      const isFwd = ['fwd','loss'].includes(step.arrows[i]);
+    if (i < nodeLabels.length - 1) {
       const isBwd = step.arrows[i] === 'bwd';
-      const isUpd = step.arrows[i] === 'update';
       const arrowCls = `active-${step.arrows[i]}`;
-      html2 += `<div class="bp-arrow ${arrowCls}">${isBwd ? '←' : '→'}</div>`;
+      html2 += `<div class="bp-arrow ${arrowCls}">${isBwd ? '\u2190' : '\u2192'}</div>`;
     }
   });
   diagram.innerHTML = html2;
-  document.getElementById('bp-desc').innerHTML = step.desc;
+  document.getElementById('bp-desc').innerHTML = step.desc();
 }
 
 renderBP();
