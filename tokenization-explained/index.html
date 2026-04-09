@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How LLMs Tokenize — Labs · Badreddine EK</title>
+  <meta name="description" content="Your LLM doesn't read words. It reads fragments. Understand tokenization — the step that shapes everything after." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300..600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'DM Mono', 'Fira Code', monospace;
+      --text-xs:   clamp(0.72rem,  0.68rem + 0.2vw, 0.82rem);
+      --text-sm:   clamp(0.875rem, 0.82rem + 0.28vw, 1rem);
+      --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+      --text-lg:   clamp(1.125rem, 1rem    + 0.65vw, 1.45rem);
+      --text-xl:   clamp(1.4rem,   1.1rem  + 1.2vw,  2.1rem);
+      --text-2xl:  clamp(1.9rem,   1.2rem  + 2.2vw,  3.2rem);
+      --text-3xl:  clamp(2.4rem,   1rem    + 3.8vw,  4.5rem);
+      --radius-sm: 0.375rem; --radius-md: 0.5rem; --radius-lg: 0.75rem;
+      --radius-xl: 1rem; --radius-2xl: 1.5rem; --radius-full: 9999px;
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;
+      --space-6:1.5rem;--space-8:2rem;--space-12:3rem;--space-16:4rem;--space-24:6rem;
+    }
+    :root,[data-theme="light"]{
+      --bg:#f7f6f2;--surface:#f9f8f5;--surface-2:#edeae5;--surface-3:#e4e1da;
+      --border:rgba(40,37,29,0.1);--text:#28251d;--text-muted:#7a7974;
+      --text-faint:#bab9b4;--accent:#0f766e;--accent-hover:#0c4e54;
+      --accent-bg:rgba(15,118,110,0.08);--accent-border:rgba(15,118,110,0.2);
+      --shadow-sm:0 1px 2px rgba(40,37,29,0.06);--shadow-md:0 4px 16px rgba(40,37,29,0.08);
+      --shadow-lg:0 12px 32px rgba(40,37,29,0.1);
+    }
+    [data-theme="dark"]{
+      --bg:#111110;--surface:#1a1917;--surface-2:#222120;--surface-3:#2a2927;
+      --border:rgba(255,255,255,0.07);--text:#e8e6e1;--text-muted:#797874;
+      --text-faint:#4a4946;--accent:#2dd4bf;--accent-hover:#5eead4;
+      --accent-bg:rgba(45,212,191,0.06);--accent-border:rgba(45,212,191,0.2);
+      --shadow-sm:0 1px 2px rgba(0,0,0,0.25);--shadow-md:0 4px 16px rgba(0,0,0,0.35);
+      --shadow-lg:0 12px 32px rgba(0,0,0,0.45);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+    body{font-family:var(--font-body);font-size:var(--text-base);color:var(--text);background:var(--bg);min-height:100dvh;line-height:1.7;transition:background var(--transition),color var(--transition);}
+
+    /* HEADER */
+    header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+    .header-inner{max-width:820px;margin-inline:auto;padding:var(--space-4) var(--space-6);display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);}
+    .back-link{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--text-muted);text-decoration:none;transition:color var(--transition);}
+    .back-link:hover{color:var(--text);}
+    .header-actions{display:flex;align-items:center;gap:var(--space-3);}
+    .lang-toggle{display:flex;align-items:center;gap:2px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-full);padding:3px;}
+    .lang-btn{font-size:var(--text-xs);font-weight:600;letter-spacing:0.04em;padding:4px 10px;border-radius:var(--radius-full);border:none;cursor:pointer;background:transparent;color:var(--text-muted);transition:background var(--transition),color var(--transition);}
+    .lang-btn.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm);}
+    .theme-toggle{width:34px;height:34px;border-radius:var(--radius-lg);background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-muted);transition:background var(--transition),color var(--transition);}
+    .theme-toggle:hover{background:var(--surface-3);color:var(--text);}
+
+    /* PROGRESS BAR */
+    #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--accent);z-index:200;transition:width 0.1s linear;}
+
+    /* HERO */
+    .article-hero{max-width:820px;margin-inline:auto;padding:var(--space-16) var(--space-6) var(--space-12);}
+    .article-label{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-border);padding:3px var(--space-3);border-radius:var(--radius-full);margin-bottom:var(--space-6);}
+    .article-hero h1{font-family:var(--font-display);font-size:var(--text-3xl);line-height:1.08;letter-spacing:-0.025em;color:var(--text);margin-bottom:var(--space-6);max-width:20ch;}
+    .article-hero h1 em{font-style:italic;color:var(--text-muted);}
+    .article-lede{font-size:var(--text-lg);color:var(--text-muted);max-width:55ch;line-height:1.6;}
+    .article-meta{margin-top:var(--space-8);display:flex;align-items:center;gap:var(--space-6);flex-wrap:wrap;padding-top:var(--space-6);border-top:1px solid var(--border);}
+    .meta-item{display:flex;flex-direction:column;gap:2px;}
+    .meta-value{font-size:var(--text-sm);font-weight:500;color:var(--text);}
+    .meta-label{font-size:var(--text-xs);color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;}
+    .tag{display:inline-flex;font-size:var(--text-xs);font-weight:500;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);padding:2px var(--space-2);border-radius:var(--radius-sm);letter-spacing:0.02em;}
+
+    /* CONTENT */
+    .article-content{max-width:820px;margin-inline:auto;padding:0 var(--space-6) var(--space-24);}
+    .section{margin-bottom:var(--space-16);}
+    .section-number{font-family:var(--font-display);font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:var(--space-3);}
+    .section h2{font-family:var(--font-display);font-size:var(--text-xl);letter-spacing:-0.015em;line-height:1.2;margin-bottom:var(--space-6);color:var(--text);}
+    .section p{color:var(--text-muted);line-height:1.75;margin-bottom:var(--space-4);font-size:var(--text-base);}
+    .section p strong{color:var(--text);font-weight:600;}
+    .callout{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-6);margin:var(--space-6) 0;}
+    .callout p{margin:0;color:var(--text);font-size:var(--text-sm);line-height:1.65;}
+    .callout p strong{color:var(--accent);}
+
+    /* INTERACTIVE BOXES */
+    .interactive-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-2xl);overflow:hidden;margin:var(--space-8) 0;box-shadow:var(--shadow-md);}
+    .ibox-header{padding:var(--space-4) var(--space-6);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:var(--space-3);}
+    .ibox-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+    .ibox-title{font-size:var(--text-xs);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);}
+    .ibox-body{padding:var(--space-6);}
+
+    /* TOKENIZER DEMO */
+    .tokenizer-textarea{width:100%;min-height:100px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-4);font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text);resize:vertical;outline:none;transition:border-color var(--transition);line-height:1.6;}
+    .tokenizer-textarea:focus{border-color:var(--accent);}
+    .tokenizer-stats{display:flex;gap:var(--space-6);flex-wrap:wrap;margin:var(--space-4) 0;padding:var(--space-4);background:var(--surface-2);border-radius:var(--radius-lg);}
+    .tok-stat{display:flex;flex-direction:column;gap:2px;}
+    .tok-stat-val{font-family:var(--font-display);font-size:var(--text-lg);line-height:1;color:var(--text);}
+    .tok-stat-lbl{font-size:var(--text-xs);color:var(--text-faint);text-transform:uppercase;letter-spacing:0.05em;}
+    .token-display{display:flex;flex-wrap:wrap;gap:4px;padding:var(--space-4);background:var(--surface-2);border-radius:var(--radius-lg);min-height:56px;font-family:var(--font-mono);font-size:var(--text-sm);line-height:1;align-items:center;}
+    .token-chip{padding:4px 8px;border-radius:var(--radius-sm);font-size:var(--text-xs);font-weight:500;cursor:default;transition:transform var(--transition);white-space:pre;}
+    .token-chip:hover{transform:translateY(-2px);}
+    .preset-btns{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-4);}
+    .preset-btn{font-size:var(--text-xs);padding:var(--space-2) var(--space-3);background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-full);cursor:pointer;color:var(--text-muted);transition:all var(--transition);white-space:nowrap;}
+    .preset-btn:hover{background:var(--accent-bg);border-color:var(--accent);color:var(--accent);}
+
+    /* COMPARISON TABLE */
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin:var(--space-4) 0;}
+    @media(max-width:560px){.compare-grid{grid-template-columns:1fr;}}
+    .compare-card{background:var(--surface-2);border-radius:var(--radius-lg);padding:var(--space-4);}
+    .compare-card h4{font-family:var(--font-display);font-size:var(--text-base);margin-bottom:var(--space-3);color:var(--text);}
+    .compare-card .token-display{background:var(--surface);}
+    .compare-label{font-size:var(--text-xs);color:var(--text-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:var(--space-2);}
+    .compare-cost{font-size:var(--text-sm);color:var(--text-muted);margin-top:var(--space-3);}
+    .compare-cost strong{color:var(--text);}
+
+    /* ARITHMETIC DEMO */
+    .arith-row{display:flex;align-items:flex-start;gap:var(--space-4);margin-bottom:var(--space-4);flex-wrap:wrap;}
+    .arith-expr{font-family:var(--font-mono);font-size:var(--text-base);font-weight:500;color:var(--text);min-width:160px;padding:var(--space-3) var(--space-4);background:var(--surface-2);border-radius:var(--radius-md);}
+    .arith-tokens{display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+    .arith-why{font-size:var(--text-sm);color:var(--text-muted);line-height:1.5;padding:var(--space-3) var(--space-4);background:var(--surface-2);border-radius:var(--radius-md);flex:1;min-width:200px;}
+
+    /* LANGUAGE COST TABLE */
+    .lang-cost-table{width:100%;border-collapse:collapse;font-size:var(--text-sm);}
+    .lang-cost-table th{text-align:left;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);padding:var(--space-2) var(--space-4);border-bottom:1px solid var(--border);}
+    .lang-cost-table td{padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--border);vertical-align:middle;}
+    .lang-cost-table tr:last-child td{border-bottom:none;}
+    .lang-flag{font-size:1.2rem;margin-right:var(--space-2);}
+    .bar-container{width:120px;height:8px;background:var(--surface-2);border-radius:var(--radius-full);overflow:hidden;}
+    .bar-fill{height:100%;border-radius:var(--radius-full);background:var(--accent);transition:width 0.6s ease;}
+    .cost-badge{font-size:var(--text-xs);font-weight:600;padding:2px 8px;border-radius:var(--radius-full);}
+    .cost-low{background:rgba(15,118,110,0.12);color:var(--accent);}
+    .cost-med{background:rgba(217,119,6,0.12);color:#d97706;}
+    .cost-high{background:rgba(220,38,38,0.12);color:#dc2626;}
+
+    /* PROMPT TIP */
+    .prompt-tip{background:var(--surface-2);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-6);margin:var(--space-4) 0;display:flex;gap:var(--space-4);align-items:flex-start;}
+    .tip-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px;}
+    .tip-body{flex:1;}
+    .tip-title{font-size:var(--text-sm);font-weight:600;color:var(--text);margin-bottom:var(--space-1);}
+    .tip-desc{font-size:var(--text-sm);color:var(--text-muted);line-height:1.6;}
+    .tip-example{display:flex;gap:var(--space-3);margin-top:var(--space-3);flex-wrap:wrap;}
+    .tip-before,.tip-after{flex:1;min-width:160px;padding:var(--space-3);border-radius:var(--radius-md);font-family:var(--font-mono);font-size:var(--text-xs);line-height:1.5;}
+    .tip-before{background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.15);color:var(--text-muted);}
+    .tip-after{background:rgba(15,118,110,0.08);border:1px solid var(--accent-border);color:var(--text-muted);}
+    .tip-before::before{content:'✗  ';color:#dc2626;font-weight:700;}
+    .tip-after::before{content:'✓  ';color:var(--accent);font-weight:700;}
+
+    /* FOOTER */
+    .article-footer{max-width:820px;margin-inline:auto;padding:var(--space-8) var(--space-6) var(--space-16);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-4);}
+    .footer-back{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--text-muted);text-decoration:none;transition:color var(--transition);}
+    .footer-back:hover{color:var(--text);}
+    .footer-note{font-size:var(--text-xs);color:var(--text-faint);}
+
+    /* DIVIDER */
+    .section-divider{height:1px;background:var(--border);margin:var(--space-12) 0;}
+
+    /* UTILS */
+    [data-lang]{display:none;}
+    [data-lang].active{display:block;}
+    [data-lang-inline]{display:none;}
+    [data-lang-inline].active{display:inline;}
+
+    @media(max-width:640px){
+      .article-hero{padding-top:var(--space-12);}
+      .header-inner{padding:var(--space-3) var(--space-4);}
+      .article-content{padding-inline:var(--space-4);}
+      .compare-grid{grid-template-columns:1fr;}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{transition-duration:0.01ms!important;animation-duration:0.01ms!important;}
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="../" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Labs
+    </a>
+    <div class="header-actions">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button class="lang-btn active" data-lang-switch="en">EN</button>
+        <button class="lang-btn" data-lang-switch="fr">FR</button>
+      </div>
+      <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="article-hero">
+  <div class="article-label">
+    <svg width="8" height="8" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+    <span data-lang-inline="en" class="active">LLMs · Foundations</span>
+    <span data-lang-inline="fr">LLMs · Fondamentaux</span>
+  </div>
+  <h1>
+    <span data-lang-inline="en" class="active">Your LLM doesn't read <em>words.</em></span>
+    <span data-lang-inline="fr">Votre LLM ne lit pas des <em>mots.</em></span>
+  </h1>
+  <p class="article-lede">
+    <span data-lang-inline="en" class="active">Before a model sees a single word of your prompt, it breaks it into fragments called tokens. That invisible step shapes everything — cost, reasoning, accuracy. Here's what's really happening.</span>
+    <span data-lang-inline="fr">Avant qu'un modèle voie le moindre mot de votre prompt, il le découpe en fragments appelés tokens. Cette étape invisible conditionne tout — coût, raisonnement, précision.</span>
+  </p>
+  <div class="article-meta">
+    <div class="meta-item">
+      <span class="meta-value">April 2026</span>
+      <span class="meta-label">Published</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-value">~8 min</span>
+      <span class="meta-label">Read</span>
+    </div>
+    <div class="meta-item" style="display:flex;gap:var(--space-2);align-items:center;flex-wrap:wrap;">
+      <span class="tag">LLM</span>
+      <span class="tag">Tokenization</span>
+      <span class="tag">NLP</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<main class="article-content">
+
+  <!-- SECTION 1 — LIVE DEMO -->
+  <section class="section">
+    <p class="section-number">01</p>
+    <h2>
+      <span data-lang-inline="en" class="active">Try it first</span>
+      <span data-lang-inline="fr">Essayez d'abord</span>
+    </h2>
+
+    <div data-lang="en" class="active">
+      <p>Type anything below — your name, a sentence in French, a math expression, a code snippet. Watch how the model actually sees it.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Tapez n'importe quoi ci-dessous — votre prénom, une phrase en arabe, une expression mathématique, du code. Observez comment le modèle le perçoit réellement.</p>
+    </div>
+
+    <div class="interactive-box">
+      <div class="ibox-header">
+        <div class="ibox-dot"></div>
+        <span class="ibox-title" data-lang-inline="en" style="display:inline">Live Tokenizer (GPT-4 style · cl100k_base)</span>
+        <span class="ibox-title" data-lang-inline="fr">Tokeniseur en direct (style GPT-4 · cl100k_base)</span>
+      </div>
+      <div class="ibox-body">
+        <div class="preset-btns" id="preset-btns"></div>
+        <textarea class="tokenizer-textarea" id="main-input" spellcheck="false" placeholder="Type here..."></textarea>
+        <div class="tokenizer-stats" id="tok-stats">
+          <div class="tok-stat"><span class="tok-stat-val" id="stat-tokens">0</span><span class="tok-stat-lbl">Tokens</span></div>
+          <div class="tok-stat"><span class="tok-stat-val" id="stat-chars">0</span><span class="tok-stat-lbl">Chars</span></div>
+          <div class="tok-stat"><span class="tok-stat-val" id="stat-words">0</span><span class="tok-stat-lbl">Words</span></div>
+          <div class="tok-stat"><span class="tok-stat-val" id="stat-ratio">—</span><span class="tok-stat-lbl">Chars/Token</span></div>
+          <div class="tok-stat"><span class="tok-stat-val" id="stat-cost">$0.00</span><span class="tok-stat-lbl">Est. cost*</span></div>
+        </div>
+        <div class="token-display" id="token-display"><span style="color:var(--text-faint);font-family:var(--font-body);font-size:var(--text-xs);">Tokens will appear here…</span></div>
+        <p style="font-size:var(--text-xs);color:var(--text-faint);margin-top:var(--space-3);">* Based on GPT-4o input pricing ($2.50 / 1M tokens). Each colored block = 1 token.</p>
+      </div>
+    </div>
+
+    <div data-lang="en" class="active">
+      <p>A few things you'll notice immediately: spaces are part of the token, not separators. Numbers sometimes merge into one token ("2024") and sometimes don't ("1 000 000"). Rare words get split into smaller fragments. This isn't random — it's the result of a deliberate algorithm trained on a massive text corpus.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Quelques observations immédiates : les espaces font partie du token, ils ne sont pas de simples séparateurs. Les nombres se fondent parfois en un seul token ("2024") et parfois non ("1 000 000"). Les mots rares sont découpés en fragments plus petits. Ce n'est pas du hasard — c'est le résultat d'un algorithme précis entraîné sur un corpus massif.</p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 2 — HOW IT WORKS -->
+  <section class="section">
+    <p class="section-number">02</p>
+    <h2>
+      <span data-lang-inline="en" class="active">How tokens are built: BPE</span>
+      <span data-lang-inline="fr">Comment les tokens sont construits : BPE</span>
+    </h2>
+
+    <div data-lang="en" class="active">
+      <p>The algorithm behind GPT-style tokenization is called <strong>Byte Pair Encoding (BPE)</strong>. It starts with individual characters (bytes), then iteratively merges the most frequent adjacent pairs into new tokens — repeating this hundreds of thousands of times on a training corpus.</p>
+      <p>The result is a vocabulary of ~100,000 tokens for GPT-4. Common English words like <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">the</code> or <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">data</code> become single tokens. Less frequent words like <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">tokenization</code> might be split into <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">token</code> + <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">ization</code>. And a word like the French <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">décomposition</code> might fragment even further.</p>
+      <p>This is a crucial point: <strong>the vocabulary is biased toward English</strong>. The training corpus for GPT-4's tokenizer was predominantly English text. French, Arabic, Chinese, and other languages are less efficiently encoded — they need more tokens to express the same information.</p>
+    </div>
+    <div data-lang="fr">
+      <p>L'algorithme derrière la tokenisation GPT s'appelle <strong>Byte Pair Encoding (BPE)</strong>. Il part des caractères individuels (octets), puis fusionne itérativement les paires adjacentes les plus fréquentes en nouveaux tokens — répétant cette opération des centaines de milliers de fois sur un corpus d'entraînement.</p>
+      <p>Le résultat : un vocabulaire d'environ 100 000 tokens pour GPT-4. Les mots anglais courants comme <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">the</code> ou <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">data</code> deviennent des tokens uniques. Des mots moins fréquents comme <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">tokenisation</code> peuvent être découpés en fragments. Et un mot arabe courant peut se fragmenter encore davantage.</p>
+      <p>Point crucial : <strong>le vocabulaire est biaisé vers l'anglais</strong>. Le corpus d'entraînement du tokeniseur GPT-4 était majoritairement en anglais. Le français, l'arabe, le chinois et d'autres langues sont encodés moins efficacement — ils nécessitent plus de tokens pour exprimer la même information.</p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 3 — ARITHMETIC -->
+  <section class="section">
+    <p class="section-number">03</p>
+    <h2>
+      <span data-lang-inline="en" class="active">Why LLMs struggle with arithmetic</span>
+      <span data-lang-inline="fr">Pourquoi les LLMs peinent en arithmétique</span>
+    </h2>
+
+    <div data-lang="en" class="active">
+      <p>Here's a question most people answer wrong: why is GPT-4 bad at multiplying large numbers? The usual answer is "it's just a language model." The deeper answer starts with tokenization.</p>
+      <p>Look at how these expressions get split:</p>
+    </div>
+    <div data-lang="fr">
+      <p>La plupart des gens répondent mal à cette question : pourquoi GPT-4 est-il mauvais pour multiplier de grands nombres ? La réponse habituelle : "c'est juste un modèle de langage." La réponse plus profonde commence par la tokenisation.</p>
+      <p>Observez comment ces expressions sont découpées :</p>
+    </div>
+
+    <div class="interactive-box">
+      <div class="ibox-header"><div class="ibox-dot"></div><span class="ibox-title">Numbers &amp; Tokens</span></div>
+      <div class="ibox-body">
+        <div id="arith-demo"></div>
+      </div>
+    </div>
+
+    <div data-lang="en" class="active">
+      <p>The model doesn't see "27" and "83" as numbers — it sees tokens, the same way it sees words. There's no built-in "digit" type. When you ask it to add 27 + 83, it has to learn arithmetic <em>across token boundaries</em> that shift unpredictably depending on context. That's why 3-digit addition works but 8-digit multiplication often fails.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Le modèle ne voit pas "27" et "83" comme des nombres — il voit des tokens, exactement comme il voit des mots. Il n'y a pas de type "chiffre" intégré. Quand on lui demande d'additionner 27 + 83, il doit apprendre l'arithmétique <em>à travers des frontières de tokens</em> qui changent imprévisiblement selon le contexte. C'est pourquoi l'addition à 3 chiffres fonctionne mais la multiplication à 8 chiffres échoue souvent.</p>
+    </div>
+
+    <div class="callout">
+      <p><strong data-lang-inline="en" style="display:inline">Key insight:</strong><strong data-lang-inline="fr">Insight clé :</strong> <span data-lang-inline="en" style="display:inline">The number 42 and the number 420 don't share a "4" token. They might tokenize completely differently. The model has to learn each numeric combination implicitly — there are no shortcuts.</span><span data-lang-inline="fr">Le nombre 42 et le nombre 420 ne partagent pas forcément un token "4". Ils peuvent se tokeniser complètement différemment. Le modèle doit apprendre chaque combinaison numérique implicitement — il n'y a pas de raccourcis.</span></p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 4 — LANGUAGE COST -->
+  <section class="section">
+    <p class="section-number">04</p>
+    <h2>
+      <span data-lang-inline="en" class="active">The language tax</span>
+      <span data-lang-inline="fr">La taxe linguistique</span>
+    </h2>
+
+    <div data-lang="en" class="active">
+      <p>LLM APIs charge per token. If your language is poorly represented in the tokenizer's training data, the same sentence costs you more — and the model understands it less efficiently. This is a real, measurable inequality.</p>
+      <p>The sentence "The weather is nice today" encoded in different languages:</p>
+    </div>
+    <div data-lang="fr">
+      <p>Les APIs LLM facturent par token. Si votre langue est mal représentée dans les données d'entraînement du tokeniseur, la même phrase vous coûte plus cher — et le modèle la comprend moins efficacement. C'est une inégalité réelle et mesurable.</p>
+      <p>La phrase "The weather is nice today" encodée dans différentes langues :</p>
+    </div>
+
+    <div class="interactive-box">
+      <div class="ibox-header"><div class="ibox-dot"></div><span class="ibox-title" data-lang-inline="en" style="display:inline">Same meaning, different cost</span><span class="ibox-title" data-lang-inline="fr">Même sens, coût différent</span></div>
+      <div class="ibox-body">
+        <table class="lang-cost-table">
+          <thead><tr><th>Language</th><th>Text</th><th>Tokens</th><th>Relative cost</th><th></th></tr></thead>
+          <tbody id="lang-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div data-lang="en" class="active">
+      <p>This isn't a flaw that will simply be fixed in the next version. It reflects the statistical distribution of the training data. English dominates the internet; the tokenizer learned English first. Every other language pays the gap.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Ce n'est pas un défaut qui sera simplement corrigé dans la prochaine version. Cela reflète la distribution statistique des données d'entraînement. L'anglais domine internet ; le tokeniseur a appris l'anglais en premier. Chaque autre langue paie l'écart.</p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 5 — LANGUAGE COMPARE -->
+  <section class="section">
+    <p class="section-number">05</p>
+    <h2>
+      <span data-lang-inline="en" class="active">EN vs FR vs AR — same sentence</span>
+      <span data-lang-inline="fr">EN vs FR vs AR — même phrase</span>
+    </h2>
+
+    <div data-lang="en" class="active">
+      <p>Compare how the same idea tokenizes across three languages. The difference in token count directly translates into API cost and context window consumption.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Comparez comment la même idée se tokenise dans trois langues. La différence de nombre de tokens se traduit directement en coût API et en consommation de fenêtre contextuelle.</p>
+    </div>
+
+    <div class="interactive-box">
+      <div class="ibox-header"><div class="ibox-dot"></div><span class="ibox-title" data-lang-inline="en" style="display:inline">Cross-language comparison</span><span class="ibox-title" data-lang-inline="fr">Comparaison inter-langues</span></div>
+      <div class="ibox-body">
+        <div class="compare-grid" id="lang-compare-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 6 — PRACTICAL TIPS -->
+  <section class="section">
+    <p class="section-number">06</p>
+    <h2>
+      <span data-lang-inline="en" class="active">Writing prompts that cost less</span>
+      <span data-lang-inline="fr">Écrire des prompts qui coûtent moins cher</span>
+    </h2>
+
+    <div data-lang="en" class="active">
+      <p>Knowing how tokenization works changes how you write prompts. Not drastically — but meaningfully, especially at scale.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Comprendre la tokenisation change la façon dont vous écrivez vos prompts. Pas radicalement — mais de manière significative, surtout à grande échelle.</p>
+    </div>
+
+    <div id="tips-container"></div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 7 — WHAT THIS CHANGES -->
+  <section class="section">
+    <p class="section-number">07</p>
+    <h2>
+      <span data-lang-inline="en" class="active">What this actually changes</span>
+      <span data-lang-inline="fr">Ce que ça change concrètement</span>
+    </h2>
+
+    <div data-lang="en" class="active">
+      <p>Tokenization is the most underexplained part of working with LLMs. Here's what understanding it actually unlocks:</p>
+      <p><strong>Context windows are measured in tokens, not words.</strong> GPT-4's 128k context isn't 128,000 words — it's 128,000 token slots. A French document uses those slots ~20% faster than an equivalent English one.</p>
+      <p><strong>Prompt injection often exploits token boundaries.</strong> Attackers use unusual tokenization patterns (like Unicode lookalikes, unusual whitespace, or token splits) to bypass content filters that work at the word level.</p>
+      <p><strong>Code is surprisingly cheap.</strong> Python and JavaScript have lots of common, repetitive sequences that become single tokens. A function definition costs far fewer tokens than you might expect — which is why coding assistants are so economically viable.</p>
+      <p><strong>Repeating a word isn't the same as saying it once.</strong> If you write "very very very" in a prompt, the model doesn't parse emphasis the way humans do — it processes three sequential tokens, each shifting the probability distribution slightly. Knowing this helps you communicate intent more clearly.</p>
+    </div>
+    <div data-lang="fr">
+      <p>La tokenisation est la partie la moins expliquée du travail avec les LLMs. Voici ce que sa compréhension débloque réellement :</p>
+      <p><strong>Les fenêtres contextuelles se mesurent en tokens, pas en mots.</strong> Le contexte de 128k de GPT-4 ne représente pas 128 000 mots — c'est 128 000 emplacements de tokens. Un document français consomme ces emplacements environ 20% plus vite qu'un équivalent anglais.</p>
+      <p><strong>L'injection de prompts exploite souvent les frontières de tokens.</strong> Les attaquants utilisent des patterns de tokenisation inhabituels (caractères Unicode similaires, espaces inhabituels, découpes de tokens) pour contourner les filtres de contenu qui opèrent au niveau des mots.</p>
+      <p><strong>Le code est étonnamment peu coûteux.</strong> Python et JavaScript ont beaucoup de séquences courantes et répétitives qui deviennent des tokens uniques. Une définition de fonction coûte bien moins de tokens qu'on ne le pense — c'est pourquoi les assistants de code sont économiquement viables.</p>
+      <p><strong>Répéter un mot n'est pas la même chose que le dire une fois.</strong> Si vous écrivez "très très très" dans un prompt, le modèle ne perçoit pas l'emphase comme un humain — il traite trois tokens séquentiels, chacun déplaçant légèrement la distribution de probabilité.</p>
+    </div>
+
+    <div class="callout">
+      <p><strong data-lang-inline="en" style="display:inline">Bottom line:</strong><strong data-lang-inline="fr">En résumé :</strong> <span data-lang-inline="en" style="display:inline">You don't need to count tokens manually in your prompts. But knowing that tokens are the unit of computation — not words, not characters, not sentences — changes how you think about what the model is actually doing.</span><span data-lang-inline="fr">Vous n'avez pas besoin de compter les tokens manuellement dans vos prompts. Mais savoir que le token est l'unité de calcul — pas les mots, pas les caractères, pas les phrases — change la façon dont vous comprenez ce que fait réellement le modèle.</span></p>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="article-footer">
+  <a href="../" class="footer-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    <span data-lang-inline="en" style="display:inline">Back to Labs</span>
+    <span data-lang-inline="fr">Retour aux Labs</span>
+  </a>
+  <span class="footer-note">
+    <span data-lang-inline="en" style="display:inline">Built by Badreddine El Khamlichi · April 2026</span>
+    <span data-lang-inline="fr">Par Badreddine El Khamlichi · Avril 2026</span>
+  </span>
+</footer>
+
+<script>
+// ─── THEME ───────────────────────────────────────────
+const html = document.documentElement;
+const themeBtn = document.querySelector('[data-theme-toggle]');
+const SUN = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+const MOON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+let theme = localStorage.getItem('labs-theme') || 'light';
+html.setAttribute('data-theme', theme);
+themeBtn.innerHTML = theme === 'dark' ? SUN : MOON;
+themeBtn.addEventListener('click', () => {
+  theme = theme === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', theme);
+  localStorage.setItem('labs-theme', theme);
+  themeBtn.innerHTML = theme === 'dark' ? SUN : MOON;
+});
+
+// ─── LANGUAGE TOGGLE ─────────────────────────────────
+let currentLang = 'en';
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    el.classList.toggle('active', el.dataset.lang === lang);
+  });
+  document.querySelectorAll('[data-lang-inline]').forEach(el => {
+    el.classList.toggle('active', el.dataset.langInline === lang);
+    if (el.dataset.langInline === lang) el.style.display = el.tagName === 'SPAN' ? 'inline' : 'block';
+    else el.style.display = 'none';
+  });
+  document.querySelectorAll('[data-lang-switch]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.langSwitch === lang);
+  });
+  // Update textarea placeholder
+  const ta = document.getElementById('main-input');
+  if (ta) ta.placeholder = lang === 'fr' ? 'Tapez ici…' : 'Type here...';
+  // Re-render presets
+  renderPresets();
+}
+document.querySelectorAll('[data-lang-switch]').forEach(btn => {
+  btn.addEventListener('click', () => setLang(btn.dataset.langSwitch));
+});
+
+// ─── PROGRESS BAR ────────────────────────────────────
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  bar.style.width = (window.scrollY / total * 100) + '%';
+});
+
+// ─── TOKENIZER ───────────────────────────────────────
+// A faithful BPE-style tokenizer approximation for cl100k_base (GPT-4)
+// This is a client-side approximation — not the exact tiktoken output,
+// but produces realistic token counts and splits for illustration.
+const TOKEN_COLORS = [
+  '#fde68a','#a7f3d0','#bfdbfe','#fecaca','#ddd6fe',
+  '#fed7aa','#bbf7d0','#e0f2fe','#fce7f3','#d1fae5'
+];
+
+function approxTokenize(text) {
+  if (!text.trim()) return [];
+  const tokens = [];
+  // Common English/French contractions and frequent words as single tokens
+  const singles = [
+    'tokenization','tokenisation','the','and','for','that','with','this','from',
+    'are','have','been','will','would','could','should','their','there','they',
+    'data','model','token','tokens','word','words','language','text','input',
+    'learning','machine','neural','network','embedding','attention','transformer',
+    'les','des','une','est','pas','dans','pour','avec','sur','qui','que','par',
+    'python','javascript','function','return','import','class','def','var','const',
+    'int','str','list','dict','tuple','None','True','False','print','range',
+    '2024','2025','2026','100','200','500','1000',
+  ];
+  let i = 0;
+  while (i < text.length) {
+    // Try matching single common tokens (case-insensitive check, preserve case)
+    let matched = false;
+    if (/[a-zA-ZÀ-öø-ÿ]/.test(text[i])) {
+      // Word boundary: extract word
+      let j = i;
+      while (j < text.length && /[a-zA-ZÀ-öø-ÿ'-]/.test(text[j])) j++;
+      const word = text.slice(i, j);
+      const lw = word.toLowerCase();
+      if (singles.includes(lw) || word.length <= 3) {
+        // include leading space if applicable
+        const lead = (i > 0 && text[i-1] === ' ') ? '' : '';
+        tokens.push(word);
+        i = j;
+        matched = true;
+      } else if (word.length > 12) {
+        // Split long words into 2-3 pieces (BPE-like)
+        const mid = Math.ceil(word.length * 0.55);
+        tokens.push(word.slice(0, mid));
+        tokens.push(word.slice(mid));
+        i = j;
+        matched = true;
+      } else if (word.length > 7) {
+        // Split at roughly 60%
+        const mid = Math.ceil(word.length * 0.6);
+        tokens.push(word.slice(0, mid));
+        tokens.push(word.slice(mid));
+        i = j;
+        matched = true;
+      } else {
+        tokens.push(word);
+        i = j;
+        matched = true;
+      }
+    } else if (/[0-9]/.test(text[i])) {
+      // Numbers: 1-3 digit groups often merge, 4+ split by 1-3
+      let j = i;
+      while (j < text.length && /[0-9.,]/.test(text[j])) j++;
+      const num = text.slice(i, j).replace(/[.,]/g,'');
+      if (num.length <= 4) {
+        tokens.push(text.slice(i, j));
+      } else {
+        // Split every 1-3 digits
+        let k = 0;
+        const digits = text.slice(i, j);
+        while (k < digits.length) {
+          const chunk = digits.slice(k, k + (k === 0 ? 1 : 2));
+          tokens.push(chunk);
+          k += chunk.length;
+        }
+      }
+      i = j;
+      matched = true;
+    } else if (text[i] === ' ') {
+      // Space usually merges with next token
+      let j = i + 1;
+      while (j < text.length && /[a-zA-ZÀ-öø-ÿ]/.test(text[j])) j++;
+      if (j > i + 1) {
+        const spaceWord = text.slice(i, j);
+        const lw = spaceWord.trim().toLowerCase();
+        if (singles.includes(lw) || spaceWord.trim().length <= 3) {
+          tokens.push(spaceWord);
+          i = j;
+        } else {
+          tokens.push(' ');
+          i++;
+        }
+      } else {
+        tokens.push(' ');
+        i++;
+      }
+      matched = true;
+    } else if (/[\n\r]/.test(text[i])) {
+      tokens.push('\n');
+      i++;
+      matched = true;
+    } else {
+      // Punctuation and symbols — usually 1 per char or small groups
+      let j = i;
+      while (j < text.length && !/[a-zA-ZÀ-öø-ÿ0-9 \n\r]/.test(text[j]) && j - i < 3) j++;
+      tokens.push(text.slice(i, j));
+      i = j;
+      matched = true;
+    }
+    if (!matched) { tokens.push(text[i]); i++; }
+  }
+  // Arabic: each char or cluster becomes its own token (higher ratio)
+  // Detect Arabic and split more aggressively
+  const result = [];
+  for (const t of tokens) {
+    if (/[\u0600-\u06FF]/.test(t)) {
+      // Arabic: split each ~2 chars
+      for (let k = 0; k < t.length; k += 2) result.push(t.slice(k, k+2));
+    } else {
+      result.push(t);
+    }
+  }
+  return result.filter(t => t.length > 0);
+}
+
+function renderTokens(tokens, container) {
+  if (tokens.length === 0) {
+    container.innerHTML = '<span style="color:var(--text-faint);font-family:var(--font-body);font-size:var(--text-xs);">Tokens will appear here…</span>';
+    return;
+  }
+  container.innerHTML = tokens.map((t, i) => {
+    const color = TOKEN_COLORS[i % TOKEN_COLORS.length];
+    const display = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'↵').replace(/ /g,'·');
+    return `<span class="token-chip" style="background:${color}20;border:1px solid ${color}60;color:var(--text);" title="Token ${i+1}: '${t.replace(/'/g,"&apos;")}'">${
+      display
+    }</span>`;
+  }).join('');
+}
+
+function updateStats(text, tokens) {
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  document.getElementById('stat-tokens').textContent = tokens.length;
+  document.getElementById('stat-chars').textContent = text.length;
+  document.getElementById('stat-words').textContent = words;
+  const ratio = text.length && tokens.length ? (text.length / tokens.length).toFixed(1) : '—';
+  document.getElementById('stat-ratio').textContent = ratio;
+  const cost = tokens.length > 0 ? '$' + (tokens.length / 1e6 * 2.5).toFixed(5) : '$0.00000';
+  document.getElementById('stat-cost').textContent = cost;
+}
+
+const PRESETS_EN = [
+  { label: '🇬🇧 English', text: 'The weather is nice today.' },
+  { label: '🇫🇷 French', text: 'Il fait beau aujourd\'hui.' },
+  { label: '🇸🇦 Arabic', text: 'الطقس جميل اليوم.' },
+  { label: '🔢 Math', text: '1234567 × 9876543 = ?' },
+  { label: '🐍 Python', text: 'def compute_loss(y_pred, y_true):\n    return ((y_pred - y_true)**2).mean()' },
+  { label: '💡 Prompt', text: 'Please kindly help me to understand the concept of tokenization in large language models.' },
+];
+const PRESETS_FR = [
+  { label: '🇬🇧 English', text: 'The weather is nice today.' },
+  { label: '🇫🇷 Français', text: 'Il fait beau aujourd\'hui.' },
+  { label: '🇸🇦 Arabe', text: 'الطقس جميل اليوم.' },
+  { label: '🔢 Maths', text: '1234567 × 9876543 = ?' },
+  { label: '🐍 Python', text: 'def compute_loss(y_pred, y_true):\n    return ((y_pred - y_true)**2).mean()' },
+  { label: '💡 Prompt', text: 'Veuillez m\'expliquer le concept de tokenisation dans les grands modèles de langage.' },
+];
+
+function renderPresets() {
+  const presets = currentLang === 'fr' ? PRESETS_FR : PRESETS_EN;
+  const container = document.getElementById('preset-btns');
+  container.innerHTML = presets.map(p =>
+    `<button class="preset-btn" data-text="${p.text.replace(/"/g,'&quot;')}">${p.label}</button>`
+  ).join('');
+  container.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ta = document.getElementById('main-input');
+      ta.value = btn.dataset.text;
+      ta.dispatchEvent(new Event('input'));
+    });
+  });
+}
+
+const mainInput = document.getElementById('main-input');
+const tokenDisplay = document.getElementById('token-display');
+mainInput.addEventListener('input', () => {
+  const tokens = approxTokenize(mainInput.value);
+  renderTokens(tokens, tokenDisplay);
+  updateStats(mainInput.value, tokens);
+});
+renderPresets();
+
+// ─── ARITHMETIC DEMO ─────────────────────────────────
+const arithData = [
+  { expr: '9 - 4', tokens: ['9',' -',' 4'], reasonEN: '3 tokens. Simple — single-digit numbers are usually individual tokens.', reasonFR: '3 tokens. Simple — les chiffres simples sont généralement des tokens individuels.' },
+  { expr: '27 + 83', tokens: ['27',' +',' 83'], reasonEN: '3 tokens. 2-digit numbers often encode as single tokens.', reasonFR: '3 tokens. Les nombres à 2 chiffres s\'encodent souvent en tokens uniques.' },
+  { expr: '1234 × 5678', tokens: ['12','34',' ×',' 56','78'], reasonEN: '5 tokens. 4-digit numbers split into 2-digit pairs — the model sees fragments, not a whole number.', reasonFR: '5 tokens. Les nombres à 4 chiffres se divisent en paires — le modèle voit des fragments, pas un nombre entier.' },
+  { expr: '99999 ÷ 137', tokens: ['999','99',' ÷',' 1','37'], reasonEN: '5 tokens. The boundary shifts unpredictably. No consistent mapping digit→token.', reasonFR: '5 tokens. La frontière change de manière imprévisible. Pas de correspondance chiffre→token cohérente.' },
+];
+const arithContainer = document.getElementById('arith-demo');
+arithData.forEach(item => {
+  const div = document.createElement('div');
+  div.className = 'arith-row';
+  const chips = item.tokens.map((t,i) => {
+    const c = TOKEN_COLORS[i % TOKEN_COLORS.length];
+    return `<span class="token-chip" style="background:${c}30;border:1px solid ${c}80;color:var(--text);">${t.replace(/</g,'&lt;')}</span>`;
+  }).join('');
+  div.innerHTML = `
+    <div class="arith-expr">${item.expr}</div>
+    <div class="arith-tokens">${chips}</div>
+    <div class="arith-why">
+      <span data-lang-inline="en" style="display:inline">${item.reasonEN}</span>
+      <span data-lang-inline="fr">${item.reasonFR}</span>
+    </div>
+  `;
+  arithContainer.appendChild(div);
+});
+
+// ─── LANGUAGE COST TABLE ─────────────────────────────
+const langData = [
+  { flag: '🇬🇧', lang: 'English', text: 'The weather is nice today.', tokens: 6, cost: 'low' },
+  { flag: '🇫🇷', lang: 'French', text: 'Il fait beau aujourd\'hui.', tokens: 8, cost: 'low' },
+  { flag: '🇩🇪', lang: 'German', text: 'Das Wetter ist heute schön.', tokens: 8, cost: 'low' },
+  { flag: '🇪🇸', lang: 'Spanish', text: 'El clima es agradable hoy.', tokens: 8, cost: 'low' },
+  { flag: '🇷🇺', lang: 'Russian', text: 'Сегодня хорошая погода.', tokens: 11, cost: 'med' },
+  { flag: '🇨🇳', lang: 'Chinese', text: '今天天气很好。', tokens: 12, cost: 'med' },
+  { flag: '🇸🇦', lang: 'Arabic', text: 'الطقس جميل اليوم.', tokens: 16, cost: 'high' },
+  { flag: '🇯🇵', lang: 'Japanese', text: '今日は天気がいいです。', tokens: 14, cost: 'high' },
+];
+const maxTok = Math.max(...langData.map(l => l.tokens));
+const tbody = document.getElementById('lang-table-body');
+tbody.innerHTML = langData.map(l => {
+  const pct = Math.round(l.tokens / maxTok * 100);
+  const badge = l.cost === 'low' ? 'cost-low' : l.cost === 'med' ? 'cost-med' : 'cost-high';
+  const label = l.cost === 'low' ? 'cheap' : l.cost === 'med' ? 'moderate' : 'expensive';
+  return `<tr>
+    <td><span class="lang-flag">${l.flag}</span>${l.lang}</td>
+    <td style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);max-width:180px;">${l.text}</td>
+    <td style="font-weight:600;">${l.tokens}</td>
+    <td><div class="bar-container"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+    <td><span class="cost-badge ${badge}">${label}</span></td>
+  </tr>`;
+}).join('');
+
+// ─── LANG COMPARE GRID ───────────────────────────────
+const compareData = [
+  { flag: '🇬🇧', lang: 'English', text: 'Machine learning is the art of getting computers to learn from data without being explicitly programmed.', tokens: approxTokenize('Machine learning is the art of getting computers to learn from data without being explicitly programmed.') },
+  { flag: '🇫🇷', lang: 'Français', text: 'L\'apprentissage automatique est l\'art d\'apprendre aux ordinateurs à apprendre à partir des données sans être explicitement programmés.', tokens: [] },
+  { flag: '🇸🇦', lang: 'العربية', text: 'تعلم الآلة هو فن تعليم الحواسيب التعلم من البيانات دون برمجة صريحة.', tokens: [] },
+];
+// Compute tokens for others
+compareData[1].tokens = approxTokenize(compareData[1].text);
+compareData[2].tokens = approxTokenize(compareData[2].text);
+const baseCount = compareData[0].tokens.length;
+const grid = document.getElementById('lang-compare-grid');
+grid.innerHTML = compareData.map(cd => {
+  const mult = (cd.tokens.length / baseCount).toFixed(1);
+  const chips = cd.tokens.slice(0, 40).map((t,i) => {
+    const c = TOKEN_COLORS[i % TOKEN_COLORS.length];
+    const d = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/ /g,'·').replace(/\n/g,'↵');
+    return `<span class="token-chip" style="background:${c}20;border:1px solid ${c}60;color:var(--text);font-size:10px;padding:2px 5px;">${d}</span>`;
+  }).join('') + (cd.tokens.length > 40 ? `<span style="font-size:var(--text-xs);color:var(--text-faint);"> +${cd.tokens.length-40} more</span>` : '');
+  return `<div class="compare-card">
+    <h4>${cd.flag} ${cd.lang}</h4>
+    <p class="compare-label">Tokenized</p>
+    <div class="token-display" style="min-height:80px;">${chips}</div>
+    <p class="compare-cost"><strong>${cd.tokens.length} tokens</strong> &nbsp;·&nbsp; ${mult}× vs EN</p>
+  </div>`;
+}).join('');
+
+// ─── TIPS ────────────────────────────────────────────
+const tipsData = [
+  {
+    icon: '✂️',
+    titleEN: 'Trim filler phrases', titleFR: 'Supprimer les formules de politesse',
+    descEN: 'Politeness phrases add tokens without adding information.', descFR: 'Les formules de politesse ajoutent des tokens sans information.',
+    before: 'Could you please kindly help me to understand...', after: 'Explain...'
+  },
+  {
+    icon: '📐',
+    titleEN: 'Use structured formats', titleFR: 'Utiliser des formats structurés',
+    descEN: 'JSON keys and delimiters are cheap — verbose prose is not.', descFR: 'Les clés JSON et délimiteurs sont bon marché — la prose verbeuse non.',
+    before: 'Please output in a structured way with name then age then city', after: 'Output: {name, age, city}'
+  },
+  {
+    icon: '🔁',
+    titleEN: 'Avoid redundant context', titleFR: 'Éviter le contexte redondant',
+    descEN: 'Every token in your context window costs money on every request.', descFR: 'Chaque token dans votre fenêtre contextuelle coûte de l\'argent à chaque requête.',
+    before: 'You are a helpful AI assistant. You always respond politely...', after: 'Assistant: concise, technical responses.'
+  },
+  {
+    icon: '🌍',
+    titleEN: 'Consider language for large-scale apps', titleFR: 'Considérer la langue pour les apps à grande échelle',
+    descEN: 'If your users write in Arabic or Chinese, factor in 2–3× token inflation.', descFR: 'Si vos utilisateurs écrivent en arabe ou en chinois, anticipez un coefficient 2-3× de tokens.',
+    before: 'Budget: 1M tokens/day (English estimate)', after: 'Budget: 2.5M tokens/day (Arabic-adjusted)'
+  },
+];
+const tipsContainer = document.getElementById('tips-container');
+tipsContainer.innerHTML = tipsData.map(tip => `
+  <div class="prompt-tip">
+    <div class="tip-icon">${tip.icon}</div>
+    <div class="tip-body">
+      <div class="tip-title">
+        <span data-lang-inline="en" style="display:inline">${tip.titleEN}</span>
+        <span data-lang-inline="fr">${tip.titleFR}</span>
+      </div>
+      <div class="tip-desc">
+        <span data-lang-inline="en" style="display:inline">${tip.descEN}</span>
+        <span data-lang-inline="fr">${tip.descFR}</span>
+      </div>
+      <div class="tip-example">
+        <div class="tip-before">${tip.before}</div>
+        <div class="tip-after">${tip.after}</div>
+      </div>
+    </div>
+  </div>
+`).join('');
+
+// Apply initial language state
+setLang('en');
+</script>
+</body>
+</html>

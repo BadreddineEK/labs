@@ -1,5 +1,15 @@
 [
   {
+    "slug": "tokenization-explained",
+    "title": "How LLMs Tokenize",
+    "description": "Your LLM doesn't read words — it reads fragments called tokens. That invisible step shapes cost, reasoning, and accuracy. Understand it fully, interactively.",
+    "tags": ["LLM", "Tokenization", "NLP"],
+    "category": "LLMs",
+    "date": "2026-04-09",
+    "color": "#0f766e",
+    "status": "live"
+  },
+  {
     "slug": "llm-agent-anatomy",
     "title": "LLM Agent Anatomy",
     "description": "A bare LLM answers once and stops. An agent reasons, picks tools, observes results, and loops — until the task is done. The full ReAct loop, visualized.",
