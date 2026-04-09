@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Transformer Architecture — Labs</title>
+<title>The Transformer Architecture - Labs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300..700&display=swap" rel="stylesheet">
@@ -63,6 +63,8 @@ nav{position:sticky;top:0;z-index:100;background:oklch(from var(--color-bg) l c 
 .nav-back:hover{color:var(--color-text)}
 .theme-toggle{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);color:var(--color-text-muted)}
 .theme-toggle:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.lang-btn{padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);border:1px solid var(--color-border);font-size:var(--text-xs);font-weight:600;letter-spacing:0.04em;color:var(--color-text-muted);background:transparent}
+.lang-btn:hover{background:var(--color-surface-offset);color:var(--color-text)}
 .hero{padding:clamp(var(--space-12),8vw,var(--space-20)) 0 var(--space-12)}
 .hero-tag{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--space-6)}
 .hero-tag::before{content:'';width:24px;height:2px;background:var(--color-primary);border-radius:var(--radius-full)}
@@ -117,15 +119,26 @@ nav{position:sticky;top:0;z-index:100;background:oklch(from var(--color-bg) l c 
 .qkv-card p{font-size:var(--text-xs);color:var(--color-text-muted);max-width:none}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity 500ms ease,transform 500ms ease}
 .reveal.visible{opacity:1;transform:none}
+.series-nav{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6);margin-top:var(--space-10)}
+.series-title{font-size:var(--text-xs);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-faint);margin-bottom:var(--space-4)}
+.series-items{display:flex;flex-direction:column;gap:var(--space-3)}
+.series-item{display:flex;align-items:center;gap:var(--space-3);text-decoration:none;color:var(--color-text-muted);font-size:var(--text-sm);padding:var(--space-2) 0}
+.series-item:hover{color:var(--color-text)}
+.series-item.current{color:var(--color-text);font-weight:600;pointer-events:none}
+.series-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.takeaways{display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-8)}
+.takeaway{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-4);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg)}
+.takeaway-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px}
+.takeaway p{font-size:var(--text-sm);color:var(--color-text-muted);max-width:none}
+.step-list{display:flex;flex-direction:column;gap:var(--space-3)}
+.step{display:flex;gap:var(--space-3);align-items:flex-start}
+.step-num{min-width:24px;height:24px;border-radius:var(--radius-full);background:oklch(from var(--color-primary) l c h / 0.15);display:flex;align-items:center;justify-content:center;font-size:var(--text-xs);font-weight:700;color:var(--color-primary);flex-shrink:0}
+.step p{font-size:var(--text-sm);color:var(--color-text-muted);max-width:none}
 footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin-top:var(--space-20)}
 .footer-inner{max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-4);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4)}
 .footer-left p{font-size:var(--text-sm);color:var(--color-text-muted)}
 .footer-left a{color:var(--color-primary);text-decoration:none}
 .footer-right{font-size:var(--text-sm);color:var(--color-text-faint)}
-.step-list{display:flex;flex-direction:column;gap:var(--space-3)}
-.step{display:flex;gap:var(--space-3);align-items:flex-start}
-.step-num{min-width:24px;height:24px;border-radius:var(--radius-full);background:oklch(from var(--color-primary) l c h / 0.15);display:flex;align-items:center;justify-content:center;font-size:var(--text-xs);font-weight:700;color:var(--color-primary);flex-shrink:0}
-.step p{font-size:var(--text-sm);color:var(--color-text-muted);max-width:none}
 @media(max-width:640px){
   .qkv-grid{grid-template-columns:1fr}
   .timeline-item{grid-template-columns:1fr;gap:var(--space-2)}
@@ -145,7 +158,8 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
       <span>labs</span>
     </a>
     <div class="nav-right">
-      <a href="../" class="nav-back">← Labs</a>
+      <a href="../" class="nav-back">&#8592; Labs</a>
+      <button class="lang-btn" id="lang-toggle">FR</button>
       <button class="theme-toggle" data-theme-toggle aria-label="Switch theme">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
@@ -156,21 +170,24 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
 <main>
   <section class="hero">
     <div class="container">
-      <div class="hero-tag">Deep Learning · Architecture</div>
+      <div class="hero-tag">Deep Learning &#183; Architecture</div>
       <h1>The <em>Transformer</em><br>Architecture</h1>
-      <p class="hero-lead">Every modern LLM — GPT, Claude, Gemini — is built on one 2017 paper. Here is the full architecture, block by block, with interactive attention and a live playground.</p>
+      <p class="hero-lead lang-en">GPT, Claude, Gemini, Llama: every modern LLM is built on one 2017 paper. Here is the full architecture, block by block, with an interactive attention playground.</p>
+      <p class="hero-lead lang-fr" style="display:none">GPT, Claude, Gemini, Llama: chaque grand mod&#232;le de langage moderne repose sur un seul article de 2017. Voici l'architecture compl&#232;te, bloc par bloc, avec un playground interactif.</p>
       <div class="hero-meta">
         <div class="hero-meta-item">
-          <span class="hero-meta-label">Published</span>
+          <span class="hero-meta-label lang-en">Published</span>
+          <span class="hero-meta-label lang-fr" style="display:none">Publi&#233;</span>
           <span class="hero-meta-value">April 2026</span>
         </div>
         <div class="hero-meta-item">
-          <span class="hero-meta-label">Reading time</span>
+          <span class="hero-meta-label lang-en">Reading time</span>
+          <span class="hero-meta-label lang-fr" style="display:none">Lecture</span>
           <span class="hero-meta-value">~10 min</span>
         </div>
         <div class="hero-meta-item">
           <span class="hero-meta-label">Tags</span>
-          <span class="hero-meta-value">Transformers · Self-Attention · LLM</span>
+          <span class="hero-meta-value">Transformers &#183; Self-Attention &#183; LLM</span>
         </div>
       </div>
     </div>
@@ -178,45 +195,54 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
 
   <section class="section">
     <div class="container">
-      <p class="section-label">The 6 building blocks</p>
-      <h2 class="section-title">What the Transformer is made of</h2>
-      <p class="section-lead">The architecture is deceptively simple — 6 operations stacked and repeated. Understand each one and the whole becomes clear.</p>
+      <p class="section-label lang-en">The 6 building blocks</p>
+      <p class="section-label lang-fr" style="display:none">Les 6 blocs fondamentaux</p>
+      <h2 class="section-title lang-en">What the Transformer is made of</h2>
+      <h2 class="section-title lang-fr" style="display:none">De quoi est fait le Transformer</h2>
+      <p class="section-lead lang-en">Six operations stacked and repeated. Understand each one and the whole becomes clear.</p>
+      <p class="section-lead lang-fr" style="display:none">Six op&#233;rations empil&#233;es et r&#233;p&#233;t&#233;es. Comprendre chacune suffit &#224; saisir le tout.</p>
       <div class="concepts-grid">
         <div class="concept-card reveal">
           <p class="concept-num">01</p>
-          <h3>Tokenization</h3>
-          <p>Text is split into sub-word tokens. Each token gets a unique ID. "unbelievable" → ["un","believ","able"]. The model never sees raw text.</p>
-          <div class="concept-formula">"Hello world" → [15496, 995]</div>
+          <h3><span class="lang-en">Tokenization</span><span class="lang-fr" style="display:none">Tokenisation</span></h3>
+          <p class="lang-en">Text is split into sub-word tokens. Each token gets a unique ID. "unbelievable" becomes ["un","believ","able"]. The model never sees raw text.</p>
+          <p class="lang-fr" style="display:none">Le texte est d&#233;coup&#233; en sous-mots. Chaque token re&#231;oit un identifiant unique. "incroyable" devient ["in","croy","able"]. Le mod&#232;le ne voit jamais le texte brut.</p>
+          <div class="concept-formula">"Hello world" &#8594; [15496, 995]</div>
         </div>
         <div class="concept-card reveal">
           <p class="concept-num">02</p>
-          <h3>Positional Encoding</h3>
-          <p>Attention has no sense of order. So we inject position via sinusoidal waves — unique vectors added to each token embedding that encode its place in the sequence.</p>
+          <h3><span class="lang-en">Positional Encoding</span><span class="lang-fr" style="display:none">Encodage positionnel</span></h3>
+          <p class="lang-en">Attention has no sense of order, so position is injected via sinusoidal waves: unique vectors added to each token embedding that encode its place in the sequence.</p>
+          <p class="lang-fr" style="display:none">L'attention n'a pas de sens de l'ordre, la position est donc inject&#233;e via des ondes sinuso&#239;dales: des vecteurs uniques ajout&#233;s &#224; chaque embedding qui encodent sa place dans la s&#233;quence.</p>
           <div class="concept-formula">PE(pos,2i) = sin(pos / 10000^(2i/d))</div>
         </div>
         <div class="concept-card reveal">
           <p class="concept-num">03</p>
           <h3>Self-Attention</h3>
-          <p>Each token asks: "which other tokens should I pay attention to?" It computes scores by comparing Query and Key vectors, then uses those scores to weight the Values.</p>
-          <div class="concept-formula">Attention(Q,K,V) = softmax(QKᵀ/√d)V</div>
+          <p class="lang-en">Each token asks: which other tokens should I pay attention to? It computes scores by comparing Query and Key vectors, then uses those scores to weight the Values.</p>
+          <p class="lang-fr" style="display:none">Chaque token demande: quels autres tokens m&#233;ritent mon attention? Il calcule des scores en comparant les vecteurs Query et Key, puis utilise ces scores pour pond&#233;rer les Values.</p>
+          <div class="concept-formula">Attention(Q,K,V) = softmax(QK&#7488;/&#8730;d)V</div>
         </div>
         <div class="concept-card reveal">
           <p class="concept-num">04</p>
           <h3>Multi-Head Attention</h3>
-          <p>Run self-attention h times in parallel with different learned projections. Each "head" can focus on different linguistic relationships simultaneously.</p>
-          <div class="concept-formula">MultiHead = Concat(head₁,...,headₕ)Wᴼ</div>
+          <p class="lang-en">Self-attention runs h times in parallel with different learned projections. Each head can focus on different linguistic relationships at the same time.</p>
+          <p class="lang-fr" style="display:none">L'auto-attention s'ex&#233;cute h fois en parall&#232;le avec des projections apprises distinctes. Chaque t&#234;te peut se concentrer sur diff&#233;rentes relations linguistiques en m&#234;me temps.</p>
+          <div class="concept-formula">MultiHead = Concat(head&#8321;,...,head&#8348;)W&#7476;</div>
         </div>
         <div class="concept-card reveal">
           <p class="concept-num">05</p>
           <h3>Layer Normalization</h3>
-          <p>After each sub-layer, normalize activations to zero mean and unit variance. This stabilizes training and allows much deeper stacking.</p>
-          <div class="concept-formula">LayerNorm(x) = (x - μ) / (σ + ε) · γ + β</div>
+          <p class="lang-en">After each sub-layer, activations are normalized to zero mean and unit variance. This stabilizes training and allows much deeper stacking without collapse.</p>
+          <p class="lang-fr" style="display:none">Apr&#232;s chaque sous-couche, les activations sont normalis&#233;es &#224; moyenne nulle et variance unitaire. Cela stabilise l'entra&#238;nement et permet un empilement bien plus profond.</p>
+          <div class="concept-formula">LayerNorm(x) = (x - &#956;) / (&#963; + &#949;) &#183; &#947; + &#946;</div>
         </div>
         <div class="concept-card reveal">
           <p class="concept-num">06</p>
           <h3>Feed-Forward Network</h3>
-          <p>A position-wise MLP applied identically to every token. It expands to 4× the model dimension, applies ReLU/GELU, then projects back. This is where most parameters live.</p>
-          <div class="concept-formula">FFN(x) = max(0, xW₁+b₁)W₂+b₂</div>
+          <p class="lang-en">A position-wise MLP applied identically to every token. It expands to 4x the model dimension, applies GELU, then projects back. Most parameters live here.</p>
+          <p class="lang-fr" style="display:none">Un MLP position par position appliqu&#233; identiquement &#224; chaque token. Il s'&#233;tend &#224; 4x la dimension du mod&#232;le, applique GELU, puis reprojette. C'est l&#224; que r&#233;sident la plupart des param&#232;tres.</p>
+          <div class="concept-formula">FFN(x) = max(0, xW&#8321;+b&#8321;)W&#8322;+b&#8322;</div>
         </div>
       </div>
     </div>
@@ -224,33 +250,54 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
 
   <section class="section">
     <div class="container">
-      <p class="section-label">Self-Attention deep dive</p>
-      <h2 class="section-title">Query, Key, Value — explained</h2>
-      <p class="section-lead">The hardest part to intuit. Think of it as a soft database lookup: Q is what you're searching for, K is what each token offers, V is what you actually retrieve.</p>
+      <p class="section-label lang-en">Self-Attention deep dive</p>
+      <p class="section-label lang-fr" style="display:none">Plong&#233;e dans le self-attention</p>
+      <h2 class="section-title lang-en">Query, Key, Value</h2>
+      <h2 class="section-title lang-fr" style="display:none">Query, Key, Value</h2>
+      <p class="section-lead lang-en">Think of it as a soft database lookup. Q is what a token is searching for, K is what each token offers, and V is what actually gets retrieved when a match is found.</p>
+      <p class="section-lead lang-fr" style="display:none">Pensez-y comme une recherche souple dans une base de donn&#233;es. Q est ce qu'un token cherche, K est ce que chaque token propose, et V est ce qui est r&#233;ellement r&#233;cup&#233;r&#233; quand une correspondance est trouv&#233;e.</p>
       <div class="qkv-grid" style="margin-bottom:var(--space-8)">
         <div class="qkv-card q reveal">
           <div class="qkv-letter">Q</div>
           <h4>Query</h4>
-          <p>What this token is looking for. Like a search query in a database.</p>
+          <p class="lang-en">What this token is looking for. Like a search query in a database.</p>
+          <p class="lang-fr" style="display:none">Ce que ce token cherche. Comme une requ&#234;te de recherche dans une base de donn&#233;es.</p>
         </div>
         <div class="qkv-card k reveal">
           <div class="qkv-letter">K</div>
           <h4>Key</h4>
-          <p>What each token offers. The "index" that Q is matched against.</p>
+          <p class="lang-en">What each token offers. The index that Q is matched against.</p>
+          <p class="lang-fr" style="display:none">Ce que chaque token propose. L'index sur lequel Q est compar&#233;.</p>
         </div>
         <div class="qkv-card v reveal">
           <div class="qkv-letter">V</div>
           <h4>Value</h4>
-          <p>The actual content retrieved if the Q·K match is high.</p>
+          <p class="lang-en">The actual content retrieved when the Q&#183;K match is high.</p>
+          <p class="lang-fr" style="display:none">Le contenu r&#233;ellement r&#233;cup&#233;r&#233; quand la correspondance Q&#183;K est &#233;lev&#233;e.</p>
         </div>
       </div>
       <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6)" class="reveal">
-        <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-4)">Step by step — "Le chat mange la souris"</p>
+        <p style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);font-weight:700;margin-bottom:var(--space-3)">
+          <span class="lang-en">Step by step: "Le chat mange la souris"</span>
+          <span class="lang-fr" style="display:none">Etape par etape: "Le chat mange la souris"</span>
+        </p>
         <div class="step-list">
-          <div class="step"><div class="step-num">1</div><p><strong style="color:var(--color-text)">Linear projections</strong> — Each token embedding is multiplied by 3 weight matrices (Wq, Wk, Wv) to get its Q, K and V vectors.</p></div>
-          <div class="step"><div class="step-num">2</div><p><strong style="color:var(--color-text)">Dot-product scores</strong> — Q of token i × K of token j → a raw score indicating how much i should attend to j.</p></div>
-          <div class="step"><div class="step-num">3</div><p><strong style="color:var(--color-text)">Scale + Softmax</strong> — Divide by √d_k to prevent vanishing gradients, then softmax to get weights that sum to 1.</p></div>
-          <div class="step"><div class="step-num">4</div><p><strong style="color:var(--color-text)">Weighted sum of V</strong> — Multiply each V by its attention weight. Sum = the new representation of token i, enriched with context.</p></div>
+          <div class="step"><div class="step-num">1</div>
+            <p class="lang-en"><strong style="color:var(--color-text)">Linear projections.</strong> Each token embedding is multiplied by 3 weight matrices (Wq, Wk, Wv) to produce its Q, K, and V vectors.</p>
+            <p class="lang-fr" style="display:none"><strong style="color:var(--color-text)">Projections lin&#233;aires.</strong> Chaque embedding de token est multipli&#233; par 3 matrices de poids (Wq, Wk, Wv) pour produire ses vecteurs Q, K et V.</p>
+          </div>
+          <div class="step"><div class="step-num">2</div>
+            <p class="lang-en"><strong style="color:var(--color-text)">Dot-product scores.</strong> Q of token i multiplied by K of token j gives a raw score indicating how much i should attend to j.</p>
+            <p class="lang-fr" style="display:none"><strong style="color:var(--color-text)">Scores produit scalaire.</strong> Q du token i multipli&#233; par K du token j donne un score brut indiquant &#224; quel point i doit porter attention &#224; j.</p>
+          </div>
+          <div class="step"><div class="step-num">3</div>
+            <p class="lang-en"><strong style="color:var(--color-text)">Scale and softmax.</strong> Dividing by &#8730;d_k prevents the dot products from growing too large; softmax converts scores into weights that sum to 1.</p>
+            <p class="lang-fr" style="display:none"><strong style="color:var(--color-text)">Mise &#224; l'&#233;chelle et softmax.</strong> Diviser par &#8730;d_k emp&#234;che les produits scalaires de devenir trop grands; le softmax convertit les scores en poids dont la somme vaut 1.</p>
+          </div>
+          <div class="step"><div class="step-num">4</div>
+            <p class="lang-en"><strong style="color:var(--color-text)">Weighted sum of V.</strong> Each V is multiplied by its attention weight. The sum is the new representation of token i, enriched with context from the full sequence.</p>
+            <p class="lang-fr" style="display:none"><strong style="color:var(--color-text)">Somme pond&#233;r&#233;e des V.</strong> Chaque V est multipli&#233; par son poids d'attention. La somme est la nouvelle repr&#233;sentation du token i, enrichie du contexte de la s&#233;quence enti&#232;re.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -258,13 +305,22 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
 
   <section class="section">
     <div class="container">
-      <p class="section-label">Interactive playground</p>
-      <h2 class="section-title">Attention scores in action</h2>
-      <p class="section-lead">Click on any token to see how much attention it pays to the others. Scores reflect typical patterns learned by real models.</p>
+      <p class="section-label lang-en">Interactive playground</p>
+      <p class="section-label lang-fr" style="display:none">Playground interactif</p>
+      <h2 class="section-title lang-en">Attention scores in action</h2>
+      <h2 class="section-title lang-fr" style="display:none">Les poids d'attention en action</h2>
+      <p class="section-lead lang-en">Click any token to see how much attention it pays to the others. Weights shown are illustrative and simplified to highlight key patterns.</p>
+      <p class="section-lead lang-fr" style="display:none">Cliquez sur un token pour voir &#224; quel point il porte attention aux autres. Les poids affich&#233;s sont illustratifs et simplifi&#233;s pour mettre en &#233;vidence les patterns cl&#233;s.</p>
       <div class="attention-demo">
-        <p style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);font-weight:700;margin-bottom:var(--space-3)">Select a token</p>
+        <p style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);font-weight:700;margin-bottom:var(--space-3)">
+          <span class="lang-en">Select a token</span>
+          <span class="lang-fr" style="display:none">S&#233;lectionnez un token</span>
+        </p>
         <div class="attention-phrase" id="tokenRow"></div>
-        <p style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);font-weight:700;margin-bottom:var(--space-4)">Attention weights</p>
+        <p style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);font-weight:700;margin-bottom:var(--space-4)">
+          <span class="lang-en">Attention weights</span>
+          <span class="lang-fr" style="display:none">Poids d'attention</span>
+        </p>
         <div class="attention-bars" id="attentionBars"></div>
       </div>
     </div>
@@ -272,9 +328,12 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
 
   <section class="section">
     <div class="container container--wide">
-      <p class="section-label">Full architecture</p>
-      <h2 class="section-title">Encoder &amp; Decoder</h2>
-      <p class="section-lead">The original Transformer has two stacks. Modern LLMs like GPT use only the decoder. BERT uses only the encoder. Encoder-decoder is used for translation and summarization.</p>
+      <p class="section-label lang-en">Full architecture</p>
+      <p class="section-label lang-fr" style="display:none">Architecture compl&#232;te</p>
+      <h2 class="section-title lang-en">Encoder &amp; Decoder</h2>
+      <h2 class="section-title lang-fr" style="display:none">Encodeur et D&#233;codeur</h2>
+      <p class="section-lead lang-en">The original Transformer has two stacks. Modern LLMs like GPT use only the decoder. BERT uses only the encoder. Encoder-decoder models are used for translation and summarization.</p>
+      <p class="section-lead lang-fr" style="display:none">Le Transformer original a deux piles. Les LLMs modernes comme GPT n'utilisent que le d&#233;codeur. BERT n'utilise que l'encodeur. Les mod&#232;les encodeur-d&#233;codeur sont utilis&#233;s pour la traduction et le r&#233;sum&#233;.</p>
       <div class="arch-diagram reveal">
         <svg width="700" height="480" viewBox="0 0 700 480" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto">
           <rect x="40" y="40" width="270" height="400" rx="12" fill="oklch(from #fb923c l c h / 0.06)" stroke="oklch(from #fb923c l c h / 0.3)" stroke-width="1.5"/>
@@ -287,7 +346,7 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
           <text x="175" y="214" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="var(--color-text)">Feed-Forward Network</text>
           <rect x="60" y="244" width="230" height="36" rx="8" fill="var(--color-surface-offset)" stroke="var(--color-border)" stroke-width="1"/>
           <text x="175" y="266" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="var(--color-text-muted)">Add &amp; Norm</text>
-          <text x="175" y="310" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="var(--color-text-faint)">× N layers</text>
+          <text x="175" y="310" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="var(--color-text-faint)">x N layers</text>
           <rect x="60" y="328" width="230" height="44" rx="8" fill="var(--color-surface-offset)" stroke="var(--color-border)" stroke-width="1"/>
           <text x="175" y="354" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="var(--color-text-muted)">Input Embedding</text>
           <rect x="60" y="384" width="230" height="36" rx="8" fill="var(--color-surface-offset)" stroke="var(--color-border)" stroke-width="1"/>
@@ -323,29 +382,39 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
 
   <section class="section">
     <div class="container">
-      <p class="section-label">Key equations</p>
-      <h2 class="section-title">The math behind it</h2>
-      <p class="section-lead">Four equations define the entire architecture. Understand these and you understand every LLM built since 2017.</p>
+      <p class="section-label lang-en">Key equations</p>
+      <p class="section-label lang-fr" style="display:none">Les &#233;quations cl&#233;s</p>
+      <h2 class="section-title lang-en">The math behind it</h2>
+      <h2 class="section-title lang-fr" style="display:none">Les maths derri&#232;re</h2>
+      <p class="section-lead lang-en">Four equations define the entire architecture.</p>
+      <p class="section-lead lang-fr" style="display:none">Quatre &#233;quations d&#233;finissent toute l'architecture.</p>
       <div class="formulas">
         <div class="formula-card reveal">
-          <h4>Scaled Dot-Product Attention</h4>
-          <div class="formula-eq">Attention(Q,K,V) = softmax( QKᵀ / √d_k ) · V</div>
-          <p>The core operation. Divide by √d_k to prevent the dot products from growing too large, which would push softmax into regions with tiny gradients.</p>
+          <h4 class="lang-en">Scaled Dot-Product Attention</h4>
+          <h4 class="lang-fr" style="display:none">Attention produit scalaire mis &#224; l'&#233;chelle</h4>
+          <div class="formula-eq">Attention(Q,K,V) = softmax( QK&#7488; / &#8730;d_k ) &#183; V</div>
+          <p class="lang-en">The core operation. Dividing by &#8730;d_k prevents the dot products from growing too large, which would push softmax into regions with very small gradients.</p>
+          <p class="lang-fr" style="display:none">L'op&#233;ration centrale. Diviser par &#8730;d_k emp&#234;che les produits scalaires de devenir trop grands, ce qui pousserait le softmax dans des zones &#224; gradients tr&#232;s faibles.</p>
         </div>
         <div class="formula-card reveal">
           <h4>Multi-Head Attention</h4>
-          <div class="formula-eq">MultiHead(Q,K,V) = Concat(head₁,...,headₕ) · Wᴼ<br>headᵢ = Attention(QWᵢQ, KWᵢK, VWᵢV)</div>
-          <p>Each head learns its own Q/K/V projections, allowing the model to attend to different subspaces simultaneously.</p>
+          <div class="formula-eq">MultiHead(Q,K,V) = Concat(head&#8321;,...,head&#8348;) &#183; W&#7476;<br>head&#7522; = Attention(QW&#7522;Q, KW&#7522;K, VW&#7522;V)</div>
+          <p class="lang-en">Each head learns its own Q/K/V projections, allowing the model to attend to different subspaces at the same time.</p>
+          <p class="lang-fr" style="display:none">Chaque t&#234;te apprend ses propres projections Q/K/V, ce qui permet au mod&#232;le de porter attention &#224; diff&#233;rents sous-espaces simultan&#233;ment.</p>
         </div>
         <div class="formula-card reveal">
-          <h4>Position-wise FFN</h4>
-          <div class="formula-eq">FFN(x) = max(0, xW₁ + b₁) · W₂ + b₂</div>
-          <p>Applied independently to each position. The hidden layer is typically 4× wider than the model dimension — this is where most parameters live.</p>
+          <h4 class="lang-en">Position-wise FFN</h4>
+          <h4 class="lang-fr" style="display:none">FFN position par position</h4>
+          <div class="formula-eq">FFN(x) = max(0, xW&#8321; + b&#8321;) &#183; W&#8322; + b&#8322;</div>
+          <p class="lang-en">Applied independently to each position. The hidden layer is typically 4x wider than the model dimension. This is where most parameters live.</p>
+          <p class="lang-fr" style="display:none">Appliqu&#233; ind&#233;pendamment &#224; chaque position. La couche cach&#233;e est typiquement 4x plus large que la dimension du mod&#232;le. C'est l&#224; que r&#233;sident la plupart des param&#232;tres.</p>
         </div>
         <div class="formula-card reveal">
-          <h4>Positional Encoding</h4>
+          <h4 class="lang-en">Positional Encoding</h4>
+          <h4 class="lang-fr" style="display:none">Encodage positionnel</h4>
           <div class="formula-eq">PE(pos,2i) = sin(pos / 10000^(2i/d_model))<br>PE(pos,2i+1) = cos(pos / 10000^(2i/d_model))</div>
-          <p>Sine and cosine waves at different frequencies encode position. Modern models replace this with RoPE or ALiBi for better length generalization.</p>
+          <p class="lang-en">Sine and cosine waves at different frequencies encode position. Modern models replace this with RoPE or ALiBi for better length generalization.</p>
+          <p class="lang-fr" style="display:none">Des ondes sinus et cosinus &#224; diff&#233;rentes fr&#233;quences encodent la position. Les mod&#232;les modernes remplacent cela par RoPE ou ALiBi pour une meilleure g&#233;n&#233;ralisation sur la longueur.</p>
         </div>
       </div>
     </div>
@@ -353,43 +422,147 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
 
   <section class="section">
     <div class="container container--narrow">
-      <p class="section-label">From paper to paradigm</p>
+      <p class="section-label lang-en">From paper to paradigm</p>
+      <p class="section-label lang-fr" style="display:none">Du papier au paradigme</p>
       <h2 class="section-title">Timeline</h2>
-      <p class="section-lead">How a single architecture took over all of AI in eight years.</p>
+      <p class="section-lead lang-en">How one architecture took over all of AI in eight years.</p>
+      <p class="section-lead lang-fr" style="display:none">Comment une seule architecture a pris le contr&#244;le de tout l'IA en huit ans.</p>
       <div class="timeline">
         <div class="timeline-item reveal">
           <div class="timeline-year">2017</div>
           <div class="timeline-content">
             <h4>Attention Is All You Need</h4>
-            <p>Vaswani et al. at Google Brain publish the original paper. 8 authors, one architecture that would change everything.</p>
+            <p class="lang-en">Vaswani et al. at Google Brain publish the original paper. Eight authors, one architecture.</p>
+            <p class="lang-fr" style="display:none">Vaswani et al. chez Google Brain publient l'article original. Huit auteurs, une architecture.</p>
           </div>
         </div>
         <div class="timeline-item reveal">
           <div class="timeline-year">2018</div>
           <div class="timeline-content">
             <h4>BERT &amp; GPT-1</h4>
-            <p>Google's BERT (encoder-only, bidirectional) and OpenAI's GPT (decoder-only, autoregressive) show the two paths forward.</p>
+            <p class="lang-en">Google's BERT (encoder-only, bidirectional) and OpenAI's GPT (decoder-only, autoregressive) establish the two main paths forward.</p>
+            <p class="lang-fr" style="display:none">Le BERT de Google (encodeur seul, bidirectionnel) et le GPT d'OpenAI (d&#233;codeur seul, autor&#233;gressif) &#233;tablissent les deux grandes directions &#224; suivre.</p>
           </div>
         </div>
         <div class="timeline-item reveal">
           <div class="timeline-year">2020</div>
           <div class="timeline-content">
             <h4>GPT-3 (175B parameters)</h4>
-            <p>Few-shot learning emerges. The same architecture, scaled × 1000. The world notices.</p>
+            <p class="lang-en">Few-shot learning emerges. Same architecture, scaled up 1000x. The broader world takes notice.</p>
+            <p class="lang-fr" style="display:none">L'apprentissage few-shot &#233;merge. M&#234;me architecture, multipli&#233;e par 1000. Le monde entier commence &#224; s'y int&#233;resser.</p>
           </div>
         </div>
         <div class="timeline-item reveal">
           <div class="timeline-year">2022</div>
           <div class="timeline-content">
             <h4>ChatGPT &amp; the RLHF era</h4>
-            <p>Instruction fine-tuning + RLHF turns a raw language model into an assistant. 1 million users in 5 days.</p>
+            <p class="lang-en">Instruction fine-tuning combined with RLHF turns a raw language model into an assistant. One million users in five days.</p>
+            <p class="lang-fr" style="display:none">Le fine-tuning par instruction combin&#233; au RLHF transforme un mod&#232;le brut en assistant. Un million d'utilisateurs en cinq jours.</p>
           </div>
         </div>
         <div class="timeline-item reveal">
-          <div class="timeline-year">2024–26</div>
+          <div class="timeline-year">2024-26</div>
           <div class="timeline-content">
             <h4>MoE, long context, reasoning</h4>
-            <p>GPT-4, Claude 3, Gemini Ultra, Llama 3 — all Transformers. Context windows reach 1M+ tokens. The architecture holds.</p>
+            <p class="lang-en">GPT-4, Claude 3, Gemini Ultra, Llama 3: all Transformers. Context windows reach 1M+ tokens. The architecture holds.</p>
+            <p class="lang-fr" style="display:none">GPT-4, Claude 3, Gemini Ultra, Llama 3: tous des Transformers. Les fen&#234;tres de contexte atteignent 1M+ tokens. L'architecture tient bon.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-label lang-en">Where this matters</p>
+      <p class="section-label lang-fr" style="display:none">O&#249; ca compte vraiment</p>
+      <h2 class="section-title lang-en">What the Transformer powers today</h2>
+      <h2 class="section-title lang-fr" style="display:none">Ce que le Transformer alimente aujourd'hui</h2>
+      <p class="section-lead lang-en">Knowing the architecture helps you make better decisions when deploying, fine-tuning, or building on top of these models.</p>
+      <p class="section-lead lang-fr" style="display:none">Conna&#238;tre l'architecture aide &#224; prendre de meilleures d&#233;cisions lors du d&#233;ploiement, du fine-tuning ou de la construction par-dessus ces mod&#232;les.</p>
+      <div class="concepts-grid">
+        <div class="concept-card reveal">
+          <p class="concept-num">Use case 1</p>
+          <h3 class="lang-en">Inference cost</h3>
+          <h3 class="lang-fr" style="display:none">Co&#251;t d'inf&#233;rence</h3>
+          <p class="lang-en">Self-attention scales quadratically with sequence length. A 4x longer prompt costs roughly 16x more to process. Understanding this lets you design prompts and context windows more deliberately.</p>
+          <p class="lang-fr" style="display:none">L'auto-attention s'adapte quadratiquement &#224; la longueur de la s&#233;quence. Un prompt 4x plus long co&#251;te environ 16x plus cher &#224; traiter. Comprendre cela permet de concevoir les prompts de fa&#231;on plus r&#233;fl&#233;chie.</p>
+        </div>
+        <div class="concept-card reveal">
+          <p class="concept-num">Use case 2</p>
+          <h3 class="lang-en">Fine-tuning strategies</h3>
+          <h3 class="lang-fr" style="display:none">Strat&#233;gies de fine-tuning</h3>
+          <p class="lang-en">LoRA works by adding low-rank adapters to the attention weight matrices (Wq, Wk, Wv, Wo). Knowing the architecture shows you exactly what gets modified and why it is parameter-efficient.</p>
+          <p class="lang-fr" style="display:none">LoRA fonctionne en ajoutant des adaptateurs de bas rang aux matrices de poids d'attention (Wq, Wk, Wv, Wo). Conna&#238;tre l'architecture montre exactement ce qui est modifi&#233; et pourquoi c'est efficace en param&#232;tres.</p>
+        </div>
+        <div class="concept-card reveal">
+          <p class="concept-num">Use case 3</p>
+          <h3 class="lang-en">RAG and retrieval</h3>
+          <h3 class="lang-fr" style="display:none">RAG et retrieval</h3>
+          <p class="lang-en">In RAG pipelines, retrieved chunks are prepended to the decoder's context. The Transformer processes them with the same attention mechanism, so retrieved context competes with the original prompt token by token.</p>
+          <p class="lang-fr" style="display:none">Dans les pipelines RAG, les chunks r&#233;cup&#233;r&#233;s sont ajout&#233;s au contexte du d&#233;codeur. Le Transformer les traite avec le m&#234;me m&#233;canisme d'attention, donc le contexte r&#233;cup&#233;r&#233; entre en comp&#233;tition avec le prompt d'origine token par token.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--narrow">
+      <p class="section-label lang-en">Summary</p>
+      <p class="section-label lang-fr" style="display:none">R&#233;sum&#233;</p>
+      <h2 class="section-title lang-en">Key takeaways</h2>
+      <h2 class="section-title lang-fr" style="display:none">Points cl&#233;s &#224; retenir</h2>
+      <div class="takeaways">
+        <div class="takeaway reveal">
+          <span class="takeaway-icon">&#129513;</span>
+          <p class="lang-en">Six operations repeated N times is all a Transformer is: tokenization, positional encoding, self-attention, multi-head projection, layer norm, and feed-forward.</p>
+          <p class="lang-fr" style="display:none">Six op&#233;rations r&#233;p&#233;t&#233;es N fois, c'est tout ce qu'est un Transformer: tokenisation, encodage positionnel, auto-attention, projection multi-t&#234;te, norme de couche et feed-forward.</p>
+        </div>
+        <div class="takeaway reveal">
+          <span class="takeaway-icon">&#128269;</span>
+          <p class="lang-en">Self-attention lets every token attend directly to every other token in a single parallel step. This is what replaced the sequential bottleneck of RNNs.</p>
+          <p class="lang-fr" style="display:none">L'auto-attention permet &#224; chaque token de porter attention directement &#224; chaque autre en une seule &#233;tape parall&#232;le. C'est ce qui a remplac&#233; le goulot d'&#233;tranglement s&#233;quentiel des RNN.</p>
+        </div>
+        <div class="takeaway reveal">
+          <span class="takeaway-icon">&#129504;</span>
+          <p class="lang-en">Multiple attention heads run in parallel, each learning to focus on different aspects: syntax, co-reference, local structure, and so on.</p>
+          <p class="lang-fr" style="display:none">Plusieurs t&#234;tes d'attention s'ex&#233;cutent en parall&#232;le, chacune apprenant &#224; se concentrer sur des aspects diff&#233;rents: syntaxe, co-r&#233;f&#233;rence, structure locale, etc.</p>
+        </div>
+        <div class="takeaway reveal">
+          <span class="takeaway-icon">&#128208;</span>
+          <p class="lang-en">Attention complexity is O(n&#178;) in sequence length. Longer contexts cost more to process, which is why efficient attention variants (FlashAttention, sliding window) matter at scale.</p>
+          <p class="lang-fr" style="display:none">La complexit&#233; de l'attention est O(n&#178;) en longueur de s&#233;quence. Les contextes plus longs co&#251;tent plus cher &#224; traiter, c'est pourquoi les variantes d'attention efficaces (FlashAttention, fen&#234;tre glissante) comptent &#224; grande &#233;chelle.</p>
+        </div>
+        <div class="takeaway reveal">
+          <span class="takeaway-icon">&#127959;&#65039;</span>
+          <p class="lang-en">GPT-style models are decoder-only. BERT is encoder-only. The full encoder-decoder is used for seq2seq tasks like translation. The choice of stack determines what the model can do.</p>
+          <p class="lang-fr" style="display:none">Les mod&#232;les de style GPT sont d&#233;codeur uniquement. BERT est encodeur uniquement. L'encodeur-d&#233;codeur complet est utilis&#233; pour les t&#226;ches seq2seq comme la traduction. Le choix de la pile d&#233;termine ce que le mod&#232;le peut faire.</p>
+        </div>
+        <div class="takeaway reveal">
+          <span class="takeaway-icon">&#128197;</span>
+          <p class="lang-en">The architecture from the 2017 paper is still the foundation of every major model in 2026. The improvements since then are mostly in training recipes, data, and scale.</p>
+          <p class="lang-fr" style="display:none">L'architecture du papier de 2017 est toujours la base de chaque grand mod&#232;le en 2026. Les am&#233;liorations depuis lors concernent surtout les recettes d'entra&#238;nement, les donn&#233;es et l'&#233;chelle.</p>
+        </div>
+      </div>
+
+      <div class="series-nav">
+        <div class="series-title lang-en">Labs - AI Foundations series</div>
+        <div class="series-title lang-fr" style="display:none">Labs - S&#233;rie Fondations IA</div>
+        <div class="series-items">
+          <a href="../the-embedding-space" class="series-item">
+            <div class="series-dot" style="background:#fbbf24"></div>
+            <span class="lang-en">The Embedding Space - words become vectors</span>
+            <span class="lang-fr" style="display:none">L'espace des embeddings - les mots deviennent des vecteurs</span>
+          </a>
+          <a href="../attention-visualized" class="series-item">
+            <div class="series-dot" style="background:#38bdf8"></div>
+            <span class="lang-en">Attention, Visualized - vectors attend to each other</span>
+            <span class="lang-fr" style="display:none">Attention, Visualis&#233;e - les vecteurs s'observent mutuellement</span>
+          </a>
+          <div class="series-item current">
+            <div class="series-dot" style="background:#a78bfa"></div>
+            <span class="lang-en">The Transformer Architecture - the full picture</span>
+            <span class="lang-fr" style="display:none">L'architecture Transformer - vue d'ensemble</span>
           </div>
         </div>
       </div>
@@ -400,7 +573,7 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
 <footer>
   <div class="footer-inner">
     <div class="footer-left">
-      <p>Part of <a href="../index.html">labs.badreddineek.com</a> — visual explainers by <a href="https://github.com/BadreddineEK" target="_blank" rel="noopener">Badreddine El Khamlichi</a></p>
+      <p>Part of <a href="../index.html">labs.badreddineek.com</a> - visual explainers by <a href="https://github.com/BadreddineEK" target="_blank" rel="noopener">Badreddine El Khamlichi</a></p>
     </div>
     <div class="footer-right">Built with curiosity &amp; clean code</div>
   </div>
@@ -419,6 +592,22 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
     localStorage.setItem('labs-theme',d);
     t.innerHTML=d==='dark'?sunSVG:moonSVG;
   });}
+})();
+
+(function(){
+  const btn=document.getElementById('lang-toggle');
+  let lang=localStorage.getItem('labs-transformer-lang')||'en';
+  function applyLang(){
+    document.querySelectorAll('.lang-en').forEach(el=>el.style.display=lang==='en'?'':'none');
+    document.querySelectorAll('.lang-fr').forEach(el=>el.style.display=lang==='fr'?'':'none');
+    btn.textContent=lang==='en'?'FR':'EN';
+  }
+  applyLang();
+  btn.addEventListener('click',()=>{
+    lang=lang==='en'?'fr':'en';
+    localStorage.setItem('labs-transformer-lang',lang);
+    applyLang();
+  });
 })();
 
 const tokens=["Le","chat","mange","la","souris"];
