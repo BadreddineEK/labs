@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Attention, Visualized — Labs by Badreddine EK</title>
-  <meta name="description" content="What the attention mechanism actually does — Query, Key, Value explained intuitively, with an interactive heatmap you can explore token by token." />
+  <meta name="description" content="What the attention mechanism actually does. Query, Key, Value explained intuitively, with an interactive heatmap you can explore token by token." />
   <meta property="og:title" content="Attention, Visualized" />
   <meta property="og:description" content="The transformer attention mechanism, explained and made interactive." />
   <meta property="og:url" content="https://labs.badreddineek.com/attention-visualized" />
@@ -180,6 +180,8 @@
     .back-section{max-width:900px;margin-inline:auto;padding:0 var(--sp6) var(--sp16);display:flex;gap:var(--sp4);align-items:center;justify-content:space-between;flex-wrap:wrap}
     .back-labs{display:inline-flex;align-items:center;gap:var(--sp2);font-size:var(--text-sm);color:var(--text-muted);border:1px solid var(--border);background:var(--surface);padding:var(--sp2) var(--sp4);border-radius:var(--r-full);transition:color var(--tr),border-color var(--tr)}
     .back-labs:hover{color:var(--text);border-color:var(--acc)}
+    .lang-btn{height:34px;padding:0 var(--sp3);border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:var(--text-xs);font-weight:600;letter-spacing:.05em;transition:color var(--tr),background var(--tr)}
+    .lang-btn:hover{color:var(--text);background:var(--surface-2)}
     footer{border-top:1px solid var(--border);padding:var(--sp8) var(--sp6)}
     .footer-inner{max-width:900px;margin-inline:auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--sp4);font-size:var(--text-xs);color:var(--text-faint)}
     .footer-link{color:var(--text-faint);transition:color var(--tr)}
@@ -203,6 +205,7 @@
     </a>
     <div class="nav-right">
       <span class="nav-tag">Transformers · Attention · AI</span>
+      <button class="lang-btn" id="lang-toggle" aria-label="Switch language">FR</button>
       <button class="theme-btn" data-theme-toggle aria-label="Toggle theme">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
@@ -213,158 +216,181 @@
 <header class="hero">
   <div class="hero-kicker">
     <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
-    Interactive Explainer
+    <span class="lang-en">Interactive Explainer</span>
+    <span class="lang-fr" style="display:none">Explainer interactif</span>
   </div>
   <h1>Attention, <em>Visualized</em></h1>
-  <p class="hero-sub">In 2017, a single mechanism changed everything. Not a bigger model, not more data — just a new way to let every word look at every other word. Here's what actually happens inside.</p>
+  <p class="hero-sub lang-en">In 2017, a single mechanism changed everything. Not a bigger model, not more data. Just a new way to let every word look at every other word at the same time. Here is what actually happens inside.</p>
+  <p class="hero-sub lang-fr" style="display:none">En 2017, un seul mécanisme a tout changé. Pas un modèle plus grand, pas plus de données. Juste une nouvelle façon de laisser chaque mot regarder tous les autres en même temps. Voici ce qui se passe vraiment à l'intérieur.</p>
   <div class="hero-meta">
-    <div class="meta-item"><span class="meta-val">5</span><span class="meta-lbl">Concepts</span></div>
+    <div class="meta-item"><span class="meta-val">5</span><span class="meta-lbl lang-en">Concepts</span><span class="meta-lbl lang-fr" style="display:none">Concepts</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">~7 min</span><span class="meta-lbl">Read</span></div>
+    <div class="meta-item"><span class="meta-val">~7 min</span><span class="meta-lbl lang-en">Read</span><span class="meta-lbl lang-fr" style="display:none">Lecture</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl">Published</span></div>
+    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl lang-en">Published</span><span class="meta-lbl lang-fr" style="display:none">Publié</span></div>
   </div>
 </header>
 
 <main class="article">
 
-  <!-- 01 THE PROBLEM -->
   <section class="section">
     <div class="section-label">
       <span class="section-num">01</span>
-      <h2 class="section-title">Why RNNs weren't enough</h2>
+      <h2 class="section-title lang-en">Why the old approach wasn't enough</h2>
+      <h2 class="section-title lang-fr" style="display:none">Pourquoi l'ancienne approche ne suffisait pas</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Before transformers, language models processed text sequentially — one word at a time, left to right. Recurrent networks (RNNs, LSTMs) maintained a <strong>hidden state</strong> that accumulated context as they moved through the sequence. The problem: by the time the model reached word 50, the signal from word 1 had been diluted through 49 multiplicative steps.</p>
-      <p class="prose">Long-range dependencies — like the relationship between a pronoun and its antecedent five sentences earlier — were nearly impossible to preserve. The model's <strong>memory bottleneck</strong> was the hidden state vector, a single fixed-size representation of all prior context.</p>
+      <p class="prose lang-en">For a language model to understand a sentence, it needs to know what each word means <em>in context</em>. The word "bank" means something different depending on what surrounds it: "river bank" versus "bank account". So the model needs a way to connect any word to any other word in the sentence, regardless of distance.</p>
+      <p class="prose lang-fr" style="display:none">Pour qu'un modèle de langage comprenne une phrase, il doit savoir ce que chaque mot signifie <em>en contexte</em>. Le mot "avocat" signifie autre chose selon son entourage. Le modèle a donc besoin d'un moyen de connecter n'importe quel mot à n'importe quel autre dans la phrase, quelle que soit la distance.</p>
+      <p class="prose lang-en">Before transformers, models processed text sequentially, one token at a time from left to right. Recurrent networks (RNNs, LSTMs) maintained a hidden state that carried context forward as they moved through the sequence. The problem was that by the time the model reached token 50, the signal from token 1 had been diluted through 49 multiplicative steps. Long-range relationships were very hard to preserve.</p>
+      <p class="prose lang-fr" style="display:none">Avant les transformers, les modèles traitaient le texte de façon séquentielle, un token à la fois de gauche à droite. Les réseaux récurrents (RNN, LSTM) maintenaient un état caché qui transportait le contexte au fil de la séquence. Le problème : au token 50, le signal du token 1 avait été dilué à travers 49 étapes multiplicatives. Les dépendances longue portée étaient très difficiles à préserver.</p>
       <div class="card-grid">
-        <div class="card"><div class="card-icon">⏩</div><div class="card-title">Sequential processing</div><div class="card-body">RNNs read one token at a time. Processing can't be parallelized across a sequence, making training on long texts extremely slow.</div></div>
-        <div class="card"><div class="card-icon">📉</div><div class="card-title">Vanishing gradients</div><div class="card-body">Gradients shrink exponentially as they travel back through long sequences. Early tokens receive almost no useful learning signal.</div></div>
-        <div class="card"><div class="card-icon">🔗</div><div class="card-title">The attention fix</div><div class="card-body">Attention lets every token directly attend to every other token in a single step — no bottleneck, no sequential dependency, full parallelism.</div></div>
+        <div class="card"><div class="card-icon">⏩</div><div class="card-title lang-en">Sequential processing</div><div class="card-title lang-fr" style="display:none">Traitement séquentiel</div><div class="card-body lang-en">RNNs read one token at a time. Processing cannot be parallelized across a sequence, which makes training on long texts extremely slow.</div><div class="card-body lang-fr" style="display:none">Les RNN lisent un token à la fois. Le traitement ne peut pas être parallélisé sur une séquence, ce qui rend l'entraînement sur des textes longs extrêmement lent.</div></div>
+        <div class="card"><div class="card-icon">📉</div><div class="card-title lang-en">Vanishing gradients</div><div class="card-title lang-fr" style="display:none">Gradients qui s'évanouissent</div><div class="card-body lang-en">Gradients shrink exponentially as they travel back through long sequences. Early tokens end up receiving almost no useful learning signal.</div><div class="card-body lang-fr" style="display:none">Les gradients diminuent exponentiellement lorsqu'ils remontent à travers de longues séquences. Les premiers tokens finissent par ne recevoir presque aucun signal d'apprentissage utile.</div></div>
+        <div class="card"><div class="card-icon">🔗</div><div class="card-title lang-en">The attention fix</div><div class="card-title lang-fr" style="display:none">La solution attention</div><div class="card-body lang-en">Attention lets every token directly connect to every other token in a single parallel step. No bottleneck, no sequential dependency, and the full sequence is processed at once.</div><div class="card-body lang-fr" style="display:none">L'attention permet à chaque token de se connecter directement à chaque autre en une seule étape parallèle. Pas de goulot d'étranglement, pas de dépendance séquentielle, et toute la séquence est traitée d'un coup.</div></div>
       </div>
     </div>
   </section>
 
-  <!-- 02 QKV -->
   <section class="section">
     <div class="section-label">
       <span class="section-num">02</span>
       <h2 class="section-title">Query, Key, Value</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Attention is built on a simple retrieval metaphor. Think of a library: you have a <strong>query</strong> (what you're looking for), a set of <strong>keys</strong> (the labels on each book), and <strong>values</strong> (the actual content inside). Attention scores how well your query matches each key, then returns a weighted mix of the values.</p>
+      <p class="prose lang-en">Attention is built on a retrieval metaphor. Think of a library: you have a <strong>query</strong> (what you are looking for), a set of <strong>keys</strong> (the labels on each book), and <strong>values</strong> (the actual content inside). Attention scores how well your query matches each key, then returns a weighted mix of the values.</p>
+      <p class="prose lang-fr" style="display:none">L'attention repose sur une métaphore de recherche. Imaginez une bibliothèque : vous avez une <strong>requête</strong> (ce que vous cherchez), un ensemble de <strong>clés</strong> (les étiquettes sur chaque livre) et des <strong>valeurs</strong> (le contenu réel). L'attention mesure à quel point votre requête correspond à chaque clé, puis retourne un mélange pondéré des valeurs.</p>
       <div class="qkv-diagram">
         <div class="qkv-row">
           <div class="qkv-card q">
             <div class="qkv-letter">Q</div>
             <div class="qkv-name">Query</div>
-            <div class="qkv-desc">"What am I looking for?" — A projection of the current token asking which other tokens are relevant to it.</div>
+            <div class="qkv-desc lang-en">A projection of the current token asking which other tokens are relevant to it right now.</div>
+            <div class="qkv-desc lang-fr" style="display:none">Une projection du token courant qui demande quels autres tokens lui sont pertinents en ce moment.</div>
           </div>
           <div class="qkv-card k">
             <div class="qkv-letter">K</div>
             <div class="qkv-name">Key</div>
-            <div class="qkv-desc">"What do I contain?" — A projection of each token advertising its content to incoming queries.</div>
+            <div class="qkv-desc lang-en">A projection of each token advertising its content. The dot product between Q and K produces the attention score.</div>
+            <div class="qkv-desc lang-fr" style="display:none">Une projection de chaque token qui annonce son contenu. Le produit scalaire entre Q et K produit le score d'attention.</div>
           </div>
           <div class="qkv-card v">
             <div class="qkv-letter">V</div>
             <div class="qkv-name">Value</div>
-            <div class="qkv-desc">"What do I give if selected?" — The actual information a token contributes to the output if its key matched the query.</div>
+            <div class="qkv-desc lang-en">The actual information a token contributes to the output. Once the weights are computed from Q and K, the values are summed accordingly.</div>
+            <div class="qkv-desc lang-fr" style="display:none">L'information réelle qu'un token apporte à la sortie. Une fois les poids calculés depuis Q et K, les valeurs sont sommées en conséquence.</div>
           </div>
         </div>
         <div class="qkv-formula">
           Attention(Q, K, V) = softmax<span style="color:var(--warm)">( Q · Kᵀ</span> <span style="color:var(--text-faint)">/ √dₖ )</span> <span style="color:var(--pink)">· V</span>
-          <div style="margin-top:var(--sp2);font-size:10px;color:var(--text-faint)">
-            dot-product similarity → scaled → softmax weights → weighted sum of values
-          </div>
         </div>
       </div>
-      <p class="prose">The <code>√dₖ</code> scaling factor prevents the dot products from growing too large in high dimensions, which would push the softmax into regions with near-zero gradients. It's a small but essential stabilization trick.</p>
+      <p class="prose lang-en">Reading left to right: compute dot-product similarity between every Q-K pair, divide by the square root of the key dimension to keep gradients stable, apply softmax to turn the scores into probabilities, then take a weighted sum of the values. Each token ends up with a new representation built from the whole sequence.</p>
+      <p class="prose lang-fr" style="display:none">En lisant de gauche à droite : calculer la similarité produit scalaire entre chaque paire Q-K, diviser par la racine carrée de la dimension des clés pour stabiliser les gradients, appliquer un softmax pour convertir les scores en probabilités, puis faire la somme pondérée des valeurs. Chaque token obtient une nouvelle représentation construite depuis toute la séquence.</p>
+      <p class="prose lang-en">The <code>√dₖ</code> factor is a small but necessary detail. Without it, dot products grow large in high dimensions and push the softmax into near-zero gradient regions, which stalls learning.</p>
+      <p class="prose lang-fr" style="display:none">Le facteur <code>√dₖ</code> est un détail petit mais nécessaire. Sans lui, les produits scalaires deviennent grands en haute dimension et poussent le softmax dans des zones à gradient quasi nul, ce qui bloque l'apprentissage.</p>
     </div>
   </section>
 
-  <!-- 03 INTERACTIVE HEATMAP -->
   <section class="section">
     <div class="section-label">
       <span class="section-num">03</span>
-      <h2 class="section-title">The attention heatmap</h2>
+      <h2 class="section-title lang-en">The attention heatmap</h2>
+      <h2 class="section-title lang-fr" style="display:none">La carte de chaleur d'attention</h2>
     </div>
     <div class="section-body">
-      <p class="prose">The most intuitive way to see attention is a heatmap. Each row is a token acting as <strong>query</strong>. Each column is a token acting as <strong>key</strong>. The intensity of each cell is the attention weight — how much the query token attends to that key token when constructing its output.</p>
+      <p class="prose lang-en">The clearest way to see attention at work is a heatmap. Each row is a token acting as query. Each column is a token acting as key. The intensity of each cell shows the attention weight: how much the query token attends to that key token when building its output representation. The weights shown are illustrative, simplified to highlight key patterns.</p>
+      <p class="prose lang-fr" style="display:none">La façon la plus claire de voir l'attention en action est une carte de chaleur. Chaque ligne est un token faisant office de requête. Chaque colonne est un token faisant office de clé. L'intensité de chaque cellule montre le poids d'attention. Les valeurs affichées sont illustratives, simplifiées pour mettre en évidence les patterns clés.</p>
       <div class="heatmap-wrap">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp3)">
-          <div style="font-size:var(--text-sm);font-weight:600;color:var(--text)">Click a token to highlight its attention pattern</div>
+          <div style="font-size:var(--text-sm);font-weight:600;color:var(--text)" class="lang-en">Click a token to highlight its attention pattern</div>
+          <div style="font-size:var(--text-sm);font-weight:600;color:var(--text)" class="lang-fr" style="display:none">Cliquez un token pour voir son pattern d'attention</div>
           <div class="sentence-selector" id="sent-selector"></div>
         </div>
         <div class="token-row" id="token-row"></div>
         <div id="heatmap-area" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
         <div class="heatmap-legend">
-          <span>Low attention</span>
+          <span class="lang-en">Low attention</span>
+          <span class="lang-fr" style="display:none">Attention faible</span>
           <div class="legend-bar"></div>
-          <span>High attention</span>
+          <span class="lang-en">High attention</span>
+          <span class="lang-fr" style="display:none">Attention forte</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 04 MULTI-HEAD -->
   <section class="section">
     <div class="section-label">
       <span class="section-num">04</span>
-      <h2 class="section-title">Multi-head attention</h2>
+      <h2 class="section-title lang-en">Multi-head attention</h2>
+      <h2 class="section-title lang-fr" style="display:none">L'attention multi-têtes</h2>
     </div>
     <div class="section-body">
-      <p class="prose">A single attention head can only focus on one type of relationship at a time. Transformers run <strong>multiple heads in parallel</strong> — each with its own Q, K, V projections. Each head learns to specialize in a different aspect of language: one might track syntactic dependencies, another co-references, another positional patterns.</p>
+      <p class="prose lang-en">A single attention head can only focus on one type of relationship at a time. Real transformers run several heads in parallel, each with its own Q, K, V projection matrices. Each head learns to specialize in a different aspect of language: one tracks syntactic subject-verb agreement, another spots co-references, another is sensitive to local positional patterns.</p>
+      <p class="prose lang-fr" style="display:none">Une seule tête d'attention ne peut se concentrer que sur un type de relation à la fois. Les vrais transformers font tourner plusieurs têtes en parallèle, chacune avec ses propres matrices de projection Q, K, V. Chaque tête apprend à se spécialiser dans un aspect différent du langage : l'une suit les accords syntaxiques sujet-verbe, une autre repère les coréférences, une autre est sensible aux patterns positionnels locaux.</p>
       <div class="heads-grid" id="heads-grid"></div>
-      <p class="prose">The outputs of all heads are concatenated and projected back to the model dimension. The result is a <strong>rich, multi-perspective representation</strong> of each token's context — far more expressive than any single attention pattern.</p>
+      <p class="prose lang-en">All heads run in parallel on the same input. Their outputs are concatenated and projected back to the model dimension. The result is a richer representation of each token's context than any single head could provide on its own.</p>
+      <p class="prose lang-fr" style="display:none">Toutes les têtes tournent en parallèle sur la même entrée. Leurs sorties sont concaténées et projetées vers la dimension du modèle. Le résultat est une représentation plus riche du contexte de chaque token que n'importe quelle tête seule ne pourrait fournir.</p>
     </div>
   </section>
 
-  <!-- 05 THE BIGGER PICTURE -->
   <section class="section">
     <div class="section-label">
       <span class="section-num">05</span>
-      <h2 class="section-title">Where this fits</h2>
+      <h2 class="section-title lang-en">Where this fits in a transformer</h2>
+      <h2 class="section-title lang-fr" style="display:none">La place de l'attention dans un transformer</h2>
     </div>
     <div class="section-body">
-      <p class="prose">Attention is the core operation inside every transformer layer. Stacked 12, 24, or 96 times deep, each layer refines the representations produced by the one before — progressively building richer contextual embeddings until the final layer produces output that reflects the full meaning of the sequence.</p>
+      <p class="prose lang-en">Attention is the core operation inside every transformer layer. After attention, each token's representation has been updated to reflect what it learned from attending to the rest of the sequence. A feed-forward network then refines that representation further.</p>
+      <p class="prose lang-fr" style="display:none">L'attention est l'opération centrale dans chaque couche de transformer. Après l'attention, la représentation de chaque token a été mise à jour pour refléter ce qu'il a appris en regardant le reste de la séquence. Un réseau feed-forward affine ensuite cette représentation.</p>
+      <p class="prose lang-en">This whole block (attention followed by feed-forward) is stacked 12, 24, or 96 times. Each layer does not start from scratch: it receives the representations produced by the previous layer and builds on them. Layer 1 might learn basic co-occurrences. Layer 6 might capture syntactic patterns. Layer 24 is already operating on something closer to abstract meaning. The depth is what gives transformers their expressive power.</p>
+      <p class="prose lang-fr" style="display:none">Ce bloc entier (attention puis feed-forward) est empilé 12, 24 ou 96 fois. Chaque couche ne repart pas de zéro : elle reçoit les représentations produites par la couche précédente et s'appuie dessus. La couche 1 peut apprendre des co-occurrences basiques. La couche 6 peut capturer des patrons syntaxiques. La couche 24 opère déjà sur quelque chose qui ressemble à du sens abstrait. C'est la profondeur qui donne aux transformers leur puissance expressive.</p>
       <div class="series-nav">
-        <div class="series-title">Labs — AI Foundations series</div>
+        <div class="series-title lang-en">Labs — AI Foundations series</div>
+        <div class="series-title lang-fr" style="display:none">Labs — Série Fondations IA</div>
         <div class="series-items">
           <a href="../the-embedding-space" class="series-item">
             <div class="series-dot" style="background:#fbbf24"></div>
-            The Embedding Space — words become vectors
-            <span class="series-num">03</span>
+            <span class="lang-en">The Embedding Space — words become vectors</span>
+            <span class="lang-fr" style="display:none">L'espace des embeddings — les mots deviennent des vecteurs</span>
           </a>
           <div class="series-item current">
             <div class="series-dot" style="background:#38bdf8"></div>
-            Attention, Visualized — vectors attend to each other
-            <span class="series-num">04</span>
+            <span class="lang-en">Attention, Visualized — vectors attend to each other</span>
+            <span class="lang-fr" style="display:none">Attention, Visualized — les vecteurs s'observent mutuellement</span>
           </div>
-          <a href="../rag-under-the-hood" class="series-item">
+          <a href="../transformer-architecture" class="series-item">
             <div class="series-dot" style="background:#a78bfa"></div>
-            RAG Under the Hood — retrieval meets generation
-            <span class="series-num">02</span>
+            <span class="lang-en">The Transformer Architecture — the full picture</span>
+            <span class="lang-fr" style="display:none">L'architecture Transformer — vue d'ensemble</span>
           </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 06 TAKEAWAYS -->
   <section class="section">
     <div class="section-label">
       <span class="section-num">06</span>
-      <h2 class="section-title">What to remember</h2>
+      <h2 class="section-title lang-en">What to remember</h2>
+      <h2 class="section-title lang-fr" style="display:none">Ce qu'il faut retenir</h2>
     </div>
     <div class="section-body">
       <div class="takeaways">
-        <h3>Attention in five sentences.</h3>
+        <h3 class="lang-en">Attention in five sentences.</h3>
+        <h3 class="lang-fr" style="display:none">L'attention en cinq phrases.</h3>
         <ol>
-          <li><strong>Attention lets every token look at every other token</strong> in a single parallel operation — no sequential bottleneck.</li>
-          <li><strong>Query, Key, Value</strong> is a retrieval metaphor: Q asks, K advertises, V delivers.</li>
-          <li><strong>Attention weights</strong> are dot-product similarities, scaled and softmaxed into a probability distribution over the sequence.</li>
-          <li><strong>Multi-head attention</strong> runs several heads in parallel, each specializing in a different type of linguistic relationship.</li>
-          <li><strong>Stacked transformer layers</strong> build progressively richer contextual representations — the foundation of every modern LLM.</li>
+          <li class="lang-en"><strong>Attention solves the context problem:</strong> every token can look at every other token in a single parallel step, with no distance penalty.</li>
+          <li class="lang-fr" style="display:none"><strong>L'attention résout le problème de contexte :</strong> chaque token peut regarder tous les autres en une seule étape parallèle, sans pénalité de distance.</li>
+          <li class="lang-en"><strong>Query, Key, Value</strong> is a retrieval metaphor: Q asks what it needs, K advertises what each token has, V delivers the content when selected.</li>
+          <li class="lang-fr" style="display:none"><strong>Query, Key, Value</strong> est une métaphore de recherche : Q demande ce dont il a besoin, K annonce ce que chaque token contient, V livre le contenu quand il est sélectionné.</li>
+          <li class="lang-en"><strong>Attention weights</strong> are dot-product similarities, divided by √dₖ for stability, then passed through softmax to form a probability distribution over the sequence.</li>
+          <li class="lang-fr" style="display:none"><strong>Les poids d'attention</strong> sont des similarités produit scalaire, divisées par √dₖ pour la stabilité, puis passées par un softmax pour former une distribution de probabilité sur la séquence.</li>
+          <li class="lang-en"><strong>Multi-head attention</strong> runs several heads in parallel, each specializing in a different linguistic relationship, then merges them.</li>
+          <li class="lang-fr" style="display:none"><strong>L'attention multi-têtes</strong> fait tourner plusieurs têtes en parallèle, chacune spécialisée dans une relation linguistique différente, puis les fusionne.</li>
+          <li class="lang-en"><strong>Stacking transformer layers</strong> builds progressively richer representations: early layers see local patterns, deeper layers operate on abstract meaning.</li>
+          <li class="lang-fr" style="display:none"><strong>L'empilement des couches</strong> construit des représentations de plus en plus riches : les premières couches voient des patterns locaux, les couches profondes opèrent sur du sens abstrait.</li>
         </ol>
       </div>
     </div>
@@ -375,7 +401,8 @@
 <div class="back-section">
   <a href="../" class="back-labs">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Back to Labs
+    <span class="lang-en">Back to Labs</span>
+    <span class="lang-fr" style="display:none">Retour aux Labs</span>
   </a>
   <span style="font-size:var(--text-xs);color:var(--text-faint)">By <a href="https://badreddineek.com" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:3px" target="_blank" rel="noopener noreferrer">Badreddine EK</a></span>
 </div>
@@ -391,9 +418,10 @@
 </footer>
 
 <script>
-// THEME
+// ── THEME ──
 const html=document.documentElement;
 const toggleBtn=document.querySelector('[data-theme-toggle]');
+const langToggle=document.getElementById('lang-toggle');
 let theme=localStorage.getItem('labs-theme')||'light';
 const sunSVG=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
 const moonSVG=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
@@ -401,13 +429,28 @@ function setIcon(t){if(toggleBtn)toggleBtn.innerHTML=t==='dark'?sunSVG:moonSVG;}
 html.setAttribute('data-theme',theme);setIcon(theme);
 if(toggleBtn)toggleBtn.addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';html.setAttribute('data-theme',theme);localStorage.setItem('labs-theme',theme);setIcon(theme);});
 
+// ── LANGUAGE ──
+let lang=localStorage.getItem('labs-attention-lang')||'en';
+function applyLang(){
+  document.querySelectorAll('.lang-en').forEach(el=>el.style.display=lang==='en'?'':'none');
+  document.querySelectorAll('.lang-fr').forEach(el=>el.style.display=lang==='fr'?'':'none');
+  langToggle.textContent=lang==='en'?'FR':'EN';
+  html.setAttribute('lang',lang);
+}
+applyLang();
+langToggle.addEventListener('click',()=>{
+  lang=lang==='en'?'fr':'en';
+  localStorage.setItem('labs-attention-lang',lang);
+  applyLang();
+});
+
 // ── HEATMAP DATA ──
-const SENTENCES = [
+const SENTENCES=[
   {
-    label: 'The cat sat on the mat',
-    tokens: ['The','cat','sat','on','the','mat'],
-    // attention[i][j] = weight from token i to token j
-    attention: [
+    labelEn:'The cat sat on the mat',
+    labelFr:'Le chat était assis sur le tapis',
+    tokens:['The','cat','sat','on','the','mat'],
+    attention:[
       [0.60,0.25,0.05,0.03,0.04,0.03],
       [0.08,0.55,0.18,0.05,0.06,0.08],
       [0.04,0.22,0.50,0.08,0.04,0.12],
@@ -417,9 +460,10 @@ const SENTENCES = [
     ]
   },
   {
-    label: 'She gave him the key',
-    tokens: ['She','gave','him','the','key'],
-    attention: [
+    labelEn:'She gave him the key',
+    labelFr:'Elle lui a donné la clé',
+    tokens:['She','gave','him','the','key'],
+    attention:[
       [0.50,0.20,0.15,0.05,0.10],
       [0.18,0.42,0.22,0.08,0.10],
       [0.28,0.14,0.38,0.06,0.14],
@@ -428,9 +472,10 @@ const SENTENCES = [
     ]
   },
   {
-    label: 'The model reads the tokens',
-    tokens: ['The','model','reads','the','tokens'],
-    attention: [
+    labelEn:'The model reads the tokens',
+    labelFr:'Le modèle lit les tokens',
+    tokens:['The','model','reads','the','tokens'],
+    attention:[
       [0.48,0.28,0.08,0.08,0.08],
       [0.10,0.52,0.22,0.06,0.10],
       [0.06,0.28,0.44,0.10,0.12],
@@ -440,74 +485,67 @@ const SENTENCES = [
   }
 ];
 
-let activeSent = 0;
-let activeToken = null;
+let activeSent=0;
+let activeToken=null;
 
-function getColor(weight, isHighlighted) {
-  const t = html.getAttribute('data-theme') || 'dark';
-  const alpha = isHighlighted ? Math.max(0.08, weight) : weight * 0.6;
-  if (t === 'dark') {
-    // Blue tones for dark
-    const l = Math.round(20 + weight * 55);
-    const sat = Math.round(60 + weight * 40);
+function getColor(weight){
+  const t=html.getAttribute('data-theme')||'light';
+  if(t==='dark'){
+    const l=Math.round(20+weight*55);
+    const sat=Math.round(60+weight*40);
     return `hsl(200,${sat}%,${l}%)`;
-  } else {
-    const l = Math.round(85 - weight * 55);
+  }else{
+    const l=Math.round(85-weight*55);
     return `hsl(200,70%,${l}%)`;
   }
 }
 
-function renderHeatmap() {
-  const sent = SENTENCES[activeSent];
-  const tokens = sent.tokens;
-  const area = document.getElementById('heatmap-area');
-
-  // Token row
-  const tokenRow = document.getElementById('token-row');
-  tokenRow.innerHTML = tokens.map((t, i) =>
-    `<div class="token-pill ${activeToken === i ? 'selected' : ''}" data-idx="${i}">${t}</div>`
+function renderHeatmap(){
+  const sent=SENTENCES[activeSent];
+  const tokens=sent.tokens;
+  const area=document.getElementById('heatmap-area');
+  const tokenRow=document.getElementById('token-row');
+  tokenRow.innerHTML=tokens.map((t,i)=>
+    `<div class="token-pill ${activeToken===i?'selected':''}" data-idx="${i}">${t}</div>`
   ).join('');
-  tokenRow.querySelectorAll('.token-pill').forEach(el => {
-    el.addEventListener('click', () => {
-      const idx = parseInt(el.dataset.idx);
-      activeToken = activeToken === idx ? null : idx;
+  tokenRow.querySelectorAll('.token-pill').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const idx=parseInt(el.dataset.idx);
+      activeToken=activeToken===idx?null:idx;
       renderHeatmap();
     });
   });
-
-  // Heatmap
-  const colLabels = `<div class="hm-col-labels">${tokens.map(t => `<div class="hm-col-label">${t}</div>`).join('')}</div>`;
-  const rows = tokens.map((rowTok, i) => {
-    const isActiveRow = activeToken === i;
-    const cells = tokens.map((colTok, j) => {
-      const w = sent.attention[i][j];
-      const highlighted = activeToken === null || activeToken === i;
-      const bg = getColor(w, highlighted);
-      const opacity = activeToken !== null && activeToken !== i ? 0.25 : 1;
-      const textColor = w > 0.35 ? '#fff' : 'transparent';
+  const colLabels=`<div class="hm-col-labels">${tokens.map(t=>`<div class="hm-col-label">${t}</div>`).join('')}</div>`;
+  const rows=tokens.map((rowTok,i)=>{
+    const isActiveRow=activeToken===i;
+    const cells=tokens.map((colTok,j)=>{
+      const w=sent.attention[i][j];
+      const opacity=activeToken!==null&&activeToken!==i?0.22:1;
+      const bg=getColor(w);
+      const textColor=w>0.35?'#fff':'transparent';
       return `<div class="hm-cell" style="background:${bg};opacity:${opacity}">
         <span style="color:${textColor}">${w.toFixed(2)}</span>
-        <div class="hm-tooltip">${rowTok}→${colTok}: ${w.toFixed(2)}</div>
+        <div class="hm-tooltip">${rowTok}&rarr;${colTok}: ${w.toFixed(2)}</div>
       </div>`;
     }).join('');
     return `<div class="hm-row">
-      <div class="hm-label" style="color:${isActiveRow ? 'var(--acc)' : 'var(--text-muted)'};font-weight:${isActiveRow ? 600 : 400}">${rowTok}</div>
+      <div class="hm-label" style="color:${isActiveRow?'var(--acc)':'var(--text-muted)'};font-weight:${isActiveRow?600:400}">${rowTok}</div>
       <div class="hm-cells">${cells}</div>
     </div>`;
   }).join('');
-
-  area.innerHTML = colLabels + `<div class="heatmap-grid">${rows}</div>`;
+  area.innerHTML=colLabels+`<div class="heatmap-grid">${rows}</div>`;
 }
 
-function renderSentSelector() {
-  const sel = document.getElementById('sent-selector');
-  sel.innerHTML = SENTENCES.map((s, i) =>
-    `<button class="sent-btn ${i === activeSent ? 'active' : ''}" data-i="${i}">${s.label}</button>`
-  ).join('');
-  sel.querySelectorAll('.sent-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeSent = parseInt(btn.dataset.i);
-      activeToken = null;
+function renderSentSelector(){
+  const sel=document.getElementById('sent-selector');
+  sel.innerHTML=SENTENCES.map((s,i)=>{
+    const label=lang==='fr'?s.labelFr:s.labelEn;
+    return `<button class="sent-btn ${i===activeSent?'active':''}" data-i="${i}">${label}</button>`;
+  }).join('');
+  sel.querySelectorAll('.sent-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      activeSent=parseInt(btn.dataset.i);
+      activeToken=null;
       renderSentSelector();
       renderHeatmap();
     });
@@ -517,59 +555,53 @@ function renderSentSelector() {
 renderSentSelector();
 renderHeatmap();
 
+// re-render sentence labels on lang switch
+langToggle.addEventListener('click',()=>renderSentSelector());
+
 // ── MULTI-HEAD ──
-const HEADS = [
-  {
-    name: 'Head 1',
-    specialty: 'Syntactic subject–verb',
-    color: 'var(--acc)',
-    borderColor: 'rgba(56,189,248,.25)',
-    pattern: [[0.8,0.1,0.05,0.05],[0.3,0.6,0.05,0.05],[0.1,0.2,0.6,0.1],[0.05,0.1,0.2,0.65]]
-  },
-  {
-    name: 'Head 2',
-    specialty: 'Positional / local',
-    color: 'var(--warm)',
-    borderColor: 'rgba(251,191,36,.2)',
-    pattern: [[0.6,0.3,0.07,0.03],[0.25,0.5,0.2,0.05],[0.05,0.25,0.55,0.15],[0.03,0.07,0.3,0.6]]
-  },
-  {
-    name: 'Head 3',
-    specialty: 'Co-reference',
-    color: 'var(--green)',
-    borderColor: 'rgba(52,211,153,.2)',
-    pattern: [[0.5,0.05,0.4,0.05],[0.05,0.7,0.1,0.15],[0.35,0.1,0.5,0.05],[0.05,0.15,0.05,0.75]]
-  },
-  {
-    name: 'Head 4',
-    specialty: 'Semantic similarity',
-    color: 'var(--pink)',
-    borderColor: 'rgba(244,114,182,.2)',
-    pattern: [[0.55,0.2,0.15,0.1],[0.2,0.45,0.2,0.15],[0.15,0.2,0.5,0.15],[0.1,0.15,0.15,0.6]]
-  },
+const HEAD_COLORS=[
+  {hsl:'199',hex:'0ea5e9',name:'Head 1',specialtyEn:'Syntactic subject-verb',specialtyFr:'Accord syntaxique sujet-verbe'},
+  {hsl:'38',hex:'f59e0b',name:'Head 2',specialtyEn:'Positional / local context',specialtyFr:'Contexte positionnel / local'},
+  {hsl:'158',hex:'10b981',name:'Head 3',specialtyEn:'Co-reference',specialtyFr:'Coréférence'},
+  {hsl:'330',hex:'ec4899',name:'Head 4',specialtyEn:'Semantic similarity',specialtyFr:'Similarité sémantique'},
+];
+const HEAD_PATTERNS=[
+  [[0.80,0.10,0.05,0.05],[0.30,0.60,0.05,0.05],[0.10,0.20,0.60,0.10],[0.05,0.10,0.20,0.65]],
+  [[0.60,0.30,0.07,0.03],[0.25,0.50,0.20,0.05],[0.05,0.25,0.55,0.15],[0.03,0.07,0.30,0.60]],
+  [[0.50,0.05,0.40,0.05],[0.05,0.70,0.10,0.15],[0.35,0.10,0.50,0.05],[0.05,0.15,0.05,0.75]],
+  [[0.55,0.20,0.15,0.10],[0.20,0.45,0.20,0.15],[0.15,0.20,0.50,0.15],[0.10,0.15,0.15,0.60]],
 ];
 
-function renderHeads() {
-  const grid = document.getElementById('heads-grid');
-  grid.innerHTML = HEADS.map(h => {
-    const miniCells = h.pattern.map(row =>
-      `<div class="mini-row">${row.map(w => {
-        const alpha = Math.round(w * 255).toString(16).padStart(2,'0');
-        const t = html.getAttribute('data-theme')||'dark';
-        const base = t==='dark' ? '38bdf8' : '0ea5e9';
-        return `<div class="mini-cell" style="background:#${base}${alpha}"></div>`;
+function renderHeads(){
+  const t=html.getAttribute('data-theme')||'light';
+  const grid=document.getElementById('heads-grid');
+  grid.innerHTML=HEAD_COLORS.map((h,idx)=>{
+    const pat=HEAD_PATTERNS[idx];
+    const specialty=lang==='fr'?h.specialtyFr:h.specialtyEn;
+    const miniCells=pat.map(row=>
+      `<div class="mini-row">${row.map(w=>{
+        const alpha=Math.round(w*255).toString(16).padStart(2,'0');
+        return `<div class="mini-cell" style="background:#${h.hex}${alpha}"></div>`;
       }).join('')}</div>`
     ).join('');
-    return `<div class="head-card" style="border-color:${h.borderColor}">
-      <div class="head-badge" style="color:${h.color};border-color:${h.borderColor};background:${h.borderColor.replace('.25','.06').replace('.2','.05')};">${h.name}</div>
-      <div class="head-title">${h.specialty}</div>
-      <div class="mini-heatmap" style="grid-template-columns:repeat(${h.pattern[0].length},14px)">${miniCells}</div>
-      <div class="head-body">Each head learns a distinct attention pattern, specializing in a different linguistic relationship.</div>
+    const borderColor=t==='dark'?`hsla(${h.hsl},80%,60%,.2)`:`hsla(${h.hsl},80%,40%,.18)`;
+    const bgColor=t==='dark'?`hsla(${h.hsl},80%,60%,.06)`:`hsla(${h.hsl},80%,40%,.05)`;
+    const textColor=t==='dark'?`hsl(${h.hsl},80%,70%)`:`hsl(${h.hsl},80%,35%)`;
+    const bodyEn='Each head learns a distinct pattern, specializing in a different linguistic relationship.';
+    const bodyFr='Chaque tête apprend un pattern distinct, spécialisé dans une relation linguistique différente.';
+    return `<div class="head-card" style="border-color:${borderColor}">
+      <div class="head-badge" style="color:${textColor};border-color:${borderColor};background:${bgColor}">${h.name}</div>
+      <div class="head-title">${specialty}</div>
+      <div class="mini-heatmap" style="grid-template-columns:repeat(${pat[0].length},14px)">${miniCells}</div>
+      <div class="head-body lang-en">${bodyEn}</div>
+      <div class="head-body lang-fr" style="display:none">${bodyFr}</div>
     </div>`;
   }).join('');
+  applyLang();
 }
 
 renderHeads();
+langToggle.addEventListener('click',()=>renderHeads());
 </script>
 </body>
 </html>
