@@ -1,5 +1,15 @@
 [
   {
+    "slug": "data-leakage-ts",
+    "title": "Data Leakage in Time Series",
+    "description": "Your model aced the test. It knew the future. Data leakage in forecasting — how it happens at every pipeline stage, why it destroys production models, and how to fix it.",
+    "tags": ["Time Series", "ML", "Forecasting"],
+    "category": "Data Science",
+    "date": "2026-04-09",
+    "color": "#dc2626",
+    "status": "live"
+  },
+  {
     "slug": "tokenization-explained",
     "title": "How LLMs Tokenize",
     "description": "Your LLM doesn't read words — it reads fragments called tokens. That invisible step shapes cost, reasoning, and accuracy. Understand it fully, interactively.",

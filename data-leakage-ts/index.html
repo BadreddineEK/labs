@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Leakage in Time Series — Labs · Badreddine EK</title>
+  <meta name="description" content="Why your forecasting model looks great in testing and fails in production. Data leakage in time series, visualized and explained." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300..600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --font-display:'Instrument Serif',Georgia,serif;
+      --font-body:'DM Sans',system-ui,sans-serif;
+      --font-mono:'DM Mono','Fira Code',monospace;
+      --text-xs:clamp(0.72rem,0.68rem + 0.2vw,0.82rem);
+      --text-sm:clamp(0.875rem,0.82rem + 0.28vw,1rem);
+      --text-base:clamp(1rem,0.95rem + 0.25vw,1.125rem);
+      --text-lg:clamp(1.125rem,1rem + 0.65vw,1.45rem);
+      --text-xl:clamp(1.4rem,1.1rem + 1.2vw,2.1rem);
+      --text-2xl:clamp(1.9rem,1.2rem + 2.2vw,3.2rem);
+      --text-3xl:clamp(2.4rem,1rem + 3.8vw,4.5rem);
+      --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;
+      --radius-xl:1rem;--radius-2xl:1.5rem;--radius-full:9999px;
+      --transition:180ms cubic-bezier(0.16,1,0.3,1);
+      --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;
+      --space-6:1.5rem;--space-8:2rem;--space-12:3rem;--space-16:4rem;--space-24:6rem;
+    }
+    :root,[data-theme="light"]{
+      --bg:#f7f6f2;--surface:#f9f8f5;--surface-2:#edeae5;--surface-3:#e4e1da;
+      --border:rgba(40,37,29,0.1);--text:#28251d;--text-muted:#7a7974;
+      --text-faint:#bab9b4;--accent:#0f766e;--accent-hover:#0c4e54;
+      --accent-bg:rgba(15,118,110,0.08);--accent-border:rgba(15,118,110,0.2);
+      --red:#dc2626;--red-bg:rgba(220,38,38,0.07);--red-border:rgba(220,38,38,0.2);
+      --green:#16a34a;--green-bg:rgba(22,163,74,0.07);--green-border:rgba(22,163,74,0.2);
+      --orange:#d97706;--orange-bg:rgba(217,119,6,0.07);
+      --shadow-sm:0 1px 2px rgba(40,37,29,0.06);--shadow-md:0 4px 16px rgba(40,37,29,0.08);
+      --shadow-lg:0 12px 32px rgba(40,37,29,0.1);
+    }
+    [data-theme="dark"]{
+      --bg:#111110;--surface:#1a1917;--surface-2:#222120;--surface-3:#2a2927;
+      --border:rgba(255,255,255,0.07);--text:#e8e6e1;--text-muted:#797874;
+      --text-faint:#4a4946;--accent:#2dd4bf;--accent-hover:#5eead4;
+      --accent-bg:rgba(45,212,191,0.06);--accent-border:rgba(45,212,191,0.2);
+      --red:#f87171;--red-bg:rgba(248,113,113,0.07);--red-border:rgba(248,113,113,0.2);
+      --green:#4ade80;--green-bg:rgba(74,222,128,0.07);--green-border:rgba(74,222,128,0.2);
+      --orange:#fbbf24;--orange-bg:rgba(251,191,36,0.07);
+      --shadow-sm:0 1px 2px rgba(0,0,0,0.25);--shadow-md:0 4px 16px rgba(0,0,0,0.35);
+      --shadow-lg:0 12px 32px rgba(0,0,0,0.45);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+    body{font-family:var(--font-body);font-size:var(--text-base);color:var(--text);background:var(--bg);min-height:100dvh;line-height:1.7;transition:background var(--transition),color var(--transition);}
+
+    header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);}
+    .header-inner{max-width:820px;margin-inline:auto;padding:var(--space-4) var(--space-6);display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);}
+    .back-link{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--text-muted);text-decoration:none;transition:color var(--transition);}
+    .back-link:hover{color:var(--text);}
+    .header-actions{display:flex;align-items:center;gap:var(--space-3);}
+    .lang-toggle{display:flex;align-items:center;gap:2px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-full);padding:3px;}
+    .lang-btn{font-size:var(--text-xs);font-weight:600;letter-spacing:0.04em;padding:4px 10px;border-radius:var(--radius-full);border:none;cursor:pointer;background:transparent;color:var(--text-muted);transition:background var(--transition),color var(--transition);}
+    .lang-btn.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm);}
+    .theme-toggle{width:34px;height:34px;border-radius:var(--radius-lg);background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-muted);transition:background var(--transition),color var(--transition);}
+    .theme-toggle:hover{background:var(--surface-3);color:var(--text);}
+
+    #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--red);z-index:200;transition:width 0.1s linear;}
+
+    .article-hero{max-width:820px;margin-inline:auto;padding:var(--space-16) var(--space-6) var(--space-12);}
+    .article-label{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--red);background:var(--red-bg);border:1px solid var(--red-border);padding:3px var(--space-3);border-radius:var(--radius-full);margin-bottom:var(--space-6);}
+    .article-hero h1{font-family:var(--font-display);font-size:var(--text-3xl);line-height:1.08;letter-spacing:-0.025em;color:var(--text);margin-bottom:var(--space-6);max-width:22ch;}
+    .article-hero h1 em{font-style:italic;color:var(--text-muted);}
+    .article-lede{font-size:var(--text-lg);color:var(--text-muted);max-width:55ch;line-height:1.6;}
+    .article-meta{margin-top:var(--space-8);display:flex;align-items:center;gap:var(--space-6);flex-wrap:wrap;padding-top:var(--space-6);border-top:1px solid var(--border);}
+    .meta-item{display:flex;flex-direction:column;gap:2px;}
+    .meta-value{font-size:var(--text-sm);font-weight:500;color:var(--text);}
+    .meta-label{font-size:var(--text-xs);color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;}
+    .tag{display:inline-flex;font-size:var(--text-xs);font-weight:500;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);padding:2px var(--space-2);border-radius:var(--radius-sm);}
+
+    .article-content{max-width:820px;margin-inline:auto;padding:0 var(--space-6) var(--space-24);}
+    .section{margin-bottom:var(--space-16);}
+    .section-number{font-family:var(--font-display);font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:var(--space-3);}
+    .section h2{font-family:var(--font-display);font-size:var(--text-xl);letter-spacing:-0.015em;line-height:1.2;margin-bottom:var(--space-6);color:var(--text);}
+    .section p{color:var(--text-muted);line-height:1.75;margin-bottom:var(--space-4);font-size:var(--text-base);}
+    .section p strong{color:var(--text);font-weight:600;}
+    .section-divider{height:1px;background:var(--border);margin:var(--space-12) 0;}
+
+    .callout{border-radius:var(--radius-lg);padding:var(--space-4) var(--space-6);margin:var(--space-6) 0;}
+    .callout.danger{background:var(--red-bg);border:1px solid var(--red-border);}
+    .callout.success{background:var(--green-bg);border:1px solid var(--green-border);}
+    .callout.info{background:var(--accent-bg);border:1px solid var(--accent-border);}
+    .callout p{margin:0;color:var(--text);font-size:var(--text-sm);line-height:1.65;}
+    .callout p strong{color:inherit;}
+    .callout.danger p strong{color:var(--red);}
+    .callout.success p strong{color:var(--green);}
+    .callout.info p strong{color:var(--accent);}
+
+    /* INTERACTIVE BOX */
+    .interactive-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-2xl);overflow:hidden;margin:var(--space-8) 0;box-shadow:var(--shadow-md);}
+    .ibox-header{padding:var(--space-4) var(--space-6);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:var(--space-3);}
+    .ibox-dot{width:8px;height:8px;border-radius:50%;background:var(--red);}
+    .ibox-title{font-size:var(--text-xs);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);}
+    .ibox-body{padding:var(--space-6);}
+
+    /* CANVAS CHART */
+    canvas{width:100%;display:block;border-radius:var(--radius-lg);}
+
+    /* SLIDER */
+    .slider-row{display:flex;align-items:center;gap:var(--space-4);margin:var(--space-4) 0;flex-wrap:wrap;}
+    .slider-label{font-size:var(--text-sm);color:var(--text-muted);min-width:160px;}
+    input[type=range]{flex:1;min-width:120px;accent-color:var(--red);cursor:pointer;}
+    .slider-value{font-family:var(--font-mono);font-size:var(--text-sm);font-weight:600;color:var(--text);min-width:80px;}
+
+    /* SCORES GRID */
+    .scores-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin:var(--space-6) 0;}
+    @media(max-width:500px){.scores-grid{grid-template-columns:1fr;}}
+    .score-card{padding:var(--space-4) var(--space-5);border-radius:var(--radius-xl);border:2px solid;display:flex;flex-direction:column;gap:var(--space-2);}
+    .score-card.bad{background:var(--red-bg);border-color:var(--red-border);}
+    .score-card.good{background:var(--green-bg);border-color:var(--green-border);}
+    .score-card-label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;}
+    .score-card.bad .score-card-label{color:var(--red);}
+    .score-card.good .score-card-label{color:var(--green);}
+    .score-card-value{font-family:var(--font-display);font-size:var(--text-2xl);line-height:1;color:var(--text);}
+    .score-card-sub{font-size:var(--text-xs);color:var(--text-muted);}
+
+    /* COMPARISON TABLE */
+    .method-table{width:100%;border-collapse:collapse;font-size:var(--text-sm);margin:var(--space-6) 0;}
+    .method-table th{text-align:left;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);padding:var(--space-2) var(--space-4);border-bottom:1px solid var(--border);}
+    .method-table td{padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;color:var(--text-muted);}
+    .method-table tr:last-child td{border-bottom:none;}
+    .method-table td:first-child{font-weight:600;color:var(--text);white-space:nowrap;}
+    .badge{display:inline-flex;font-size:var(--text-xs);font-weight:600;padding:2px 8px;border-radius:var(--radius-full);}
+    .badge-red{background:var(--red-bg);color:var(--red);}
+    .badge-green{background:var(--green-bg);color:var(--green);}
+    .badge-orange{background:var(--orange-bg);color:var(--orange);}
+
+    /* TIMELINE VISUAL */
+    .timeline-vis{width:100%;margin:var(--space-4) 0;}
+    .tl-row{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3);font-size:var(--text-sm);}
+    .tl-name{min-width:120px;color:var(--text-muted);font-size:var(--text-xs);font-weight:500;text-transform:uppercase;letter-spacing:0.04em;}
+    .tl-bar-wrap{flex:1;height:28px;border-radius:var(--radius-md);background:var(--surface-2);overflow:hidden;display:flex;position:relative;}
+    .tl-train{height:100%;background:var(--accent);opacity:0.7;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;letter-spacing:0.04em;transition:width 0.4s ease;}
+    .tl-leak{height:100%;background:var(--red);opacity:0.5;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;letter-spacing:0.04em;}
+    .tl-test{height:100%;background:var(--surface-3);border-left:2px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--text-faint);letter-spacing:0.04em;transition:width 0.4s ease;}
+
+    /* FOOTER */
+    .article-footer{max-width:820px;margin-inline:auto;padding:var(--space-8) var(--space-6) var(--space-16);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-4);}
+    .footer-back{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--text-muted);text-decoration:none;transition:color var(--transition);}
+    .footer-back:hover{color:var(--text);}
+    .footer-note{font-size:var(--text-xs);color:var(--text-faint);}
+
+    [data-lang]{display:none;}
+    [data-lang].active{display:block;}
+    [data-lang-inline]{display:none;}
+    [data-lang-inline].active{display:inline;}
+
+    @media(max-width:640px){
+      .article-hero{padding-top:var(--space-12);}
+      .header-inner{padding:var(--space-3) var(--space-4);}
+      .article-content{padding-inline:var(--space-4);}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{transition-duration:0.01ms!important;animation-duration:0.01ms!important;}
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="../" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Labs
+    </a>
+    <div class="header-actions">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang-switch="en">EN</button>
+        <button class="lang-btn" data-lang-switch="fr">FR</button>
+      </div>
+      <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="article-hero">
+  <div class="article-label">
+    <svg width="8" height="8" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+    <span data-lang-inline="en" class="active">Time Series · Data Science</span>
+    <span data-lang-inline="fr">Séries Temporelles · Data Science</span>
+  </div>
+  <h1>
+    <span data-lang-inline="en" class="active">Your model aced the test. It knows <em>the future.</em></span>
+    <span data-lang-inline="fr">Votre modèle a brillé au test. Il connaît <em>le futur.</em></span>
+  </h1>
+  <p class="article-lede">
+    <span data-lang-inline="en" class="active">Data leakage in time series is the most common — and most dangerous — mistake in forecasting. Your model isn't good. It's cheating. Here's how to see it, measure it, and fix it.</span>
+    <span data-lang-inline="fr">Le data leakage en séries temporelles est l'erreur la plus fréquente — et la plus dangereuse — en forecasting. Votre modèle n'est pas bon. Il triche. Voici comment le voir, le mesurer, et le corriger.</span>
+  </p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-value">April 2026</span><span class="meta-label">Published</span></div>
+    <div class="meta-item"><span class="meta-value">~10 min</span><span class="meta-label">Read</span></div>
+    <div class="meta-item" style="display:flex;gap:var(--space-2);align-items:center;flex-wrap:wrap;">
+      <span class="tag">Time Series</span><span class="tag">ML</span><span class="tag">Forecasting</span>
+    </div>
+  </div>
+</section>
+
+<main class="article-content">
+
+  <!-- 01 THE TRAP -->
+  <section class="section">
+    <p class="section-number">01</p>
+    <h2>
+      <span data-lang-inline="en" class="active">The trap that fools everyone</span>
+      <span data-lang-inline="fr">Le piège qui trompe tout le monde</span>
+    </h2>
+    <div data-lang="en" class="active">
+      <p>You train a model on historical sales data. You evaluate it. RMSE looks great — better than any baseline. You deploy. It falls apart in production.</p>
+      <p>This is not bad luck. It's a structural problem: <strong>your test set saw the future during training</strong>. The model didn't learn patterns — it memorized outcomes it was never supposed to see.</p>
+      <p>In standard machine learning, shuffling data before splitting is fine. In time series, it's catastrophic. Time has a direction. Training on data that includes information from after your forecast horizon is the definition of leakage.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Vous entraînez un modèle sur des données de ventes historiques. Vous l'évaluez. Le RMSE est excellent — meilleur que n'importe quelle baseline. Vous déployez. Il s'effondre en production.</p>
+      <p>Ce n'est pas de la malchance. C'est un problème structurel : <strong>votre ensemble de test a vu le futur pendant l'entraînement</strong>. Le modèle n'a pas appris des patterns — il a mémorisé des résultats qu'il n'était pas censé voir.</p>
+      <p>En machine learning classique, mélanger les données avant de les diviser est correct. En séries temporelles, c'est catastrophique. Le temps a une direction. S'entraîner sur des données qui incluent des informations postérieures à votre horizon de prévision, c'est la définition du leakage.</p>
+    </div>
+
+    <div class="callout danger">
+      <p><strong data-lang-inline="en" style="display:inline">The rule:</strong><strong data-lang-inline="fr">La règle :</strong> <span data-lang-inline="en" style="display:inline">In a time series, point T in your test set must never influence any computation that happens before T in your training pipeline — not scaling, not feature engineering, not imputation. Never.</span><span data-lang-inline="fr">Dans une série temporelle, le point T de votre test ne doit jamais influencer aucun calcul qui se produit avant T dans votre pipeline d'entraînement — pas le scaling, pas le feature engineering, pas l'imputation. Jamais.</span></p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- 02 LIVE DEMO -->
+  <section class="section">
+    <p class="section-number">02</p>
+    <h2>
+      <span data-lang-inline="en" class="active">See it live — move the split point</span>
+      <span data-lang-inline="fr">Observez en direct — déplacez le point de coupure</span>
+    </h2>
+    <div data-lang="en" class="active">
+      <p>Below is a synthetic time series with trend and seasonality. Move the split slider to change where training ends and testing begins. Watch what happens to the model's RMSE — and why.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Ci-dessous, une série temporelle synthétique avec tendance et saisonnalité. Déplacez le curseur pour changer où l'entraînement se termine et le test commence. Observez ce qui arrive au RMSE du modèle — et pourquoi.</p>
+    </div>
+
+    <div class="interactive-box">
+      <div class="ibox-header"><div class="ibox-dot"></div><span class="ibox-title">Train / Test Split — Proper temporal split</span></div>
+      <div class="ibox-body">
+        <div class="slider-row">
+          <span class="slider-label" id="split-label-text">Split point</span>
+          <input type="range" id="split-slider" min="30" max="85" value="70" />
+          <span class="slider-value" id="split-val">t=70</span>
+        </div>
+        <canvas id="chart-split" height="220"></canvas>
+        <div class="scores-grid" style="margin-top:var(--space-4);">
+          <div class="score-card good">
+            <span class="score-card-label" data-lang-inline="en" style="display:inline">✓ Proper split RMSE</span>
+            <span class="score-card-label" data-lang-inline="fr">✓ RMSE split correct</span>
+            <span class="score-card-value" id="rmse-proper">—</span>
+            <span class="score-card-sub" data-lang-inline="en" style="display:inline">Realistic. What you'd see in prod.</span>
+            <span class="score-card-sub" data-lang-inline="fr">Réaliste. Ce que vous verriez en prod.</span>
+          </div>
+          <div class="score-card bad">
+            <span class="score-card-label" data-lang-inline="en" style="display:inline">✗ Shuffled split RMSE</span>
+            <span class="score-card-label" data-lang-inline="fr">✗ RMSE split mélangé</span>
+            <span class="score-card-value" id="rmse-leaked">—</span>
+            <span class="score-card-sub" data-lang-inline="en" style="display:inline">Overly optimistic. This is the lie.</span>
+            <span class="score-card-sub" data-lang-inline="fr">Trop optimiste. C'est le mensonge.</span>
+          </div>
+        </div>
+        <p id="split-insight" style="font-size:var(--text-sm);color:var(--text-muted);margin-top:var(--space-3);padding:var(--space-3) var(--space-4);background:var(--surface-2);border-radius:var(--radius-md);"></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- 03 THE 3 TYPES -->
+  <section class="section">
+    <p class="section-number">03</p>
+    <h2>
+      <span data-lang-inline="en" class="active">Three types of leakage — and how they hide</span>
+      <span data-lang-inline="fr">Trois types de leakage — et comment ils se cachent</span>
+    </h2>
+    <div data-lang="en" class="active">
+      <p>The split date is just the most obvious form. In practice, leakage sneaks in at every step of the pipeline. Here are the three forms that kill forecasting models in production.</p>
+    </div>
+    <div data-lang="fr">
+      <p>La date de coupure est juste la forme la plus évidente. En pratique, le leakage s'infiltre à chaque étape du pipeline. Voici les trois formes qui détruisent les modèles de forecasting en production.</p>
+    </div>
+
+    <table class="method-table">
+      <thead>
+        <tr>
+          <th data-lang-inline="en" style="display:table-cell">Type</th>
+          <th data-lang-inline="fr" style="display:none">Type</th>
+          <th data-lang-inline="en" style="display:table-cell">Where it hides</th>
+          <th data-lang-inline="fr" style="display:none">Où il se cache</th>
+          <th>Risk</th>
+        </tr>
+      </thead>
+      <tbody id="leakage-table"></tbody>
+    </table>
+
+    <div data-lang="en" class="active">
+      <p>The subtlest form is <strong>feature leakage</strong>. Imagine you build a feature like "rolling 7-day average of sales". If you compute this on the entire dataset before splitting, the rolling average for day 100 includes data from days 101–107. The model trains on a feature that summarizes the future.</p>
+    </div>
+    <div data-lang="fr">
+      <p>La forme la plus subtile est le <strong>feature leakage</strong>. Imaginez que vous construisiez une feature comme "moyenne mobile sur 7 jours des ventes". Si vous la calculez sur l'ensemble du dataset avant de le diviser, la moyenne mobile du jour 100 inclut des données des jours 101 à 107. Le modèle s'entraîne sur une feature qui résume le futur.</p>
+    </div>
+
+    <div class="interactive-box">
+      <div class="ibox-header"><div class="ibox-dot"></div><span class="ibox-title">Feature Leakage — Rolling average computed globally vs. correctly</span></div>
+      <div class="ibox-body">
+        <canvas id="chart-feature" height="200"></canvas>
+        <div class="scores-grid" style="margin-top:var(--space-4);">
+          <div class="score-card bad">
+            <span class="score-card-label">✗ <span data-lang-inline="en" style="display:inline">Global rolling avg</span><span data-lang-inline="fr">Moyenne globale</span></span>
+            <span class="score-card-value" id="rmse-feature-bad">—</span>
+            <span class="score-card-sub" data-lang-inline="en" style="display:inline">Feature built after seeing test data</span>
+            <span class="score-card-sub" data-lang-inline="fr">Feature construite après avoir vu le test</span>
+          </div>
+          <div class="score-card good">
+            <span class="score-card-label">✓ <span data-lang-inline="en" style="display:inline">Time-aware rolling avg</span><span data-lang-inline="fr">Moyenne consciente du temps</span></span>
+            <span class="score-card-value" id="rmse-feature-good">—</span>
+            <span class="score-card-sub" data-lang-inline="en" style="display:inline">Feature only uses past data at each point</span>
+            <span class="score-card-sub" data-lang-inline="fr">Feature n'utilise que les données passées</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- 04 WALK-FORWARD -->
+  <section class="section">
+    <p class="section-number">04</p>
+    <h2>
+      <span data-lang-inline="en" class="active">The fix: walk-forward validation</span>
+      <span data-lang-inline="fr">La solution : la validation walk-forward</span>
+    </h2>
+    <div data-lang="en" class="active">
+      <p>Standard k-fold cross-validation is broken for time series. It shuffles folds, so training folds include future data relative to validation folds. The correct approach is <strong>walk-forward validation</strong> (also called time-series split): you always train on the past, validate on the immediate future, and slide forward.</p>
+    </div>
+    <div data-lang="fr">
+      <p>La validation croisée k-fold standard est cassée pour les séries temporelles. Elle mélange les folds, donc les folds d'entraînement contiennent des données futures par rapport aux folds de validation. L'approche correcte est la <strong>validation walk-forward</strong> (aussi appelée time-series split) : on s'entraîne toujours sur le passé, on valide sur le futur immédiat, et on avance.</p>
+    </div>
+
+    <div class="interactive-box">
+      <div class="ibox-header"><div class="ibox-dot"></div><span class="ibox-title">Walk-Forward Validation — <span data-lang-inline="en" style="display:inline">Move fold</span><span data-lang-inline="fr">Déplacer le fold</span></span></div>
+      <div class="ibox-body">
+        <div class="slider-row">
+          <span class="slider-label"><span data-lang-inline="en" style="display:inline">Active fold</span><span data-lang-inline="fr">Fold actif</span></span>
+          <input type="range" id="fold-slider" min="1" max="5" value="1" step="1" />
+          <span class="slider-value" id="fold-val">Fold 1</span>
+        </div>
+        <div class="timeline-vis" id="wf-timeline"></div>
+        <canvas id="chart-wf" height="200"></canvas>
+        <p id="wf-insight" style="font-size:var(--text-sm);color:var(--text-muted);margin-top:var(--space-3);padding:var(--space-3) var(--space-4);background:var(--surface-2);border-radius:var(--radius-md);"></p>
+      </div>
+    </div>
+
+    <div data-lang="en" class="active">
+      <p>Each fold gives you a realistic estimate of how the model performs on unseen future data. You get multiple RMSE values instead of one — and their variance tells you something too: a model with very inconsistent fold scores is brittle, regardless of the average.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Chaque fold vous donne une estimation réaliste de la performance du modèle sur des données futures non vues. Vous obtenez plusieurs valeurs de RMSE au lieu d'une seule — et leur variance dit aussi quelque chose : un modèle avec des scores de fold très incohérents est fragile, indépendamment de la moyenne.</p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- 05 SCALING -->
+  <section class="section">
+    <p class="section-number">05</p>
+    <h2>
+      <span data-lang-inline="en" class="active">The sneaky one: scaling leakage</span>
+      <span data-lang-inline="fr">Le plus sournois : le leakage de normalisation</span>
+    </h2>
+    <div data-lang="en" class="active">
+      <p>Here's one that even experienced practitioners miss. You use <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">StandardScaler</code> or <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">MinMaxScaler</code> before splitting. You fit the scaler on the full dataset — which includes test data. The mean and standard deviation used for normalization now contain information about the future. The leak is subtle, but the test set is compromised.</p>
+    </div>
+    <div data-lang="fr">
+      <p>En voici une que même les praticiens expérimentés ratent. Vous utilisez <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">StandardScaler</code> ou <code style="font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:3px;">MinMaxScaler</code> avant de diviser les données. Vous fittez le scaler sur le dataset complet — qui inclut les données de test. La moyenne et l'écart-type utilisés pour la normalisation contiennent maintenant des informations sur le futur. La fuite est subtile, mais l'ensemble de test est compromis.</p>
+    </div>
+
+    <div class="callout danger">
+      <p>
+        <strong>✗ Wrong:</strong><br/>
+        <code style="font-family:var(--font-mono);font-size:var(--text-xs);">scaler.fit(X_all) → split → transform(X_train), transform(X_test)</code>
+      </p>
+    </div>
+    <div class="callout success">
+      <p>
+        <strong>✓ Correct:</strong><br/>
+        <code style="font-family:var(--font-mono);font-size:var(--text-xs);">split first → scaler.fit(X_train) → transform(X_train), transform(X_test)</code>
+      </p>
+    </div>
+
+    <div data-lang="en" class="active">
+      <p>The same rule applies to every preprocessing step: imputation, encoding, outlier removal, PCA. <strong>Fit on train only. Apply to test.</strong> The test set must remain a genuine stranger to all fitting operations.</p>
+    </div>
+    <div data-lang="fr">
+      <p>La même règle s'applique à chaque étape de prétraitement : imputation, encodage, suppression des outliers, PCA. <strong>Fittez uniquement sur le train. Appliquez au test.</strong> L'ensemble de test doit rester un véritable inconnu pour toutes les opérations de fitting.</p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- 06 DIAGNOSIS -->
+  <section class="section">
+    <p class="section-number">06</p>
+    <h2>
+      <span data-lang-inline="en" class="active">How to diagnose leakage in your own model</span>
+      <span data-lang-inline="fr">Comment diagnostiquer le leakage dans votre propre modèle</span>
+    </h2>
+    <div data-lang="en" class="active">
+      <p>If you suspect leakage, here's a practical diagnostic. None of these alone is conclusive, but together they paint a clear picture.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Si vous suspectez un leakage, voici un diagnostic pratique. Aucun de ces éléments seul n'est concluant, mais ensemble ils donnent une image claire.</p>
+    </div>
+    <div id="diag-cards" style="display:flex;flex-direction:column;gap:var(--space-4);margin:var(--space-6) 0;"></div>
+
+    <div data-lang="en" class="active">
+      <p>The most reliable test: <strong>deliberately introduce a random target value into your test set</strong>, then retrain. If your "test RMSE" stays suspiciously good, the training data has seen the test targets. The model is interpolating, not forecasting.</p>
+    </div>
+    <div data-lang="fr">
+      <p>Le test le plus fiable : <strong>introduire délibérément une valeur cible aléatoire dans votre test</strong>, puis ré-entraîner. Si votre "RMSE de test" reste suspicieusement bon, les données d'entraînement ont vu les cibles de test. Le modèle interpole, il ne prévoit pas.</p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- 07 WHAT THIS CHANGES -->
+  <section class="section">
+    <p class="section-number">07</p>
+    <h2>
+      <span data-lang-inline="en" class="active">What this actually changes in practice</span>
+      <span data-lang-inline="fr">Ce que ça change concrètement en pratique</span>
+    </h2>
+    <div data-lang="en" class="active">
+      <p><strong>Leakage inflates metrics, not understanding.</strong> A model with leakage has learned the shape of the test data — not the underlying process. Deploy it 6 months later with a different trend regime and it will be confidently wrong.</p>
+      <p><strong>Business decisions built on leaked models are dangerous.</strong> Inventory forecasts, staffing plans, drug trial outcome predictions — all downstream of a metric that was fabricated. The gap between reported RMSE and production RMSE is a hidden liability.</p>
+      <p><strong>A higher RMSE from a clean model beats a low RMSE from a leaked one, every time.</strong> When you fix leakage, your metric will get worse on paper. That's not a regression — it's honesty. The number finally means something.</p>
+    </div>
+    <div data-lang="fr">
+      <p><strong>Le leakage gonfle les métriques, pas la compréhension.</strong> Un modèle avec leakage a appris la forme des données de test — pas le processus sous-jacent. Déployez-le 6 mois plus tard avec un régime de tendance différent et il sera confiant dans l'erreur.</p>
+      <p><strong>Les décisions métier basées sur des modèles contaminés sont dangereuses.</strong> Prévisions de stocks, plans de staffing, prédictions de résultats d'essais cliniques — tous en aval d'une métrique fabriquée. L'écart entre le RMSE rapporté et le RMSE en production est un passif caché.</p>
+      <p><strong>Un RMSE plus élevé issu d'un modèle propre bat chaque fois un RMSE bas d'un modèle contaminé.</strong> Quand vous corrigez le leakage, votre métrique se dégrade sur le papier. Ce n'est pas une régression — c'est de l'honnêteté. Le chiffre veut enfin dire quelque chose.</p>
+    </div>
+
+    <div class="callout info">
+      <p><strong data-lang-inline="en" style="display:inline">One rule to remember:</strong><strong data-lang-inline="fr">Une règle à retenir :</strong> <span data-lang-inline="en" style="display:inline">If building your features requires knowing any value from t+1 or later, you have leakage. No exceptions. No "it's just a small effect". Time only flows forward.</span><span data-lang-inline="fr">Si construire vos features nécessite de connaître une valeur à partir de t+1 ou plus tard, vous avez un leakage. Pas d'exceptions. Pas de "c'est juste un petit effet". Le temps ne s'écoule que vers l'avant.</span></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="article-footer">
+  <a href="../" class="footer-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    <span data-lang-inline="en" style="display:inline">Back to Labs</span>
+    <span data-lang-inline="fr">Retour aux Labs</span>
+  </a>
+  <span class="footer-note">
+    <span data-lang-inline="en" style="display:inline">Built by Badreddine El Khamlichi · April 2026</span>
+    <span data-lang-inline="fr">Par Badreddine El Khamlichi · Avril 2026</span>
+  </span>
+</footer>
+
+<script>
+// ─── THEME ───────────────────────────────────────────────
+const html = document.documentElement;
+const themeBtn = document.querySelector('[data-theme-toggle]');
+const SUN=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+const MOON=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+let theme=localStorage.getItem('labs-theme')||'light';
+html.setAttribute('data-theme',theme);
+themeBtn.innerHTML=theme==='dark'?SUN:MOON;
+themeBtn.addEventListener('click',()=>{
+  theme=theme==='dark'?'light':'dark';
+  html.setAttribute('data-theme',theme);
+  localStorage.setItem('labs-theme',theme);
+  themeBtn.innerHTML=theme==='dark'?SUN:MOON;
+  drawAll();
+});
+
+// ─── LANGUAGE ────────────────────────────────────────────
+let lang='en';
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('[data-lang]').forEach(el=>el.classList.toggle('active',el.dataset.lang===l));
+  document.querySelectorAll('[data-lang-inline]').forEach(el=>{
+    const show=el.dataset.langInline===l;
+    el.classList.toggle('active',show);
+    el.style.display=show?(el.tagName==='SPAN'?'inline':'block'):'none';
+  });
+  document.querySelectorAll('[data-lang-switch]').forEach(b=>b.classList.toggle('active',b.dataset.langSwitch===l));
+  // Update table headers
+  document.querySelectorAll('.method-table th[data-lang-inline]').forEach(el=>{
+    el.style.display=el.dataset.langInline===l?'table-cell':'none';
+  });
+  renderLeakageTable();
+  renderDiagCards();
+  updateInsights();
+}
+document.querySelectorAll('[data-lang-switch]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.langSwitch)));
+
+// ─── PROGRESS ────────────────────────────────────────────
+const bar=document.getElementById('progress-bar');
+window.addEventListener('scroll',()=>{
+  bar.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%';
+});
+
+// ─── DATA GENERATION ─────────────────────────────────────
+const N=100;
+function generateSeries(){
+  const data=[];
+  for(let i=0;i<N;i++){
+    const trend=0.3*i;
+    const season=8*Math.sin(2*Math.PI*i/12);
+    const noise=(Math.random()-0.5)*6;
+    data.push(trend+season+noise+20);
+  }
+  return data;
+}
+const series=generateSeries();
+
+// Simple linear model using last-k average as predictor (lag features)
+function trainPredict(trainData,testLen){
+  // Use lag-3 mean as prediction
+  const preds=[];
+  const full=[...trainData];
+  for(let i=0;i<testLen;i++){
+    const lag=full.slice(-3);
+    const pred=lag.reduce((a,b)=>a+b,0)/lag.length;
+    // Add slight trend component
+    const trendSlope=(full[full.length-1]-full[Math.max(0,full.length-10)])/10;
+    preds.push(pred+trendSlope*(i+1)*0.5);
+    full.push(pred);
+  }
+  return preds;
+}
+
+function rmse(a,b){
+  const n=Math.min(a.length,b.length);
+  return Math.sqrt(a.slice(0,n).reduce((s,v,i)=>s+(v-b[i])**2,0)/n).toFixed(2);
+}
+
+// ─── CANVAS UTILS ────────────────────────────────────────
+function getColors(){
+  const dark=html.getAttribute('data-theme')==='dark';
+  return {
+    text:dark?'#e8e6e1':'#28251d',
+    muted:dark?'#797874':'#7a7974',
+    faint:dark?'#4a4946':'#bab9b4',
+    bg:dark?'#1a1917':'#f9f8f5',
+    border:dark?'rgba(255,255,255,0.07)':'rgba(40,37,29,0.1)',
+    accent:dark?'#2dd4bf':'#0f766e',
+    red:dark?'#f87171':'#dc2626',
+    green:dark?'#4ade80':'#16a34a',
+    orange:dark?'#fbbf24':'#d97706',
+  };
+}
+
+function setupCanvas(canvas){
+  const dpr=window.devicePixelRatio||1;
+  const rect=canvas.getBoundingClientRect();
+  const w=rect.width||canvas.parentElement.clientWidth||700;
+  const h=parseInt(canvas.getAttribute('height'))||220;
+  canvas.width=w*dpr;
+  canvas.height=h*dpr;
+  canvas.style.width=w+'px';
+  canvas.style.height=h+'px';
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  return {ctx,w,h};
+}
+
+function drawLine(ctx,pts,color,width=2,dash=[]){
+  if(pts.length<2)return;
+  ctx.save();
+  ctx.strokeStyle=color;
+  ctx.lineWidth=width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.stroke();
+  ctx.restore();
+}
+
+function dataToPoints(data,xOffset,xScale,yMin,yMax,h,padT,padB){
+  return data.map((v,i)=>({
+    x:xOffset+i*xScale,
+    y:padT+(1-(v-yMin)/(yMax-yMin))*(h-padT-padB)
+  }));
+}
+
+// ─── CHART 1: SPLIT DEMO ─────────────────────────────────
+function drawSplitChart(){
+  const canvas=document.getElementById('chart-split');
+  const {ctx,w,h}=setupCanvas(canvas);
+  const C=getColors();
+  const pad={t:20,b:30,l:40,r:20};
+  const splitAt=parseInt(document.getElementById('split-slider').value);
+  const trainData=series.slice(0,splitAt);
+  const testData=series.slice(splitAt);
+  const testLen=testData.length;
+
+  // Proper prediction (train on past only)
+  const properPred=trainPredict(trainData,testLen);
+  // Leaked prediction (shuffle — simulate by using slightly better fit)
+  const leakedPred=testData.map((v,i)=>v+(Math.random()-0.5)*3);
+
+  const allVals=[...series,...properPred];
+  const yMin=Math.min(...allVals)-5;
+  const yMax=Math.max(...allVals)+5;
+  const xScale=(w-pad.l-pad.r)/(N-1);
+
+  // Background zones
+  const splitX=pad.l+splitAt*xScale;
+  ctx.fillStyle=C.accent+'15';
+  ctx.fillRect(pad.l,pad.t,splitX-pad.l,h-pad.t-pad.b);
+  ctx.fillStyle=C.red+'10';
+  ctx.fillRect(splitX,pad.t,w-pad.r-splitX,h-pad.t-pad.b);
+
+  // Grid lines
+  ctx.strokeStyle=C.border;
+  ctx.lineWidth=1;
+  [0,0.25,0.5,0.75,1].forEach(f=>{
+    const y=pad.t+f*(h-pad.t-pad.b);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();
+    const val=(yMax-f*(yMax-yMin)).toFixed(0);
+    ctx.fillStyle=C.faint;ctx.font=`10px ${getComputedStyle(document.body).fontFamily}`;
+    ctx.textAlign='right';ctx.fillText(val,pad.l-4,y+3);
+  });
+
+  // Split line
+  ctx.strokeStyle=C.border;
+  ctx.lineWidth=1.5;
+  ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(splitX,pad.t);ctx.lineTo(splitX,h-pad.b);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle=C.muted;ctx.font=`10px sans-serif`;ctx.textAlign='center';
+  ctx.fillText('split',splitX,pad.t-4);
+
+  // Series
+  const trainPts=dataToPoints(trainData,pad.l,xScale,yMin,yMax,h,pad.t,pad.b);
+  const testPts=dataToPoints(testData,pad.l+splitAt*xScale,xScale,yMin,yMax,h,pad.t,pad.b);
+  const properPts=dataToPoints(properPred,pad.l+splitAt*xScale,xScale,yMin,yMax,h,pad.t,pad.b);
+  const leakedPts=dataToPoints(leakedPred,pad.l+splitAt*xScale,xScale,yMin,yMax,h,pad.t,pad.b);
+
+  drawLine(ctx,trainPts,C.accent,2);
+  drawLine(ctx,testPts,C.muted,2);
+  drawLine(ctx,properPts,C.green,2,[6,3]);
+  drawLine(ctx,leakedPts,C.red,2,[2,2]);
+
+  // Labels
+  ctx.font='11px sans-serif';ctx.textAlign='left';
+  [[C.accent,'Train'],[C.muted,'Test (actual)'],[C.green,'Proper forecast'],[C.red,'Shuffled (leaked)']].forEach(([c,t],i)=>{
+    ctx.fillStyle=c;ctx.fillRect(pad.l+4,h-pad.b+8+i*0,0,0);
+  });
+
+  // Legend bottom right
+  const lg=[[C.accent,'Train'],[C.muted,'Test actual'],[C.green,'Proper pred'],[C.red,'Leaked pred']];
+  lg.forEach(([c,t],i)=>{
+    const lx=w-pad.r-120;const ly=pad.t+i*16;
+    ctx.strokeStyle=c;ctx.lineWidth=2;ctx.setLineDash(i>=2?[4,3]:[]);
+    ctx.beginPath();ctx.moveTo(lx,ly+5);ctx.lineTo(lx+18,ly+5);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle=C.muted;ctx.font='10px sans-serif';ctx.textAlign='left';
+    ctx.fillText(t,lx+22,ly+8);
+  });
+
+  const rProper=rmse(testData,properPred);
+  const rLeaked=rmse(testData,leakedPred);
+  document.getElementById('rmse-proper').textContent=rProper;
+  document.getElementById('rmse-leaked').textContent=rLeaked;
+
+  return {rProper,rLeaked,splitAt};
+}
+
+// ─── CHART 2: FEATURE LEAKAGE ────────────────────────────
+function drawFeatureChart(){
+  const canvas=document.getElementById('chart-feature');
+  const {ctx,w,h}=setupCanvas(canvas);
+  const C=getColors();
+  const pad={t:20,b:30,l:40,r:20};
+  const split=70;
+  const win=7;
+
+  // Global rolling avg (leaky)
+  const globalRoll=series.map((v,i)=>{
+    if(i<win-1)return series.slice(0,i+1).reduce((a,b)=>a+b,0)/(i+1);
+    return series.slice(i-win+1,i+1).reduce((a,b)=>a+b,0)/win;
+  });
+  // Time-aware rolling avg (correct — only past)
+  const properRoll=series.map((v,i)=>{
+    if(i===0)return v;
+    const end=i;const start=Math.max(0,i-win);
+    return series.slice(start,end).reduce((a,b)=>a+b,0)/(end-start);
+  });
+
+  const allVals=[...series,...globalRoll,...properRoll];
+  const yMin=Math.min(...allVals)-3;
+  const yMax=Math.max(...allVals)+3;
+  const xScale=(w-pad.l-pad.r)/(N-1);
+  const splitX=pad.l+split*xScale;
+
+  ctx.fillStyle=C.accent+'15';
+  ctx.fillRect(pad.l,pad.t,splitX-pad.l,h-pad.t-pad.b);
+  ctx.fillStyle=C.red+'10';
+  ctx.fillRect(splitX,pad.t,w-pad.r-splitX,h-pad.t-pad.b);
+
+  ctx.strokeStyle=C.border;ctx.lineWidth=1;
+  [0,0.5,1].forEach(f=>{
+    const y=pad.t+f*(h-pad.t-pad.b);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();
+  });
+
+  ctx.strokeStyle=C.border;ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(splitX,pad.t);ctx.lineTo(splitX,h-pad.b);ctx.stroke();
+  ctx.setLineDash([]);
+
+  const serPts=dataToPoints(series,pad.l,xScale,yMin,yMax,h,pad.t,pad.b);
+  const globalPts=dataToPoints(globalRoll,pad.l,xScale,yMin,yMax,h,pad.t,pad.b);
+  const properPts=dataToPoints(properRoll,pad.l,xScale,yMin,yMax,h,pad.t,pad.b);
+
+  drawLine(ctx,serPts,C.muted,1.5);
+  drawLine(ctx,globalPts,C.red,2,[3,2]);
+  drawLine(ctx,properPts,C.green,2);
+
+  // Estimate RMSE using rolling avg as a naive predictor for test segment
+  const testSeries=series.slice(split);
+  const testGlobal=globalRoll.slice(split);
+  const testProper=properRoll.slice(split);
+  document.getElementById('rmse-feature-bad').textContent=rmse(testSeries,testGlobal);
+  document.getElementById('rmse-feature-good').textContent=rmse(testSeries,testProper);
+
+  // Legend
+  [[C.muted,'Actual series'],[C.red,'Global rolling (leaky)'],[C.green,'Proper rolling (past only)']].forEach(([c,t],i)=>{
+    const lx=pad.l+4;const ly=pad.t+i*16;
+    ctx.strokeStyle=c;ctx.lineWidth=2;ctx.setLineDash(i===1?[3,2]:[]);
+    ctx.beginPath();ctx.moveTo(lx,ly+5);ctx.lineTo(lx+18,ly+5);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle=C.muted;ctx.font='10px sans-serif';ctx.textAlign='left';
+    ctx.fillText(t,lx+22,ly+8);
+  });
+}
+
+// ─── CHART 3: WALK-FORWARD ───────────────────────────────
+function drawWFChart(){
+  const foldIdx=parseInt(document.getElementById('fold-slider').value);
+  const canvas=document.getElementById('chart-wf');
+  const {ctx,w,h}=setupCanvas(canvas);
+  const C=getColors();
+  const pad={t:20,b:30,l:40,r:20};
+
+  const foldSize=12;
+  const initTrain=40;
+  const trainEnd=initTrain+(foldIdx-1)*foldSize;
+  const valEnd=trainEnd+foldSize;
+
+  const trainData=series.slice(0,trainEnd);
+  const valData=series.slice(trainEnd,valEnd);
+  const valPred=trainPredict(trainData,foldSize);
+
+  const yMin=Math.min(...series)-5;
+  const yMax=Math.max(...series)+5;
+  const xScale=(w-pad.l-pad.r)/(N-1);
+
+  // Background
+  const trainX=pad.l+trainEnd*xScale;
+  const valX=pad.l+valEnd*xScale;
+  ctx.fillStyle=C.accent+'15';
+  ctx.fillRect(pad.l,pad.t,trainX-pad.l,h-pad.t-pad.b);
+  ctx.fillStyle=C.orange+'20';
+  ctx.fillRect(trainX,pad.t,valX-trainX,h-pad.t-pad.b);
+  ctx.fillStyle=C.surface+'08';
+  ctx.fillRect(valX,pad.t,w-pad.r-valX,h-pad.t-pad.b);
+
+  ctx.strokeStyle=C.border;ctx.lineWidth=1;
+  [0,0.25,0.5,0.75,1].forEach(f=>{
+    const y=pad.t+f*(h-pad.t-pad.b);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();
+  });
+
+  const serPts=dataToPoints(series,pad.l,xScale,yMin,yMax,h,pad.t,pad.b);
+  const valPts=dataToPoints(valData,trainX,xScale,yMin,yMax,h,pad.t,pad.b);
+  const predPts=dataToPoints(valPred,trainX,xScale,yMin,yMax,h,pad.t,pad.b);
+
+  drawLine(ctx,serPts.slice(0,trainEnd),C.accent,2);
+  drawLine(ctx,serPts.slice(trainEnd,valEnd),C.muted,1.5);
+  drawLine(ctx,serPts.slice(valEnd),C.faint,1,[2,3]);
+  drawLine(ctx,predPts,C.orange,2,[5,3]);
+
+  // Fold boundaries
+  [trainX,valX].forEach(x=>{
+    ctx.strokeStyle=C.border;ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();
+    ctx.setLineDash([]);
+  });
+
+  const foldRmse=rmse(valData,valPred);
+  const wfInsightEN=`Fold ${foldIdx}/5 — Training on ${trainEnd} points, validating on next ${foldSize}. Fold RMSE: ${foldRmse}. The model only knows what happened up to t=${trainEnd}.`;
+  const wfInsightFR=`Fold ${foldIdx}/5 — Entraînement sur ${trainEnd} points, validation sur les ${foldSize} suivants. RMSE du fold : ${foldRmse}. Le modèle ne connaît que ce qui s'est passé jusqu'à t=${trainEnd}.`;
+  document.getElementById('wf-insight').textContent=lang==='fr'?wfInsightFR:wfInsightEN;
+  document.getElementById('fold-val').textContent=`Fold ${foldIdx}`;
+
+  // Timeline
+  renderWFTimeline(foldIdx,initTrain,foldSize);
+
+  // Legend
+  [[C.accent,'Train'],[C.muted,'Validation actual'],[C.orange,'Forecast'],[C.faint,'Future (unseen)']].forEach(([c,t],i)=>{
+    const lx=w-pad.r-130;const ly=pad.t+i*16;
+    ctx.strokeStyle=c;ctx.lineWidth=2;ctx.setLineDash(i>=2?[4,3]:[]);
+    ctx.beginPath();ctx.moveTo(lx,ly+5);ctx.lineTo(lx+18,ly+5);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle=C.muted;ctx.font='10px sans-serif';ctx.textAlign='left';
+    ctx.fillText(t,lx+22,ly+8);
+  });
+}
+
+function renderWFTimeline(foldIdx,initTrain,foldSize){
+  const C=getColors();
+  const container=document.getElementById('wf-timeline');
+  const totalWidth=100;
+  const nFolds=5;
+  container.innerHTML='';
+  for(let f=1;f<=nFolds;f++){
+    const trainEnd=initTrain+(f-1)*foldSize;
+    const valEnd=trainEnd+foldSize;
+    const trainPct=(trainEnd/N*100).toFixed(1);
+    const valPct=(foldSize/N*100).toFixed(1);
+    const restPct=(100-trainEnd/N*100-foldSize/N*100).toFixed(1);
+    const isActive=f===foldIdx;
+    const row=document.createElement('div');
+    row.className='tl-row';
+    row.style.opacity=isActive?'1':'0.4';
+    row.innerHTML=`
+      <span class="tl-name">Fold ${f}</span>
+      <div class="tl-bar-wrap">
+        <div class="tl-train" style="width:${trainPct}%">TRAIN</div>
+        <div class="tl-leak" style="width:${valPct}%">VAL</div>
+        <div class="tl-test" style="width:${parseFloat(restPct)>0?restPct:0}%">${parseFloat(restPct)>3?'→':''}</div>
+      </div>
+    `;
+    container.appendChild(row);
+  }
+}
+
+// ─── SPLIT INSIGHT ────────────────────────────────────────
+function updateInsights(){
+  const splitAt=parseInt(document.getElementById('split-slider').value);
+  const pct=(splitAt/N*100).toFixed(0);
+  const en=`${pct}% of data used for training (${splitAt} points). The test set has ${N-splitAt} points. A proper temporal split shows the true out-of-sample difficulty.`;
+  const fr=`${pct}% des données utilisées pour l'entraînement (${splitAt} points). L'ensemble de test a ${N-splitAt} points. Un split temporel correct montre la vraie difficulté hors-échantillon.`;
+  const el=document.getElementById('split-insight');
+  if(el)el.textContent=lang==='fr'?fr:en;
+}
+
+// ─── LEAKAGE TYPES TABLE ─────────────────────────────────
+function renderLeakageTable(){
+  const rows=[
+    {
+      type:'Split leakage',
+      whereEN:'Random train/test split on a temporal dataset',
+      whereFR:'Split aléatoire train/test sur un dataset temporel',
+      risk:'high'
+    },
+    {
+      type:'Feature leakage',
+      whereEN:'Rolling stats, lags, or encodings computed on full dataset before split',
+      whereFR:'Statistiques glissantes, lags ou encodages calculés sur tout le dataset avant split',
+      risk:'high'
+    },
+    {
+      type:'Scaling leakage',
+      whereEN:'Scaler/normalizer fitted on train+test combined',
+      whereFR:'Scaler/normaliseur fitté sur train+test combinés',
+      risk:'medium'
+    },
+    {
+      type:'Target leakage',
+      whereEN:'Features that are derived from or correlated with future target values',
+      whereFR:'Features dérivées ou corrélées avec les valeurs cibles futures',
+      risk:'high'
+    },
+    {
+      type:'Imputation leakage',
+      whereEN:'Missing values filled using global mean/median that includes test data',
+      whereFR:'Valeurs manquantes remplies avec la moyenne/médiane globale incluant le test',
+      risk:'medium'
+    },
+  ];
+  const tbody=document.getElementById('leakage-table');
+  tbody.innerHTML=rows.map(r=>{
+    const badge=r.risk==='high'?'badge-red':'badge-orange';
+    const label=r.risk==='high'?'High':'Medium';
+    return `<tr>
+      <td>${r.type}</td>
+      <td>${lang==='fr'?r.whereFR:r.whereEN}</td>
+      <td><span class="badge ${badge}">${label}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── DIAGNOSTIC CARDS ────────────────────────────────────
+function renderDiagCards(){
+  const cards=[
+    {
+      iconEN:'🔎 Test RMSE is suspiciously low',
+      iconFR:'🔎 Le RMSE de test est suspicieusement bas',
+      descEN:'If your model performs better on test than on training folds, something is wrong. Models don't usually generalize better than they train.',
+      descFR:'Si votre modèle performe mieux sur le test que sur les folds d\'entraînement, quelque chose ne va pas. Les modèles ne généralisent pas mieux qu\'ils ne s\'entraînent.'
+    },
+    {
+      iconEN:'📉 Performance collapses in production',
+      iconFR:'📉 Les performances s\'effondrent en production',
+      descEN:'The clearest signal. If your reported RMSE was 4.2 and production RMSE is 18.7, you had leakage. Backtest with a strict walk-forward.',
+      descFR:'Le signal le plus clair. Si votre RMSE rapporté était 4.2 et le RMSE en production est 18.7, vous aviez un leakage. Rétrotestez avec un walk-forward strict.'
+    },
+    {
+      iconEN:'🔀 Your pipeline scales before splitting',
+      iconFR:'🔀 Votre pipeline normalise avant de diviser',
+      descEN:'Check your code. If fit() or fit_transform() is called on anything other than X_train, you have scaling leakage.',
+      descFR:'Vérifiez votre code. Si fit() ou fit_transform() est appelé sur autre chose que X_train, vous avez un leakage de scaling.'
+    },
+    {
+      iconEN:'📊 Feature importance shows future-derived features at the top',
+      iconFR:'📊 Les features importantes sont dérivées du futur',
+      descEN:'If your top features include rolling averages or lags computed globally, they likely contain information from the test period.',
+      descFR:'Si vos features importantes incluent des moyennes glissantes ou des lags calculés globalement, ils contiennent probablement des informations de la période de test.'
+    },
+  ];
+  const container=document.getElementById('diag-cards');
+  container.innerHTML=cards.map(c=>`
+    <div style="padding:var(--space-4) var(--space-5);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+      <div style="font-weight:600;color:var(--text);margin-bottom:var(--space-2);font-size:var(--text-sm);">${lang==='fr'?c.iconFR:c.iconEN}</div>
+      <div style="font-size:var(--text-sm);color:var(--text-muted);line-height:1.6;">${lang==='fr'?c.descFR:c.descEN}</div>
+    </div>
+  `).join('');
+}
+
+// ─── DRAW ALL ─────────────────────────────────────────────
+function drawAll(){
+  drawSplitChart();
+  drawFeatureChart();
+  drawWFChart();
+  updateInsights();
+}
+
+// ─── EVENT LISTENERS ─────────────────────────────────────
+document.getElementById('split-slider').addEventListener('input',()=>{
+  document.getElementById('split-val').textContent='t='+document.getElementById('split-slider').value;
+  drawSplitChart();
+  updateInsights();
+});
+document.getElementById('fold-slider').addEventListener('input',()=>drawWFChart());
+
+// ─── INIT ─────────────────────────────────────────────────
+renderLeakageTable();
+renderDiagCards();
+setLang('en');
+requestAnimationFrame(()=>{ drawAll(); });
+window.addEventListener('resize',()=>drawAll());
+</script>
+</body>
+</html>
