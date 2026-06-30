@@ -1,4 +1,4 @@
-# Labs — badreddineek.com
+# Labs · Badreddine EK
 
 Interactive explainers and visual essays on data science, ML, and AI.
 
@@ -24,14 +24,14 @@ Interactive explainers and visual essays on data science, ML, and AI.
 }
 ```
 
-4. Push — Cloudflare Pages redéploie automatiquement.
+4. Push : Cloudflare Pages redéploie automatiquement.
 5. Le site est accessible à `labs.badreddineek.com/your-site-slug`
 6. La card apparaît automatiquement sur la page index.
 
 ## Status values
 
-- `live` — site accessible et linkable
-- `coming-soon` — card affichée mais non cliquable
+- `live` : site accessible et linkable
+- `coming-soon` : card affichée mais non cliquable
 
 ## Structure
 
