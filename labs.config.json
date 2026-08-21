@@ -1,5 +1,16 @@
 [
   {
+    "slug": "rentree-2026",
+    "title": "La rentrée coûte pareil à tout le monde. Pas de la même façon.",
+    "description": "Same flat allocation, same national cost — yet the back-to-school bill eats 66% of a month's income for the poorest in La Réunion vs 41% in Vendée, and those same territories carry the lowest school IPS. A data investigation (in French) into what la rentrée really reveals: purchasing power, territory, and school inequality.",
+    "tags": ["Data Journalism", "Société", "Français"],
+    "category": "Society",
+    "kind": "investigation",
+    "date": "2026-08-21",
+    "color": "#9c3b2e",
+    "status": "live"
+  },
+  {
     "slug": "data-leakage-ts",
     "title": "Data Leakage in Time Series",
     "description": "Your model aced the test. It knew the future. Data leakage in forecasting — how it happens at every pipeline stage, why it destroys production models, and how to fix it.",

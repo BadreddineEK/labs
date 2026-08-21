@@ -237,11 +237,12 @@
       margin-inline: auto;
       padding: 0 var(--space-6) var(--space-24);
     }
+    .group + .group { margin-top: var(--space-24); }
     .section-header {
       display: flex;
       align-items: baseline;
       gap: var(--space-3);
-      margin-bottom: var(--space-8);
+      margin-bottom: var(--space-2);
       padding-bottom: var(--space-4);
       border-bottom: 1px solid var(--border);
     }
@@ -255,9 +256,15 @@
       font-size: var(--text-sm);
       color: var(--text-faint);
     }
+    .group-blurb {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      margin-bottom: var(--space-8);
+      max-width: 60ch;
+    }
 
     /* ── CARDS GRID ── */
-    #cards-grid {
+    .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
       gap: var(--space-6);
@@ -472,12 +479,13 @@
   <section class="hero">
     <div class="hero-label">
       <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
-      Interactive Explainers
+      Data essays & explainers
     </div>
-    <h1>Technical concepts, <em>made visual.</em></h1>
+    <h1>Ideas & data, <em>made visual.</em></h1>
     <p class="hero-desc">
-      A collection of interactive essays on data science, machine learning and AI.
-      Each piece takes one idea and turns it into an experience you can explore.
+      A homemade collection of interactive pieces. On one side, deep-dive explainers that turn a
+      technical concept in ML and AI into something you can explore. On the other, data investigations
+      that dig into the world around us — one question, real sources, at a time.
     </p>
     <div class="hero-meta">
       <div class="hero-stat">
@@ -494,12 +502,8 @@
 
   <!-- GRID -->
   <section class="grid-section">
-    <div class="section-header">
-      <h2 class="section-title">All pieces</h2>
-      <span class="section-count" id="section-count"></span>
-    </div>
     <div class="filter-bar" id="filter-bar"></div>
-    <div id="cards-grid"></div>
+    <div id="groups"></div>
     <div id="empty-state"><p>No articles match this filter.</p></div>
   </section>
 
@@ -542,11 +546,18 @@
 
       // Stats
       const total = labs.length;
-      const CATEGORY_ORDER = ['Foundations', 'LLMs', 'Data Science', 'Engineering'];
+      const CATEGORY_ORDER = ['Society', 'Foundations', 'LLMs', 'Data Science', 'Engineering'];
       const seenCats = [...new Set(labs.map(l => l.category).filter(Boolean))];
       const categories = [...CATEGORY_ORDER.filter(c => seenCats.includes(c)), ...seenCats.filter(c => !CATEGORY_ORDER.includes(c))];
       document.getElementById('stat-total').textContent = total;
       document.getElementById('stat-categories').textContent = categories.length;
+
+      // Groups (top-level families). Missing kind defaults to 'explainer'.
+      const GROUPS = [
+        { kind: 'investigation', title: 'Data investigations', blurb: 'Real-world data, one question at a time — official sources, transparent method, no spin.' },
+        { kind: 'explainer', title: 'Interactive explainers', blurb: 'One technical idea in ML and AI, turned into something you can explore.' },
+      ];
+      const kindOf = l => l.kind || 'explainer';
 
       // Filter bar
       const filterBar = document.getElementById('filter-bar');
@@ -559,54 +570,67 @@
         filterBar.querySelectorAll('.filter-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             activeFilter = btn.dataset.filter;
-            renderCards();
+            renderGroups();
             renderFilters();
           });
         });
       }
 
-      function renderCards() {
-        const grid = document.getElementById('cards-grid');
+      function cardHTML(lab) {
+        const isLive = lab.status === 'live';
+        const href = isLive ? `./${lab.slug}/` : '#';
+        const date = lab.date ? new Date(lab.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '';
+        const tags = (lab.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+        const accentColor = lab.color || 'var(--accent)';
+        return `
+          <a href="${href}" class="card"${!isLive ? ' aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:0.55"' : ''} style="--card-accent:${accentColor}">
+            <div class="card-accent-bar" style="background:${accentColor}"></div>
+            <div class="card-body">
+              <div class="card-tags">${tags}</div>
+              <h3 class="card-title">${lab.title}</h3>
+              <p class="card-desc">${lab.description}</p>
+            </div>
+            <div class="card-footer">
+              <span class="card-date">${date}</span>
+              ${isLive
+                ? '<span class="card-arrow">→</span>'
+                : '<span class="card-status-badge coming-soon"><span class="status-dot"></span>Coming soon</span>'}
+            </div>
+          </a>`;
+      }
+
+      function renderGroups() {
+        const container = document.getElementById('groups');
         const empty = document.getElementById('empty-state');
         const filtered = activeFilter === 'All'
           ? labs
           : labs.filter(l => l.category === activeFilter);
 
         if (filtered.length === 0) {
-          grid.innerHTML = '';
+          container.innerHTML = '';
           empty.style.display = 'block';
           return;
         }
         empty.style.display = 'none';
-        const countLabel = filtered.length + ' piece' + (filtered.length !== 1 ? 's' : '') + (activeFilter !== 'All' ? ' · ' + activeFilter : '');
-        document.getElementById('section-count').textContent = countLabel;
 
-        grid.innerHTML = filtered.map(lab => {
-          const isLive = lab.status === 'live';
-          const href = isLive ? `./${lab.slug}/` : '#';
-          const date = lab.date ? new Date(lab.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '';
-          const tags = (lab.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-          const accentColor = lab.color || 'var(--accent)';
+        container.innerHTML = GROUPS.map(g => {
+          const items = filtered.filter(l => kindOf(l) === g.kind);
+          if (items.length === 0) return '';
+          const count = items.length + ' piece' + (items.length !== 1 ? 's' : '');
           return `
-            <a href="${href}" class="card"${!isLive ? ' aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:0.55"' : ''} style="--card-accent:${accentColor}">
-              <div class="card-accent-bar" style="background:${accentColor}"></div>
-              <div class="card-body">
-                <div class="card-tags">${tags}</div>
-                <h3 class="card-title">${lab.title}</h3>
-                <p class="card-desc">${lab.description}</p>
+            <div class="group">
+              <div class="section-header">
+                <h2 class="section-title">${g.title}</h2>
+                <span class="section-count">${count}</span>
               </div>
-              <div class="card-footer">
-                <span class="card-date">${date}</span>
-                ${isLive
-                  ? '<span class="card-arrow">→</span>'
-                  : '<span class="card-status-badge coming-soon"><span class="status-dot"></span>Coming soon</span>'}
-              </div>
-            </a>`;
+              <p class="group-blurb">${g.blurb}</p>
+              <div class="cards-grid">${items.map(cardHTML).join('')}</div>
+            </div>`;
         }).join('');
       }
 
       renderFilters();
-      renderCards();
+      renderGroups();
     }
 
     loadLabs();
