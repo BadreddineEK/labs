@@ -157,6 +157,23 @@
       transition: background var(--transition), color var(--transition);
     }
     .theme-toggle:hover { background: var(--surface); color: var(--text); }
+    .lang-toggle {
+      min-width: 36px; height: 36px; padding: 0 10px;
+      border-radius: var(--radius-lg);
+      background: var(--surface-2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-muted);
+      font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.03em;
+      transition: background var(--transition), color var(--transition);
+    }
+    .lang-toggle:hover { background: var(--surface); color: var(--text); }
+    .card-meta { display: inline-flex; align-items: center; gap: var(--space-2); }
+    .card-lang {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+      color: var(--text-muted); background: var(--surface-2);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 1px 5px;
+    }
 
     /* ── HERO ── */
     .hero {
@@ -466,6 +483,7 @@
         <a href="https://portfolio.badreddineek.com" class="nav-link" target="_blank" rel="noopener noreferrer">Portfolio</a>
         <a href="https://github.com/BadreddineEK" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="https://linkedin.com/in/badreddine-el-khamlichi" class="nav-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <button class="lang-toggle" data-lang-toggle aria-label="Switch language">FR</button>
         <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -479,23 +497,23 @@
   <section class="hero">
     <div class="hero-label">
       <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
-      Data essays & explainers
+      <span data-i18n="heroLabel">Data essays &amp; explainers</span>
     </div>
-    <h1>Ideas & data, <em>made visual.</em></h1>
-    <p class="hero-desc">
+    <h1 data-i18n-html="h1">Ideas &amp; data, <em>made visual.</em></h1>
+    <p class="hero-desc" data-i18n="heroDesc">
       A homemade collection of interactive pieces. On one side, deep-dive explainers that turn a
       technical concept in ML and AI into something you can explore. On the other, data investigations
-      that dig into the world around us — one question, real sources, at a time.
+      that dig into the world around us, one question and real sources at a time.
     </p>
     <div class="hero-meta">
       <div class="hero-stat">
         <span class="hero-stat-value" id="stat-total">0</span>
-        <span class="hero-stat-label">Articles</span>
+        <span class="hero-stat-label" data-i18n="statArticles">Articles</span>
       </div>
       <div class="hero-divider"></div>
       <div class="hero-stat">
         <span class="hero-stat-value" id="stat-categories">0</span>
-        <span class="hero-stat-label">Topics</span>
+        <span class="hero-stat-label" data-i18n="statTopics">Topics</span>
       </div>
     </div>
   </section>
@@ -504,13 +522,13 @@
   <section class="grid-section">
     <div class="filter-bar" id="filter-bar"></div>
     <div id="groups"></div>
-    <div id="empty-state"><p>No articles match this filter.</p></div>
+    <div id="empty-state"><p data-i18n="empty">No articles match this filter.</p></div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
-      <span class="footer-left">Built by <a href="https://badreddineek.com" class="footer-link" target="_blank" rel="noopener noreferrer">Badreddine El Khamlichi</a></span>
+      <span class="footer-left"><span data-i18n="footerBuiltBy">Built by</span> <a href="https://badreddineek.com" class="footer-link" target="_blank" rel="noopener noreferrer">Badreddine El Khamlichi</a></span>
       <div class="footer-right">
         <a href="https://github.com/BadreddineEK/labs" class="footer-link" target="_blank" rel="noopener noreferrer">Source</a>
         <a href="https://linkedin.com/in/badreddine-el-khamlichi" class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -534,103 +552,145 @@
       toggleBtn.innerHTML = theme === 'dark' ? sunIcon : moonIcon;
     });
 
+    // ── I18N (bilingue FR / EN) ──
+    const I18N = {
+      en: {
+        heroLabel: 'Data essays & explainers',
+        h1: 'Ideas & data, <em>made visual.</em>',
+        heroDesc: 'A homemade collection of interactive pieces. On one side, deep-dive explainers that turn a technical concept in ML and AI into something you can explore. On the other, data investigations that dig into the world around us, one question and real sources at a time.',
+        statArticles: 'Articles', statTopics: 'Topics',
+        filterAll: 'All',
+        invTitle: 'Data investigations', invBlurb: 'Real-world data, one question at a time: official sources, transparent method, no spin.',
+        expTitle: 'Interactive explainers', expBlurb: 'One technical idea in ML and AI, turned into something you can explore.',
+        piece: 'piece', pieces: 'pieces',
+        footerBuiltBy: 'Built by', empty: 'No articles match this filter.', comingSoon: 'Coming soon',
+        cats: { Society: 'Society', Foundations: 'Foundations', LLMs: 'LLMs', 'Data Science': 'Data Science', Engineering: 'Engineering' },
+        dateLocale: 'en-GB', langBtn: 'FR', langTitle: { FR: 'Article in French', EN: 'Article in English' }
+      },
+      fr: {
+        heroLabel: 'Essais data & explainers',
+        h1: 'Les idées et la data, <em>en visuel.</em>',
+        heroDesc: "Une collection maison de pièces interactives. D'un côté, des explainers qui décortiquent un concept technique de ML et d'IA pour le rendre explorable. De l'autre, des enquêtes data sur le monde qui nous entoure, une question et des sources officielles à la fois.",
+        statArticles: 'Articles', statTopics: 'Thèmes',
+        filterAll: 'Tous',
+        invTitle: 'Enquêtes data', invBlurb: 'Des données réelles, une question à la fois : sources officielles, méthode transparente, sans esbroufe.',
+        expTitle: 'Explainers interactifs', expBlurb: "Une idée technique de ML et d'IA, transformée en quelque chose qu'on peut explorer.",
+        piece: 'article', pieces: 'articles',
+        footerBuiltBy: 'Réalisé par', empty: 'Aucun article ne correspond à ce filtre.', comingSoon: 'Bientôt',
+        cats: { Society: 'Société', Foundations: 'Fondamentaux', LLMs: 'LLMs', 'Data Science': 'Science des données', Engineering: 'Ingénierie' },
+        dateLocale: 'fr-FR', langBtn: 'EN', langTitle: { FR: 'Article en français', EN: 'Article en anglais' }
+      }
+    };
+    let lang = localStorage.getItem('labs-lang')
+      || ((navigator.language || 'en').toLowerCase().startsWith('fr') ? 'fr' : 'en');
+    const langBtn = document.querySelector('[data-lang-toggle]');
+
     // ── LOAD CONFIG & RENDER ──
-    async function loadLabs() {
-      let labs = [];
-      try {
-        const res = await fetch('./labs.config.json');
-        labs = await res.json();
-      } catch(e) {
-        console.warn('Could not load labs.config.json', e);
-      }
+    let LABS = [];
+    const CATEGORY_ORDER = ['Society', 'Foundations', 'LLMs', 'Data Science', 'Engineering'];
+    let categories = [];
+    let activeFilter = 'All'; // valeur interne (brute), l'affichage est traduit
+    const kindOf = l => l.kind || 'explainer';
+    const catLabel = c => (I18N[lang].cats && I18N[lang].cats[c]) || c;
 
-      // Stats
-      const total = labs.length;
-      const CATEGORY_ORDER = ['Society', 'Foundations', 'LLMs', 'Data Science', 'Engineering'];
-      const seenCats = [...new Set(labs.map(l => l.category).filter(Boolean))];
-      const categories = [...CATEGORY_ORDER.filter(c => seenCats.includes(c)), ...seenCats.filter(c => !CATEGORY_ORDER.includes(c))];
-      document.getElementById('stat-total').textContent = total;
-      document.getElementById('stat-categories').textContent = categories.length;
-
-      // Groups (top-level families). Missing kind defaults to 'explainer'.
-      const GROUPS = [
-        { kind: 'investigation', title: 'Data investigations', blurb: 'Real-world data, one question at a time — official sources, transparent method, no spin.' },
-        { kind: 'explainer', title: 'Interactive explainers', blurb: 'One technical idea in ML and AI, turned into something you can explore.' },
+    function groups() {
+      const t = I18N[lang];
+      return [
+        { kind: 'investigation', title: t.invTitle, blurb: t.invBlurb },
+        { kind: 'explainer', title: t.expTitle, blurb: t.expBlurb },
       ];
-      const kindOf = l => l.kind || 'explainer';
+    }
 
-      // Filter bar
+    function applyStatic() {
+      const t = I18N[lang];
+      document.documentElement.setAttribute('lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.dataset.i18n; if (t[k] != null) el.textContent = t[k];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const k = el.dataset.i18nHtml; if (t[k] != null) el.innerHTML = t[k];
+      });
+      if (langBtn) langBtn.textContent = t.langBtn;
+    }
+
+    function renderFilters() {
+      const t = I18N[lang];
       const filterBar = document.getElementById('filter-bar');
-      let activeFilter = 'All';
+      filterBar.innerHTML = ['All', ...categories].map(f => {
+        const label = f === 'All' ? t.filterAll : catLabel(f);
+        return `<button class="filter-btn${f === activeFilter ? ' active' : ''}" data-filter="${f}">${label}</button>`;
+      }).join('');
+      filterBar.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => { activeFilter = btn.dataset.filter; renderFilters(); renderGroups(); });
+      });
+    }
 
-      function renderFilters() {
-        filterBar.innerHTML = ['All', ...categories].map(f =>
-          `<button class="filter-btn${f === activeFilter ? ' active' : ''}" data-filter="${f}">${f}</button>`
-        ).join('');
-        filterBar.querySelectorAll('.filter-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            activeFilter = btn.dataset.filter;
-            renderGroups();
-            renderFilters();
-          });
-        });
-      }
+    function cardHTML(lab) {
+      const t = I18N[lang];
+      const isLive = lab.status === 'live';
+      const href = isLive ? `./${lab.slug}/` : '#';
+      const date = lab.date ? new Date(lab.date).toLocaleDateString(t.dateLocale, { month: 'short', year: 'numeric' }) : '';
+      const tags = (lab.tags || []).map(x => `<span class="tag">${x}</span>`).join('');
+      const accentColor = lab.color || 'var(--accent)';
+      const lc = (lab.lang || 'en').toUpperCase();
+      return `
+        <a href="${href}" class="card"${!isLive ? ' aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:0.55"' : ''} style="--card-accent:${accentColor}">
+          <div class="card-accent-bar" style="background:${accentColor}"></div>
+          <div class="card-body">
+            <div class="card-tags">${tags}</div>
+            <h3 class="card-title">${lab.title}</h3>
+            <p class="card-desc">${lab.description}</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-meta"><span class="card-lang" title="${t.langTitle[lc] || lc}">${lc}</span><span class="card-date">${date}</span></span>
+            ${isLive
+              ? '<span class="card-arrow">→</span>'
+              : `<span class="card-status-badge coming-soon"><span class="status-dot"></span>${t.comingSoon}</span>`}
+          </div>
+        </a>`;
+    }
 
-      function cardHTML(lab) {
-        const isLive = lab.status === 'live';
-        const href = isLive ? `./${lab.slug}/` : '#';
-        const date = lab.date ? new Date(lab.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '';
-        const tags = (lab.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-        const accentColor = lab.color || 'var(--accent)';
+    function renderGroups() {
+      const t = I18N[lang];
+      const container = document.getElementById('groups');
+      const empty = document.getElementById('empty-state');
+      const filtered = activeFilter === 'All' ? LABS : LABS.filter(l => l.category === activeFilter);
+      if (filtered.length === 0) { container.innerHTML = ''; empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      container.innerHTML = groups().map(g => {
+        const items = filtered.filter(l => kindOf(l) === g.kind);
+        if (items.length === 0) return '';
+        const count = items.length + ' ' + (items.length !== 1 ? t.pieces : t.piece);
         return `
-          <a href="${href}" class="card"${!isLive ? ' aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:0.55"' : ''} style="--card-accent:${accentColor}">
-            <div class="card-accent-bar" style="background:${accentColor}"></div>
-            <div class="card-body">
-              <div class="card-tags">${tags}</div>
-              <h3 class="card-title">${lab.title}</h3>
-              <p class="card-desc">${lab.description}</p>
+          <div class="group">
+            <div class="section-header">
+              <h2 class="section-title">${g.title}</h2>
+              <span class="section-count">${count}</span>
             </div>
-            <div class="card-footer">
-              <span class="card-date">${date}</span>
-              ${isLive
-                ? '<span class="card-arrow">→</span>'
-                : '<span class="card-status-badge coming-soon"><span class="status-dot"></span>Coming soon</span>'}
-            </div>
-          </a>`;
-      }
+            <p class="group-blurb">${g.blurb}</p>
+            <div class="cards-grid">${items.map(cardHTML).join('')}</div>
+          </div>`;
+      }).join('');
+    }
 
-      function renderGroups() {
-        const container = document.getElementById('groups');
-        const empty = document.getElementById('empty-state');
-        const filtered = activeFilter === 'All'
-          ? labs
-          : labs.filter(l => l.category === activeFilter);
+    function applyLang() { applyStatic(); renderFilters(); renderGroups(); }
 
-        if (filtered.length === 0) {
-          container.innerHTML = '';
-          empty.style.display = 'block';
-          return;
-        }
-        empty.style.display = 'none';
+    if (langBtn) {
+      langBtn.addEventListener('click', () => {
+        lang = lang === 'en' ? 'fr' : 'en';
+        localStorage.setItem('labs-lang', lang);
+        applyLang();
+      });
+    }
 
-        container.innerHTML = GROUPS.map(g => {
-          const items = filtered.filter(l => kindOf(l) === g.kind);
-          if (items.length === 0) return '';
-          const count = items.length + ' piece' + (items.length !== 1 ? 's' : '');
-          return `
-            <div class="group">
-              <div class="section-header">
-                <h2 class="section-title">${g.title}</h2>
-                <span class="section-count">${count}</span>
-              </div>
-              <p class="group-blurb">${g.blurb}</p>
-              <div class="cards-grid">${items.map(cardHTML).join('')}</div>
-            </div>`;
-        }).join('');
-      }
-
-      renderFilters();
-      renderGroups();
+    async function loadLabs() {
+      try { const res = await fetch('./labs.config.json'); LABS = await res.json(); }
+      catch (e) { console.warn('Could not load labs.config.json', e); }
+      const seen = [...new Set(LABS.map(l => l.category).filter(Boolean))];
+      categories = [...CATEGORY_ORDER.filter(c => seen.includes(c)), ...seen.filter(c => !CATEGORY_ORDER.includes(c))];
+      document.getElementById('stat-total').textContent = LABS.length;
+      document.getElementById('stat-categories').textContent = categories.length;
+      applyLang();
     }
 
     loadLabs();
