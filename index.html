@@ -592,6 +592,8 @@
     let activeFilter = 'All'; // valeur interne (brute), l'affichage est traduit
     const kindOf = l => l.kind || 'explainer';
     const catLabel = c => (I18N[lang].cats && I18N[lang].cats[c]) || c;
+    // Champs qui peuvent être bilingues ({en, fr}) ou une simple chaîne.
+    const pick = v => (v && typeof v === 'object') ? (v[lang] || v.en || v.fr) : v;
 
     function groups() {
       const t = I18N[lang];
@@ -638,8 +640,8 @@
           <div class="card-accent-bar" style="background:${accentColor}"></div>
           <div class="card-body">
             <div class="card-tags">${tags}</div>
-            <h3 class="card-title">${lab.title}</h3>
-            <p class="card-desc">${lab.description}</p>
+            <h3 class="card-title">${pick(lab.title)}</h3>
+            <p class="card-desc">${pick(lab.description)}</p>
           </div>
           <div class="card-footer">
             <span class="card-meta"><span class="card-lang" title="${t.langTitle[lc] || lc}">${lc}</span><span class="card-date">${date}</span></span>

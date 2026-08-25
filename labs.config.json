@@ -2,7 +2,10 @@
   {
     "slug": "rentree-2026",
     "title": "L'école française réduit-elle encore les inégalités ?",
-    "description": "A calm, back-to-school data investigation (in French). Using public DEPP & INSEE data, it asks whether French schools still reduce social inequality or merely mirror it — from primary to high school: how mixed schools really are, where the private/public gap keeps widening, how it tracks territorial wealth, and why a disadvantaged school is still not a lost cause.",
+    "description": {
+      "fr": "On entend tout et son contraire sur l'école. J'ai ouvert les données publiques (DEPP, INSEE) pour voir moi-même : à quel point l'école trie socialement de la maternelle au lycée, ce que cela recoupe côté revenus, et pourquoi un collège défavorisé n'est pas pour autant un collège perdu.",
+      "en": "You hear everything and its opposite about French schools. I opened the public data (DEPP, INSEE) to see for myself: how socially sorted schools are from primary to high school, how it tracks income, and why a disadvantaged school is still not a lost cause."
+    },
     "tags": ["Data Journalism", "Éducation"],
     "category": "Society",
     "kind": "investigation",
@@ -14,9 +17,13 @@
   {
     "slug": "data-leakage-ts",
     "title": "Data Leakage in Time Series",
-    "description": "Your model aced the test. It knew the future. Data leakage in forecasting — how it happens at every pipeline stage, why it destroys production models, and how to fix it.",
+    "description": {
+      "en": "Your model aced the test. It knew the future. Data leakage in forecasting — how it happens at every pipeline stage, why it destroys production models, and how to fix it.",
+      "fr": "Votre modèle a cartonné au test. En réalité, il connaissait le futur. La fuite de données en prévision : comment elle se glisse à chaque étape du pipeline, pourquoi elle détruit les modèles en production, et comment la corriger."
+    },
     "tags": ["Time Series", "ML", "Forecasting"],
     "category": "Data Science",
+    "lang": "en",
     "date": "2026-04-09",
     "color": "#dc2626",
     "status": "live"
@@ -24,9 +31,13 @@
   {
     "slug": "tokenization-explained",
     "title": "How LLMs Tokenize",
-    "description": "Your LLM doesn't read words — it reads fragments called tokens. That invisible step shapes cost, reasoning, and accuracy. Understand it fully, interactively.",
+    "description": {
+      "en": "Your LLM doesn't read words — it reads fragments called tokens. That invisible step shapes cost, reasoning, and accuracy. Understand it fully, interactively.",
+      "fr": "Un LLM ne lit pas des mots, mais des fragments appelés tokens. Cette étape invisible façonne le coût, le raisonnement et la précision. À comprendre en profondeur, de façon interactive."
+    },
     "tags": ["LLM", "Tokenization", "NLP"],
     "category": "LLMs",
+    "lang": "en",
     "date": "2026-04-09",
     "color": "#0f766e",
     "status": "live"
@@ -34,9 +45,13 @@
   {
     "slug": "llm-agent-anatomy",
     "title": "LLM Agent Anatomy",
-    "description": "A bare LLM answers once and stops. An agent reasons, picks tools, observes results, and loops — until the task is done. The full ReAct loop, visualized.",
+    "description": {
+      "en": "A bare LLM answers once and stops. An agent reasons, picks tools, observes results, and loops — until the task is done. The full ReAct loop, visualized.",
+      "fr": "Un LLM seul répond une fois puis s'arrête. Un agent raisonne, choisit des outils, observe les résultats et boucle jusqu'à finir la tâche. La boucle ReAct complète, visualisée."
+    },
     "tags": ["LLM", "Agents", "ReAct"],
     "category": "LLMs",
+    "lang": "en",
     "date": "2026-04-07",
     "color": "#7c3aed",
     "status": "live"
@@ -44,9 +59,13 @@
   {
     "slug": "forecasting-explained",
     "title": "Forecasting Explained",
-    "description": "What actually happens when a model reads your data and draws a line into the future. Trend, seasonality, noise, ruptures — visualized.",
+    "description": {
+      "en": "What actually happens when a model reads your data and draws a line into the future. Trend, seasonality, noise, ruptures — visualized.",
+      "fr": "Ce qui se passe vraiment quand un modèle lit vos données et trace une ligne vers le futur. Tendance, saisonnalité, bruit, ruptures : le tout visualisé."
+    },
     "tags": ["Time Series", "ML", "Data Science"],
     "category": "Data Science",
+    "lang": "en",
     "date": "2026-04-02",
     "color": "#0f766e",
     "status": "live"
@@ -54,9 +73,13 @@
   {
     "slug": "rag-under-the-hood",
     "title": "RAG Under the Hood",
-    "description": "How Retrieval-Augmented Generation actually works: chunking, embeddings, vector search, reranking, and generation — step by step, visualized.",
+    "description": {
+      "en": "How Retrieval-Augmented Generation actually works: chunking, embeddings, vector search, reranking, and generation — step by step, visualized.",
+      "fr": "Comment fonctionne vraiment la génération augmentée par récupération (RAG) : découpage, embeddings, recherche vectorielle, reranking et génération, étape par étape."
+    },
     "tags": ["LLM", "AI", "RAG"],
     "category": "LLMs",
+    "lang": "en",
     "date": "2026-04-07",
     "color": "#7c3aed",
     "status": "live"
@@ -64,9 +87,13 @@
   {
     "slug": "the-embedding-space",
     "title": "The Embedding Space",
-    "description": "How a model turns words into numbers — and why the geometry of that space is the foundation of all modern AI. Visualized, interactive.",
+    "description": {
+      "en": "How a model turns words into numbers — and why the geometry of that space is the foundation of all modern AI. Visualized, interactive.",
+      "fr": "Comment un modèle transforme les mots en nombres, et pourquoi la géométrie de cet espace est le socle de toute l'IA moderne. Visualisé et interactif."
+    },
     "tags": ["Embeddings", "NLP", "AI"],
     "category": "Foundations",
+    "lang": "en",
     "date": "2026-04-07",
     "color": "#d97706",
     "status": "live"
@@ -74,9 +101,13 @@
   {
     "slug": "attention-visualized",
     "title": "Attention, Visualized",
-    "description": "What the attention mechanism actually does — Query, Key, Value explained intuitively, with an interactive heatmap you can explore token by token.",
+    "description": {
+      "en": "What the attention mechanism actually does — Query, Key, Value explained intuitively, with an interactive heatmap you can explore token by token.",
+      "fr": "Ce que fait vraiment le mécanisme d'attention : Query, Key, Value expliqués intuitivement, avec une heatmap interactive à explorer token par token."
+    },
     "tags": ["Transformers", "Attention", "AI"],
     "category": "Foundations",
+    "lang": "en",
     "date": "2026-04-07",
     "color": "#0ea5e9",
     "status": "live"
@@ -84,9 +115,13 @@
   {
     "slug": "how-a-model-learns",
     "title": "How a Model Learns",
-    "description": "Loss landscapes, gradient descent, backpropagation — why a neural network improves with every step, visualized interactively.",
+    "description": {
+      "en": "Loss landscapes, gradient descent, backpropagation — why a neural network improves with every step, visualized interactively.",
+      "fr": "Paysages de perte, descente de gradient, rétropropagation : pourquoi un réseau de neurones s'améliore à chaque étape, visualisé de façon interactive."
+    },
     "tags": ["Training", "Backprop", "Deep Learning"],
     "category": "Foundations",
+    "lang": "en",
     "date": "2026-04-07",
     "color": "#16a34a",
     "status": "live"
@@ -94,9 +129,13 @@
   {
     "slug": "streamlit-under-the-hood",
     "title": "Streamlit Under the Hood",
-    "description": "What really happens when you run a Streamlit app — the execution model, re-runs, session state, caching, and how it compares to React.",
+    "description": {
+      "en": "What really happens when you run a Streamlit app — the execution model, re-runs, session state, caching, and how it compares to React.",
+      "fr": "Ce qui se passe vraiment quand vous lancez une app Streamlit : le modèle d'exécution, les re-runs, le session state, le cache, et la comparaison avec React."
+    },
     "tags": ["Streamlit", "Python", "Data Apps"],
     "category": "Engineering",
+    "lang": "en",
     "date": "2026-04-07",
     "color": "#e11d48",
     "status": "live"
@@ -104,9 +143,13 @@
   {
     "slug": "overfitting-explained",
     "title": "Overfitting & Regularization",
-    "description": "Why models memorize instead of learn — and how regularization, dropout, and early stopping fix it. Bias-variance trade-off, visualized interactively.",
+    "description": {
+      "en": "Why models memorize instead of learn — and how regularization, dropout, and early stopping fix it. Bias-variance trade-off, visualized interactively.",
+      "fr": "Pourquoi les modèles mémorisent au lieu d'apprendre, et comment la régularisation, le dropout et l'arrêt précoce corrigent ça. Le compromis biais-variance, visualisé."
+    },
     "tags": ["ML", "Training", "Generalization"],
     "category": "Foundations",
+    "lang": "en",
     "date": "2026-04-07",
     "color": "#dc2626",
     "status": "live"
@@ -114,9 +157,13 @@
   {
     "slug": "transformer-architecture",
     "title": "The Transformer Architecture",
-    "description": "Every modern LLM is built on one 2017 paper. Here is the full architecture — self-attention, multi-head attention, encoder vs decoder — block by block, interactive.",
+    "description": {
+      "en": "Every modern LLM is built on one 2017 paper. Here is the full architecture — self-attention, multi-head attention, encoder vs decoder — block by block, interactive.",
+      "fr": "Tout LLM moderne repose sur un article de 2017. Voici l'architecture complète : self-attention, attention multi-tête, encodeur vs décodeur, bloc par bloc, en interactif."
+    },
     "tags": ["Transformers", "Deep Learning", "LLM"],
     "category": "Foundations",
+    "lang": "en",
     "date": "2026-04-07",
     "color": "#0369a1",
     "status": "live"
@@ -124,9 +171,13 @@
   {
     "slug": "fine-tuning-explained",
     "title": "Fine-Tuning Explained",
-    "description": "Pre-training gives a model knowledge. Fine-tuning gives it a job. From full fine-tuning to LoRA and RLHF — how we adapt LLMs to specific tasks, visualized.",
+    "description": {
+      "en": "Pre-training gives a model knowledge. Fine-tuning gives it a job. From full fine-tuning to LoRA and RLHF — how we adapt LLMs to specific tasks, visualized.",
+      "fr": "Le pré-entraînement donne des connaissances au modèle. Le fine-tuning lui donne un métier. Du fine-tuning complet à LoRA et RLHF : comment adapter un LLM, visualisé."
+    },
     "tags": ["Fine-Tuning", "LLM", "LoRA"],
     "category": "LLMs",
+    "lang": "en",
     "date": "2026-04-07",
     "color": "#c2410c",
     "status": "live"
