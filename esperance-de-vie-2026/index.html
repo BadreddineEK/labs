@@ -7,25 +7,84 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Structure imposée : voir CONSIGNES.md §4 pour l'ordre exact des 10 chapitres -->
-  <section id="intro"><!-- Hook --></section>
-  <section id="cadrage-macro"><!-- 1. France bonne élève mondiale --></section>
-  <section id="depend-de-la-mesure"><!-- 2. Revenu vs éducation --></section>
-  <section id="mini-lecon"><!-- 3. Simpson + risque relatif/absolu --></section>
-  <section id="le-twist"><!-- 4. Écart interne français --></section>
-  <section id="comparaison-internationale"><!-- 5. Tableau multi-pays --></section>
-  <section id="evolution"><!-- 6. Ça se creuse --></section>
-  <section id="geographie"><!-- 7. Carte départementale --></section>
-  <section id="correlation"><!-- 8. Pont statistique calculé --></section>
-  <section id="nuance"><!-- 9. Départements qui résistent --></section>
-  <section id="limites-simulateur"><!-- 10. Ce que ça ne dit pas + simulateur --></section>
 
-  <script src="js/chart-macro.js"></script>
-  <script src="js/chart-mesures.js"></script>
-  <script src="js/chart-comparaison-intl.js"></script>
-  <script src="js/chart-evolution.js"></script>
-  <script src="js/map-departements.js"></script>
-  <script src="js/scatter-correlation.js"></script>
-  <script src="js/simulateur-esperance.js"></script>
+<section id="intro">
+  <p class="kicker">Enquête data · labs.badreddineek.com</p>
+  <h1>Un homme parmi les 5% les plus pauvres en France vit en moyenne jusqu'à 72 ans. Parmi les 5% les plus riches : 85 ans.</h1>
+  <p><strong>13 ans d'écart chez les hommes, 9 ans chez les femmes</strong> (80,1 ans vs 88,7 ans). Et ça ne se stabilise pas : ça se creuse.</p>
+  <p class="source">Insee, l'espérance de vie par niveau de vie, 2020-2024.</p>
+</section>
+
+<section id="cadrage-macro">
+  <h2>1 · La France, bonne élève mondiale</h2>
+  <p>Avant de parler d'inégalités internes, un chiffre de contexte : la France affiche une espérance de vie moyenne de 83,1 à 83,7 ans, 2e position en Union européenne pour les femmes, +1,9 an au-dessus de la moyenne OCDE.</p>
+  <p class="source">OCDE, Eurostat, Health at a Glance Europe 2024.</p>
+</section>
+
+<section id="depend-de-la-mesure">
+  <h2>2 · Où se situe la France ? Ça dépend de la mesure</h2>
+  <p>Mesuré par le <strong>revenu</strong>, l'écart français (13/9 ans) reste inférieur à celui des États-Unis (15/10 ans). Mesuré par l'<strong>éducation</strong> (35 ans, universitaire vs sans bac), l'écart français (8,0/5,4 ans) est quasiment dans la moyenne OCDE (8/5 ans).</p>
+  <p>Plus troublant : l'OCDE classe la Suède, l'Estonie, le Danemark et le Royaume-Uni à la fois parmi les pays à <em>forte</em> inégalité par revenu ET parmi les pays à <em>faible</em> inégalité par éducation. La même réalité sociale, mesurée différemment, raconte deux histoires opposées.</p>
+  <p class="source">OCDE, Health Policy Studies 2019 · OCDE, working paper 2017.</p>
+</section>
+
+<section id="mini-lecon">
+  <h2>3 · La leçon derrière ce Lab</h2>
+  <p>Ce n'est pas un cas isolé. Sur les hospitalisations Covid Delta 2021, chez les moins de 50 ans, la mortalité était 1,8 fois plus élevée chez les non-vaccinés — mais sur la population entière agrégée, la tendance s'inversait. Paradoxe de Simpson : la répartition par âge change tout.</p>
+  <p>En 1995, une agence sanitaire britannique annonce que la pilule de 3e génération « double le risque » de thrombose. Vrai en relatif (+100%). En absolu : de 1 femme sur 7 000 à 2 sur 7 000. Panique nationale, pour un risque réel minuscule.</p>
+  <p><strong>Avant de croire un chiffre choc : quel dénominateur ? quelle période ? quelle définition exacte ?</strong></p>
+</section>
+
+<section id="le-twist">
+  <h2>4 · Le twist, en détail</h2>
+  <p>Hommes les plus pauvres (5%) : <strong>72 ans</strong>. Hommes les plus riches (5%) : <strong>85 ans</strong>. Femmes les plus pauvres : <strong>80,1 ans</strong>. Femmes les plus riches : <strong>88,7 ans</strong>.</p>
+  <p class="source">Insee, 2020-2024.</p>
+</section>
+
+<section id="comparaison-internationale">
+  <h2>5 · Comparaison internationale complète</h2>
+  <table>
+    <tr><th>Pays/zone</th><th>Mesure</th><th>Écart</th></tr>
+    <tr><td>France</td><td>Revenu</td><td>13 ans (H) / 9 ans (F)</td></tr>
+    <tr><td>France</td><td>Éducation</td><td>8,0 ans (H) / 5,4 ans (F)</td></tr>
+    <tr><td>USA</td><td>Revenu</td><td>15 ans (H) / 10 ans (F)</td></tr>
+    <tr><td>Moyenne OCDE</td><td>Éducation</td><td>8 ans (H) / 5 ans (F)</td></tr>
+    <tr><td>UE (meilleur vs pire pays)</td><td>Nationale</td><td>&gt;8 ans (Espagne vs Bulgarie)</td></tr>
+  </table>
+</section>
+
+<section id="evolution">
+  <h2>6 · Ça se creuse</h2>
+  <p><em>[À vérifier précisément à la source primaire Insee avant publication]</em> L'écart entre 2012-2016 et 2020-2024 semble s'être agrandi. La moyenne nationale progresse doucement, ce qui masque une possible régression pour les plus modestes.</p>
+</section>
+
+<section id="geographie">
+  <h2>7 · La géographie interne</h2>
+  <p>Meilleurs départements 2024 : Hauts-de-Seine (81,9 ans H / 86,7 ans F), Yvelines, Val-de-Marne, Paris, Haute-Garonne. Moins bons : Creuse (72,3 ans H / 76,4 ans F), Pas-de-Calais, Aisne, Somme.</p>
+  <p class="source">Insee, 2024.</p>
+</section>
+
+<section id="correlation">
+  <h2>8 · Le pont statistique calculé</h2>
+  <p><em>[Placeholder — calcul à produire, aucune référence officielle équivalente à citer]</em> Corrélation entre espérance de vie départementale et revenu médian (Insee Filosofi), calculée nous-mêmes — pas recopiée d'un rapport existant.</p>
+</section>
+
+<section id="nuance">
+  <h2>9 · La nuance qui sauve</h2>
+  <p><em>[À confirmer ou infirmer dans les vraies données]</em> Certains départements ruraux/modestes font-ils mieux que leur revenu ne le prédirait ? Hypothèse à tester, pas à affirmer sans preuve.</p>
+</section>
+
+<section id="limites-simulateur">
+  <h2>10 · Ce que ça ne dit pas + simulateur</h2>
+  <p><strong>Espérance de vie statistique moyenne de votre groupe</strong> — jamais « vous vivrez jusqu'à... ». Ceci est une moyenne de population, pas une prédiction individuelle. Votre espérance de vie réelle dépend de nombreux facteurs non capturés ici (santé, mode de vie, accès aux soins, génétique...).</p>
+</section>
+
+<script src="js/chart-macro.js"></script>
+<script src="js/chart-mesures.js"></script>
+<script src="js/chart-comparaison-intl.js"></script>
+<script src="js/chart-evolution.js"></script>
+<script src="js/map-departements.js"></script>
+<script src="js/scatter-correlation.js"></script>
+<script src="js/simulateur-esperance.js"></script>
 </body>
 </html>

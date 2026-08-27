@@ -1,25 +1,41 @@
-/* Cohérent avec les autres Labs (dark mode, mobile-first) */
+/* Coherent avec les autres Labs (dark mode, mobile-first), style rentree-2026 */
 :root {
   --bg: #0e1117;
   --text: #f5f5f5;
   --accent: #3498DB;
   --warning: #F39C12;
+  --muted: #9aa4b2;
 }
 body {
   background: var(--bg);
   color: var(--text);
   font-family: -apple-system, sans-serif;
   margin: 0;
+  line-height: 1.6;
 }
 section {
   padding: 2rem 1.5rem;
   max-width: 900px;
   margin: 0 auto;
 }
-.avertissement-ethique {
+.kicker {
+  color: var(--accent);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+h1 { font-size: 1.8rem; }
+.source {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+.nuance-box, .avertissement-ethique, .incertitude {
   border: 1px solid var(--warning);
   border-radius: 8px;
   padding: 1rem;
   font-size: 0.9rem;
   margin-top: 1rem;
 }
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+td, th { border: 1px solid #333; padding: 0.5rem; text-align: left; }

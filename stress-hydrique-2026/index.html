@@ -7,25 +7,74 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Structure imposée : voir CONSIGNES.md §4 pour l'ordre exact des 10 chapitres -->
-  <section id="intro"><!-- Hook : alerte BRGM aout 2026 --></section>
-  <section id="perspective-mondiale"><!-- 2. Classement WRI, la France absente du top 25-30 --></section>
-  <section id="pivot-france"><!-- 3. Alors, la France a-t-elle un probleme ? --></section>
-  <section id="usages-france"><!-- 4. Qui consomme vraiment l'eau --></section>
-  <section id="paradoxe-fuites"><!-- 5. Le paradoxe des fuites --></section>
-  <section id="qui-paie"><!-- 6. Qui paie vs qui consomme --></section>
-  <section id="tendance-calculee"><!-- 7. Test de tendance + rang percentile (calcules, voir CONSIGNES 5.1/5.2) --></section>
-  <section id="geographie-clustering"><!-- 8. Carte des typologies issues du clustering (CONSIGNES 5.4) --></section>
-  <section id="cout-economique"><!-- 9. 5.6 Md eur en 2022, comparaison 2026 --></section>
-  <section id="limites"><!-- 10. Ce que ca ne dit pas + reserve methodologique clustering --></section>
 
-  <script src="js/chart-hook-alerte.js"></script>
-  <script src="js/chart-mondial.js"></script>
-  <script src="js/chart-usages-france.js"></script>
-  <script src="js/chart-fuites.js"></script>
-  <script src="js/chart-qui-paie.js"></script>
-  <script src="js/chart-tendance-percentile.js"></script>
-  <script src="js/map-clustering-departements.js"></script>
-  <script src="js/chart-cout-economique.js"></script>
+<section id="intro">
+  <p class="kicker">Enquête data · labs.badreddineek.com</p>
+  <h1>92% des nappes phréatiques françaises sont en baisse. Est-ce vraiment une crise de l'eau ?</h1>
+  <p>Au 15 août 2026, la situation est qualifiée de « plus dégradée qu'en 2025 » par le BRGM : 92% des niveaux de nappes sont en baisse, 64% des points d'observation sous les normales mensuelles.</p>
+  <p class="source">BRGM, bulletin de situation des nappes, 15 août 2026.</p>
+</section>
+
+<section id="perspective-mondiale">
+  <h2>1 · Mise en perspective mondiale</h2>
+  <p>Avant de parler de « crise », un chiffre remet les choses à leur place : selon le World Resources Institute, <strong>25 à 27 pays</strong> vivent aujourd'hui en stress hydrique extrême — ils consomment plus de 80% de leur eau renouvelable disponible chaque année. Environ <strong>4 milliards de personnes</strong>, la moitié de l'humanité, subissent un stress hydrique sévère au moins un mois par an.</p>
+  <p>Le top du classement : Bahreïn, Chypre, Koweït, Liban, Oman. La France n'apparaît pas dans le top 25-30 — contrairement, par exemple, à la Belgique (18e). Des tensions géopolitiques réelles existent autour de l'eau (bassin Tigre-Euphrate, vallée du Pô, sud-ouest américain) mais parler de « guerres de l'eau » pour la France serait exagéré.</p>
+  <p class="source">World Resources Institute, Aqueduct 2026 · Al Jazeera, World Water Week 2026.</p>
+</section>
+
+<section id="pivot-france">
+  <h2>2 · Alors, la France a-t-elle un problème ?</h2>
+  <p>Oui, mais pas celui qu'on croit. Ce n'est pas une rarété absolue — la France reçoit chaque année une quantité d'eau considérable. Le vrai sujet, c'est la répartition dans le temps (pluie en hiver, besoins en été), les pertes en cours de route, et l'équité de l'effort demandé.</p>
+</section>
+
+<section id="usages-france">
+  <h2>3 · Qui consomme vraiment l'eau en France</h2>
+  <p>L'agriculture représente entre 45% et 58% de la consommation totale selon les périodes — jusqu'à <strong>80% en été</strong>, moment où les nappes sont justement les plus tendues. Viennent ensuite l'eau potable domestique (21-26%), le refroidissement des centrales électriques (12-31%), l'industrie (4%).</p>
+  <p class="nuance-box">Les chiffres varient sensiblement selon l'année et la saison considérée — le périmètre exact sera précisé dans la version finale.</p>
+  <p class="source">France Stratégie · Ministère de la Transition écologique.</p>
+</section>
+
+<section id="paradoxe-fuites">
+  <h2>4 · Le paradoxe des fuites</h2>
+  <p><strong>18,8% à 20%</strong> de l'eau potable produite en France se perd dans les canalisations avant d'arriver au robinet. Soit près d'1 milliard de m³ par an — l'équivalent de la consommation annuelle de 18 millions d'habitants, grosso modo Paris, Lyon, Marseille, Lille, Toulouse, Bordeaux et Nice réunies.</p>
+  <p>Certaines communes perdent jusqu'à 45-50% de leur eau en fuites. On demande des douches plus courtes pendant qu'un litre sur cinq part dans le sol.</p>
+  <p class="source">Eaufrance / SISPEA, 2023.</p>
+</section>
+
+<section id="qui-paie">
+  <h2>5 · Qui paie vs qui consomme</h2>
+  <p>Les usagers domestiques financent 51 à 67% des redevances versées aux agences de l'eau, pour seulement 24% de la consommation nette. L'agriculture, elle, paie 2 à 15% des redevances pour 45 à 58% de la consommation (jusqu'à 80% en été).</p>
+  <p class="nuance-box">Un vrai déséquilibre, à nuancer par les différences de valeur économique et sociale des usages — à développer dans la version finale.</p>
+</section>
+
+<section id="tendance-calculee">
+  <h2>6 · L'historique, calculé et pas seulement raconté</h2>
+  <p><em>[Placeholder — résultat du pipeline analyze_trends.py]</em> Un test de tendance statistique (Mann-Kendall) sur 20-25 ans de données piézométriques permettra de dire, chiffres à l'appui, si et de combien la situation se dégrade réellement — plutôt que de répéter « ça s'aggrave » sans preuve. Un rang percentile situera le niveau d'août 2026 dans l'historique complet de chaque station.</p>
+</section>
+
+<section id="geographie-clustering">
+  <h2>7 · La géographie du stress hydrique</h2>
+  <p><em>[Placeholder — résultat du pipeline cluster_departements.py]</em> Une carte des départements classés par typologie (stress climatique pur / pression agricole dominante / réseau vétuste / résilient), à partir d'un clustering exploratoire — présenté comme tel, pas comme un modèle prédictif.</p>
+</section>
+
+<section id="cout-economique">
+  <h2>8 · Le coût économique</h2>
+  <p>La sécheresse 2022 a coûté <strong>5,6 milliards d'euros</strong> à la France, dont 1,1 milliard en pertes agricoles directes. Le coût de 2026 reste à chiffrer précisément dès que les estimations officielles seront publiées.</p>
+  <p class="source">Ministère de la Transition écologique, avril 2025.</p>
+</section>
+
+<section id="limites">
+  <h2>9 · Ce que ça ne dit pas</h2>
+  <p>Le clustering du chapitre 7 est exploratoire, pas prédictif. Aucune projection future des niveaux de nappes n'est proposée dans ce Lab — une vraie prévision hydrogéologique demande un modèle physique complet, pas une extrapolation statistique. La France n'est pas en pénurie structurelle comme les pays du top mondial du stress hydrique : c'est un stress saisonnier récurrent, pas une rareté chronique.</p>
+</section>
+
+<script src="js/chart-hook-alerte.js"></script>
+<script src="js/chart-mondial.js"></script>
+<script src="js/chart-usages-france.js"></script>
+<script src="js/chart-fuites.js"></script>
+<script src="js/chart-qui-paie.js"></script>
+<script src="js/chart-tendance-percentile.js"></script>
+<script src="js/map-clustering-departements.js"></script>
+<script src="js/chart-cout-economique.js"></script>
 </body>
 </html>

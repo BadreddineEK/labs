@@ -7,22 +7,67 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Structure imposee : voir CONSIGNES.md section 5 pour l'ordre exact des 8 chapitres -->
-  <section id="intro"><!-- Hook: +43% pouvoir d'achat SMIC depuis 1990 --></section>
-  <section id="mecanisme"><!-- 2. Le mecanisme a 3 etages --></section>
-  <section id="tassement-salarial"><!-- 3. Effet de diffusion calcule, voir CONSIGNES 6.1 --></section>
-  <section id="simulateur"><!-- 4. Simulateur interactif, modele CONSIGNES 6.2 --></section>
-  <section id="comparaison-internationale"><!-- 5. Kaitz + PPA, CONSIGNES 6.3 --></section>
-  <section id="inflation-protection"><!-- 6. Le SMIC protege-t-il vraiment ? --></section>
-  <section id="effet-emploi"><!-- 7. Le debat academique, avec nuance --></section>
-  <section id="limites"><!-- 8. Ce que ca ne dit pas --></section>
 
-  <script src="js/chart-hook-evolution.js"></script>
-  <script src="js/chart-mecanisme.js"></script>
-  <script src="js/chart-tassement-salarial.js"></script>
-  <script src="js/simulateur-diffusion.js"></script>
-  <script src="js/chart-comparaison-intl.js"></script>
-  <script src="js/chart-inflation-protection.js"></script>
-  <script src="js/chart-effet-emploi.js"></script>
+<section id="intro">
+  <p class="kicker">Enquête data · labs.badreddineek.com</p>
+  <h1>Depuis 1990, le SMIC réel a gagné 43% de pouvoir d'achat.</h1>
+  <p>Le salaire moyen, lui, n'a progressé que de 13% depuis 1996. On parle tout le temps du SMIC comme d'un minimum fragile — les chiffres racontent autre chose.</p>
+  <p class="nuance-box">Périodes de référence différentes (1990 vs 1996) — à harmoniser avant publication finale.</p>
+  <p class="source">Insee, DARES.</p>
+</section>
+
+<section id="mecanisme">
+  <h2>1 · Comment ça marche vraiment</h2>
+  <p>Le SMIC n'est pas juste « indexé sur l'inflation ». Trois mécanismes s'empilent :</p>
+  <ol>
+    <li>Indexation automatique dès que l'inflation dépasse 2%, même en cours d'année</li>
+    <li>Garantie légale d'une progression du pouvoir d'achat égale à la moitié de la hausse du salaire horaire de base des ouvriers/employés</li>
+    <li>Coup de pouce politique, discrétionnaire, activable à tout moment</li>
+  </ol>
+  <p>Au 1er juin 2026 : SMIC horaire brut à 12,31€, mensuel à 1 867,02€.</p>
+</section>
+
+<section id="tassement-salarial">
+  <h2>2 · Le tassement salarial — le vrai twist</h2>
+  <p>Quand le SMIC augmente, l'effet se propage un peu aux salaires juste au-dessus, puis s'éteint vite : +1% de SMIC entraîne jusqu'à +1% sur les salaires entre 1 et 1,1 SMIC, mais seulement +0,1% entre 1,4 et 1,5 SMIC. Au-delà, l'effet devient quasi nul.</p>
+  <p>Conséquence documentée : un tassement de la hiérarchie salariale qui réduit les perspectives de progression pour ceux juste au-dessus du SMIC.</p>
+  <p class="source">Insee (2000-2005) · OFCE (2012) · <em>coefficients à reproduire avec nos propres données, voir chapitre pipeline</em>.</p>
+</section>
+
+<section id="simulateur">
+  <h2>3 · Simulateur</h2>
+  <p><em>[Placeholder — outil interactif]</em> « Si le SMIC augmente de X%, voici l'effet estimé sur votre tranche de salaire », avec une fourchette d'incertitude affichée — jamais un chiffre unique présenté comme certain.</p>
+</section>
+
+<section id="comparaison-internationale">
+  <h2>4 · Comparaison internationale, correctement faite</h2>
+  <p>Le salaire minimum légal dans l'UE va de 620€ (Bulgarie) à 2 704€ (Luxembourg) — la France 6e à 1 867€. Mais comparer des euros bruts entre pays de niveaux de vie différents n'a pas de sens : on utilisera l'<strong>indice de Kaitz</strong> (SMIC / salaire médian) et une conversion en parité de pouvoir d'achat.</p>
+  <p><strong>6 pays de l'UE n'ont pas de SMIC légal</strong> : Danemark, Suède, Finlande, Autriche, Italie, Chypre. Ils fonctionnent par négociation collective par branche, avec des taux de couverture conventionnelle de 89 à 98%.</p>
+  <p class="source">Eurostat 2026.</p>
+</section>
+
+<section id="inflation-protection">
+  <h2>5 · Le SMIC protège-t-il vraiment contre l'inflation ?</h2>
+  <p><em>[À détailler — historique des déclenchements]</em> Le mécanisme de revalorisation automatique promet de protéger le pouvoir d'achat des salariés les moins rémunérés. Dans les faits, il y a des délais entre le pic d'inflation et la revalorisation effective — à quantifier précisément.</p>
+</section>
+
+<section id="effet-emploi">
+  <h2>6 · Effet sur l'emploi</h2>
+  <p>Débat académique classique, non tranché. Selon une estimation OFCE, une hausse de 1% du SMIC entraînerait une hausse moyenne des salaires de l'ensemble du secteur marchand de seulement 0,1% — l'effet d'entraînement global reste modéré.</p>
+  <p class="nuance-box">À compléter avec les rapports France Stratégie / Trésor les plus récents (2024-2026) avant publication.</p>
+</section>
+
+<section id="limites">
+  <h2>7 · Ce que ça ne dit pas</h2>
+  <p>Les coefficients de diffusion cités datent d'études de 2000-2005 et 2012 — à reproduire avec des données plus récentes si possible. Le débat sur l'effet emploi n'est pas tranché dans la littérature économique. Les comparaisons internationales de PPA ont leurs propres limites méthodologiques.</p>
+</section>
+
+<script src="js/chart-hook-evolution.js"></script>
+<script src="js/chart-mecanisme.js"></script>
+<script src="js/chart-tassement-salarial.js"></script>
+<script src="js/simulateur-diffusion.js"></script>
+<script src="js/chart-comparaison-intl.js"></script>
+<script src="js/chart-inflation-protection.js"></script>
+<script src="js/chart-effet-emploi.js"></script>
 </body>
 </html>
