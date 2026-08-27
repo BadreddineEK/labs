@@ -1,0 +1,21 @@
+{
+  "source": "Sites officiels des instituts, Commission des sondages (commission-des-sondages.fr) - a reverifier avant publication finale, voir CONSIGNES.md point 7",
+  "date_verification": "2026-08-27",
+  "instituts": [
+    {"nom": "Ifop", "fonde": 1938, "methode": "Quotas", "echantillon": "1000-1500", "partenaires": ["Le Figaro", "Sud Radio"]},
+    {"nom": "Ipsos BVA", "fonde": "1975 / fusion 2023", "methode": "Panel + Quotas", "echantillon": "1000-2000", "partenaires": ["Le Monde", "Le Parisien"]},
+    {"nom": "Elabe", "fonde": 2012, "methode": "Panel + Quotas", "echantillon": "1000-1500", "partenaires": ["BFM TV", "L'Express"]},
+    {"nom": "Toluna Harris", "fonde": "2000s", "methode": "Panel en ligne", "echantillon": "1000-1200", "partenaires": ["RTL", "M6", "LCI"]},
+    {"nom": "OpinionWay", "fonde": 2000, "methode": "Panel + Quotas", "echantillon": "1000", "partenaires": ["Les Echos", "Radio Classique"]},
+    {"nom": "Odoxa", "fonde": 2013, "methode": "Panel proprietaire", "echantillon": "1039-1300", "partenaires": ["Public Senat", "BFM"]},
+    {"nom": "Cluster17", "fonde": "2020s", "methode": "Panel en ligne", "echantillon": "2000+", "partenaires": ["Valeurs Actuelles", "Le Point"]}
+  ],
+  "chiffres_cles": {
+    "population_adulte_france": 53000000,
+    "proba_etre_sonde_un_sondage": "1 sur ~40770 (calcul propre, echantillon moyen 1300)",
+    "marge_erreur_legale_n1000": "environ +/-3 points a 95% de confiance",
+    "ecart_reel_mesure_2022": "4 a 6 points (vs 1.8-2 points affiches)",
+    "legislatives_2024_projection_sieges_rn": "170-230 sieges annonces, 143 sieges reels",
+    "surrepresentation_rn_access_panels_non_redresses_2021": "environ +2 points"
+  }
+}
