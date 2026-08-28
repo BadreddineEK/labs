@@ -1,4 +1,18 @@
-[
+[{
+    "slug": "stress-hydrique-2026",
+    "title": "Stress hydrique 2026 : la France manque-t-elle d'eau ?",
+    "description": {
+      "fr": "Une enquête data sur les nappes, les usages et les fuites : la France fait-elle face à une pénurie, ou surtout à un problème de répartition ? Premiers résultats calculés à partir des chroniques Hub'Eau.",
+      "en": "A data investigation into groundwater, water use and network leaks: is France facing scarcity, or mainly a distribution problem? First calculated results from Hub'Eau time series."
+    },
+    "tags": ["Data Journalism", "Environnement"],
+    "category": "Society",
+    "kind": "investigation",
+    "lang": "fr",
+    "date": "2026-08-28",
+    "color": "#2f6f73",
+    "status": "live"
+  },
   {
     "slug": "rentree-2026",
     "title": "L'école française réduit-elle encore les inégalités ?",

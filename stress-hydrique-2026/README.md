@@ -25,4 +25,4 @@ Identique aux autres Labs : pipeline Python (jamais en production) qui exporte d
 
 ## Statut
 
-🟡 Cadrage éditorial et technique complet (voir CONSIGNES.md). En attente : finalisation du Lab Espérance de vie 2026 avant de démarrer la construction de celui-ci.
+🟡 Première tranche fonctionnelle : ingestion Hub'Eau, échantillon de stations actives, tendances Mann-Kendall et percentiles historiques exportés dans `data/tendance_percentile.json`, avec rendu local harmonisé aux autres Labs. Les sources Agreste/INSEE et la typologie départementale restent à joindre avant publication finale.

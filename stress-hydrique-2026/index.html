@@ -24,7 +24,7 @@
 
 <section id="pivot-france">
   <h2>2 · Alors, la France a-t-elle un problème ?</h2>
-  <p>Oui, mais pas celui qu'on croit. Ce n'est pas une rarété absolue — la France reçoit chaque année une quantité d'eau considérable. Le vrai sujet, c'est la répartition dans le temps (pluie en hiver, besoins en été), les pertes en cours de route, et l'équité de l'effort demandé.</p>
+  <p>Oui, mais pas celui qu'on croit. Ce n'est pas une rareté absolue : la France reçoit chaque année une quantité d'eau considérable. Le vrai sujet, c'est la répartition dans le temps (pluie en hiver, besoins en été), les pertes en cours de route, et l'équité de l'effort demandé.</p>
 </section>
 
 <section id="usages-france">
@@ -49,12 +49,15 @@
 
 <section id="tendance-calculee">
   <h2>6 · L'historique, calculé et pas seulement raconté</h2>
-  <p><em>[Placeholder — résultat du pipeline analyze_trends.py]</em> Un test de tendance statistique (Mann-Kendall) sur 20-25 ans de données piézométriques permettra de dire, chiffres à l'appui, si et de combien la situation se dégrade réellement — plutôt que de répéter « ça s'aggrave » sans preuve. Un rang percentile situera le niveau d'août 2026 dans l'historique complet de chaque station.</p>
+  <p>Voici un premier résultat calculé à partir des chroniques Hub'Eau/BRGM, et non recopié d'un bulletin : une station active, suivie depuis 2000, est résumée par sa médiane annuelle.</p>
+  <div class="chart-wrap"><div id="tendance-chart"></div></div>
+  <p class="takeaway" id="tendance-summary">Chargement du résultat calculé…</p>
+  <p class="fig-cap">Source : Hub'Eau Piézométrie, échantillon de stations actives. Test de Mann-Kendall et percentile calculés localement. Ce résultat n'est pas une prévision.</p>
 </section>
 
 <section id="geographie-clustering">
   <h2>7 · La géographie du stress hydrique</h2>
-  <p><em>[Placeholder — résultat du pipeline cluster_departements.py]</em> Une carte des départements classés par typologie (stress climatique pur / pression agricole dominante / réseau vétuste / résilient), à partir d'un clustering exploratoire — présenté comme tel, pas comme un modèle prédictif.</p>
+  <p>La typologie départementale viendra après la jointure des données Agreste, SISPEA et INSEE. Elle sera exploratoire, et ne sera pas présentée comme une carte de risque ou une prédiction.</p>
 </section>
 
 <section id="cout-economique">

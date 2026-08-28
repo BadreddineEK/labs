@@ -1,0 +1,767 @@
+{
+  "n_stations": 5,
+  "stations": [
+    {
+      "bss_id": "BSS000YWHH",
+      "departement": "Haut-Rhin",
+      "code_departement": "68",
+      "annee_debut": 2000,
+      "annee_fin": 2026,
+      "tendance": {
+        "n": 27,
+        "trend": "no trend",
+        "h": false,
+        "p_value": 0.4156263533214717,
+        "tau": 0.11396011396011396,
+        "sens_slope": 0.0025000000000048317,
+        "interpretation": "pas de baisse statistiquement detectee"
+      },
+      "percentile_actuel": {
+        "n_historique": 27,
+        "percentile": 66.67,
+        "percentile_bas": 33.33,
+        "valeur_actuelle": 175.5,
+        "lecture": "au-dessus des 25 % les plus bas"
+      }
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "departement": "Haut-Rhin",
+      "code_departement": "68",
+      "annee_debut": 2000,
+      "annee_fin": 2022,
+      "tendance": {
+        "n": 23,
+        "trend": "no trend",
+        "h": false,
+        "p_value": 0.08110553307474166,
+        "tau": -0.2648221343873518,
+        "sens_slope": -0.017500000000000664,
+        "interpretation": "pas de baisse statistiquement detectee"
+      },
+      "percentile_actuel": {
+        "n_historique": 23,
+        "percentile": 47.83,
+        "percentile_bas": 52.17,
+        "valeur_actuelle": 192.21,
+        "lecture": "au-dessus des 25 % les plus bas"
+      }
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "departement": "Haut-Rhin",
+      "code_departement": "68",
+      "annee_debut": 2000,
+      "annee_fin": 2025,
+      "tendance": {
+        "n": 26,
+        "trend": "decreasing",
+        "h": true,
+        "p_value": 0.003875214237283764,
+        "tau": -0.40615384615384614,
+        "sens_slope": -0.04249999999999924,
+        "interpretation": "baisse statistiquement detectee"
+      },
+      "percentile_actuel": {
+        "n_historique": 26,
+        "percentile": 69.23,
+        "percentile_bas": 30.77,
+        "valeur_actuelle": 209.10500000000002,
+        "lecture": "au-dessus des 25 % les plus bas"
+      }
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "departement": "Haut-Rhin",
+      "code_departement": "68",
+      "annee_debut": 2000,
+      "annee_fin": 2025,
+      "tendance": {
+        "n": 26,
+        "trend": "decreasing",
+        "h": true,
+        "p_value": 0.024561006538256436,
+        "tau": -0.3169230769230769,
+        "sens_slope": -0.08199999999999932,
+        "interpretation": "baisse statistiquement detectee"
+      },
+      "percentile_actuel": {
+        "n_historique": 26,
+        "percentile": 53.85,
+        "percentile_bas": 46.15,
+        "valeur_actuelle": 223.505,
+        "lecture": "au-dessus des 25 % les plus bas"
+      }
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "departement": "Gironde",
+      "code_departement": "33",
+      "annee_debut": 2000,
+      "annee_fin": 2026,
+      "tendance": {
+        "n": 27,
+        "trend": "increasing",
+        "h": true,
+        "p_value": 0.0013253924982186138,
+        "tau": 0.4415954415954416,
+        "sens_slope": 0.14289473684210527,
+        "interpretation": "pas de baisse statistiquement detectee"
+      },
+      "percentile_actuel": {
+        "n_historique": 27,
+        "percentile": 85.19,
+        "percentile_bas": 14.81,
+        "valeur_actuelle": 12.48,
+        "lecture": "au-dessus des 25 % les plus bas"
+      }
+    }
+  ],
+  "serie_annuelle": [
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2000,
+      "niveau": 175.44
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2001,
+      "niveau": 175.375
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2002,
+      "niveau": 175.38
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2003,
+      "niveau": 175.4
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2004,
+      "niveau": 175.51
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2005,
+      "niveau": 175.41
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2006,
+      "niveau": 175.57
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2007,
+      "niveau": 175.54
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2008,
+      "niveau": 175.52
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2009,
+      "niveau": 175.425
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2010,
+      "niveau": 175.49
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2011,
+      "niveau": 175.31
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2012,
+      "niveau": 175.45
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2013,
+      "niveau": 175.74
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2014,
+      "niveau": 175.46
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2015,
+      "niveau": 175.38
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2016,
+      "niveau": 175.635
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2017,
+      "niveau": 175.29
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2018,
+      "niveau": 175.37
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2019,
+      "niveau": 175.44
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2020,
+      "niveau": 175.285
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2021,
+      "niveau": 175.54
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2022,
+      "niveau": 175.38
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2023,
+      "niveau": 175.46
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2024,
+      "niveau": 175.7
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2025,
+      "niveau": 175.61
+    },
+    {
+      "bss_id": "BSS000YWHH",
+      "annee": 2026,
+      "niveau": 175.5
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2000,
+      "niveau": 192.7
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2001,
+      "niveau": 192.7
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2002,
+      "niveau": 192.62
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2003,
+      "niveau": 192.11
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2004,
+      "niveau": 191.99
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2005,
+      "niveau": 192.13
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2006,
+      "niveau": 192.38
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2007,
+      "niveau": 192.59
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2008,
+      "niveau": 192.49
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2009,
+      "niveau": 192.02
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2010,
+      "niveau": 192.22
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2011,
+      "niveau": 192.18
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2012,
+      "niveau": 192.18
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2013,
+      "niveau": 192.8
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2014,
+      "niveau": 192.57
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2015,
+      "niveau": 192.34
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2016,
+      "niveau": 192.46
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2017,
+      "niveau": 191.92
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2018,
+      "niveau": 191.93
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2019,
+      "niveau": 191.7
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2020,
+      "niveau": 191.98
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2021,
+      "niveau": 192.47
+    },
+    {
+      "bss_id": "BSS001AYXN",
+      "annee": 2022,
+      "niveau": 192.21
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2000,
+      "niveau": 209.82
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2001,
+      "niveau": 210.19
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2002,
+      "niveau": 209.58
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2003,
+      "niveau": 209.57
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2004,
+      "niveau": 208.33
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2005,
+      "niveau": 208.21
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2006,
+      "niveau": 208.28
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2007,
+      "niveau": 209.445
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2008,
+      "niveau": 208.925
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2009,
+      "niveau": 208.475
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2010,
+      "niveau": 208.17
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2011,
+      "niveau": 208.57
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2012,
+      "niveau": 208.13
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2013,
+      "niveau": 209.33
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2014,
+      "niveau": 209.545
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2015,
+      "niveau": 209.04
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2016,
+      "niveau": 209.485
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2017,
+      "niveau": 208.28
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2018,
+      "niveau": 207.875
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2019,
+      "niveau": 207.52
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2020,
+      "niveau": 207.79
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2021,
+      "niveau": 207.91
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2022,
+      "niveau": 208.03
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2023,
+      "niveau": 207.745
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2024,
+      "niveau": 208.78
+    },
+    {
+      "bss_id": "BSS001CZKD",
+      "annee": 2025,
+      "niveau": 209.105
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2000,
+      "niveau": 224.25
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2001,
+      "niveau": 224.7
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2002,
+      "niveau": 224.08
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2003,
+      "niveau": 224.72
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2004,
+      "niveau": 222.195
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2005,
+      "niveau": 222.215
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2006,
+      "niveau": 223.79
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2007,
+      "niveau": 224.96
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2008,
+      "niveau": 223.53
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2009,
+      "niveau": 223.36
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2010,
+      "niveau": 223.355
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2011,
+      "niveau": 223.595
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2012,
+      "niveau": 222.255
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2013,
+      "niveau": 225.18
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2014,
+      "niveau": 224.785
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2015,
+      "niveau": 223.86
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2016,
+      "niveau": 224.535
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2017,
+      "niveau": 222.85
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2018,
+      "niveau": 222.505
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2019,
+      "niveau": 221.28
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2020,
+      "niveau": 221.285
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2021,
+      "niveau": 221.975
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2022,
+      "niveau": 222.63
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2023,
+      "niveau": 221.69
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2024,
+      "niveau": 222.74
+    },
+    {
+      "bss_id": "BSS001DCGZ",
+      "annee": 2025,
+      "niveau": 223.505
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2000,
+      "niveau": 9.735
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2001,
+      "niveau": 10.445
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2002,
+      "niveau": 9.15
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2003,
+      "niveau": 7.53
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2004,
+      "niveau": 11.07
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2005,
+      "niveau": 9.5
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2006,
+      "niveau": 8.09
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2007,
+      "niveau": 9.755
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2008,
+      "niveau": 13.12
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2009,
+      "niveau": 8.55
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2010,
+      "niveau": 10.91
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2011,
+      "niveau": 9.91
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2012,
+      "niveau": 9.66
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2013,
+      "niveau": 9.94
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2014,
+      "niveau": 10.63
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2015,
+      "niveau": 9.835
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2016,
+      "niveau": 9.71
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2017,
+      "niveau": 9.47
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2018,
+      "niveau": 12.46
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2019,
+      "niveau": 12.45
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2020,
+      "niveau": 13.56
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2021,
+      "niveau": 12.1
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2022,
+      "niveau": 11.9
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2023,
+      "niveau": 11.93
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2024,
+      "niveau": 12.945
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2025,
+      "niveau": 12.69
+    },
+    {
+      "bss_id": "BSS001WVSR",
+      "annee": 2026,
+      "niveau": 12.48
+    }
+  ]
+}
