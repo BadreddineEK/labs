@@ -99,7 +99,7 @@ def build_fuites_dataset():
         })
     departements.sort(key=lambda d: d["taux_fuite"], reverse=True)
 
-    seuil_services = 5
+    seuil_services = 10
     robustes = [d for d in departements if d["n_services"] >= seuil_services]
     joint = pd.DataFrame([d for d in robustes if d["revenu_median"] is not None])
     correlation = correlation_fuites_facteurs(joint, facteurs=("revenu_median",)) if len(joint) >= 3 else None

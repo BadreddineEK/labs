@@ -1,114 +1,102 @@
 {
-  "n_departements": 49,
+  "n_departements": 42,
   "features": [
     "taux_fuite",
     "densite_log",
     "pluvio_2025_mm",
     "revenu_median"
   ],
-  "n_clusters": 6,
-  "silhouette": 0.254,
+  "n_clusters": 5,
+  "silhouette": 0.24,
   "silhouette_par_k": {
-    "2": 0.22164055238010136,
-    "3": 0.2400130270118549,
-    "4": 0.23585199131858897,
-    "5": 0.23397320953126977,
-    "6": 0.25400874574251764
+    "2": 0.21608823962321658,
+    "3": 0.22518923526134227,
+    "4": 0.21787843935092843,
+    "5": 0.24021173194727835,
+    "6": 0.2209637620571696
   },
   "exploratoire": true,
   "clusters": [
     {
       "cluster": 0,
-      "nom": "Réseaux performants",
-      "n_departements": 5,
+      "nom": "Territoires denses",
+      "n_departements": 7,
       "profil_moyen_reel": {
-        "taux_fuite": 6.5,
-        "densite": 286.6,
-        "pluvio_2025_mm": 917.8,
-        "revenu_median": 23994.0
+        "taux_fuite": 22.5,
+        "densite": 145.3,
+        "pluvio_2025_mm": 787.0,
+        "revenu_median": 21610.0
       },
       "departements": [
-        "Alpes-Maritimes",
-        "Bas-Rhin",
+        "Gard",
+        "Herault",
+        "Moselle",
+        "Pas-De-Calais",
+        "Pyrenees-Orientales",
+        "Sarthe",
+        "Somme"
+      ]
+    },
+    {
+      "cluster": 1,
+      "nom": "Réseaux performants",
+      "n_departements": 13,
+      "profil_moyen_reel": {
+        "taux_fuite": 14.6,
+        "densite": 161.6,
+        "pluvio_2025_mm": 855.7,
+        "revenu_median": 23306.2
+      },
+      "departements": [
+        "Calvados",
+        "Charente-Maritime",
+        "Drome",
+        "Eure-Et-Loir",
+        "Finistere",
+        "Gironde",
+        "Loiret",
+        "Maine-Et-Loire",
+        "Meurthe-Et-Moselle",
+        "Oise",
         "Pyrenees-Atlantiques",
         "Rhone",
         "Seine-Et-Marne"
       ]
     },
     {
-      "cluster": 1,
-      "nom": "Réseaux qui fuient",
-      "n_departements": 9,
+      "cluster": 2,
+      "nom": "Territoires ruraux",
+      "n_departements": 6,
       "profil_moyen_reel": {
-        "taux_fuite": 26.0,
-        "densite": 53.4,
-        "pluvio_2025_mm": 958.7,
-        "revenu_median": 21996.7
+        "taux_fuite": 25.8,
+        "densite": 34.2,
+        "pluvio_2025_mm": 928.9,
+        "revenu_median": 21740.0
       },
       "departements": [
         "Cantal",
-        "Cote D'Or",
         "Creuse",
-        "Gard",
         "Haute-Saone",
         "Hautes-Alpes",
         "Landes",
-        "Manche",
         "Orne"
-      ]
-    },
-    {
-      "cluster": 2,
-      "nom": "Forte pluviométrie",
-      "n_departements": 5,
-      "profil_moyen_reel": {
-        "taux_fuite": 24.4,
-        "densite": 101.8,
-        "pluvio_2025_mm": 1390.9,
-        "revenu_median": 24076.0
-      },
-      "departements": [
-        "Ain",
-        "Doubs",
-        "Isere",
-        "Jura",
-        "Savoie"
       ]
     },
     {
       "cluster": 3,
       "nom": "Revenus modestes",
-      "n_departements": 5,
+      "n_departements": 8,
       "profil_moyen_reel": {
-        "taux_fuite": 18.0,
-        "densite": 188.8,
-        "pluvio_2025_mm": 604.7,
-        "revenu_median": 20956.0
-      },
-      "departements": [
-        "Aude",
-        "Nord",
-        "Pas-De-Calais",
-        "Pyrenees-Orientales",
-        "Somme"
-      ]
-    },
-    {
-      "cluster": 4,
-      "nom": "Territoires ruraux",
-      "n_departements": 9,
-      "profil_moyen_reel": {
-        "taux_fuite": 14.4,
-        "densite": 42.7,
-        "pluvio_2025_mm": 1065.0,
-        "revenu_median": 21673.3
+        "taux_fuite": 15.0,
+        "densite": 45.8,
+        "pluvio_2025_mm": 1007.4,
+        "revenu_median": 21537.5
       },
       "departements": [
         "Allier",
         "Aube",
-        "Aveyron",
+        "Aude",
         "Correze",
-        "Dordogne",
         "Haute-Marne",
         "Haute-Vienne",
         "Lozere",
@@ -116,31 +104,23 @@
       ]
     },
     {
-      "cluster": 5,
-      "nom": "Territoires denses",
-      "n_departements": 16,
+      "cluster": 4,
+      "nom": "Forte pluviométrie",
+      "n_departements": 8,
       "profil_moyen_reel": {
-        "taux_fuite": 18.5,
-        "densite": 147.1,
-        "pluvio_2025_mm": 872.0,
-        "revenu_median": 22904.4
+        "taux_fuite": 24.5,
+        "densite": 110.4,
+        "pluvio_2025_mm": 1258.5,
+        "revenu_median": 23760.0
       },
       "departements": [
-        "Bouches-Du-Rhone",
-        "Calvados",
-        "Charente-Maritime",
-        "Drome",
-        "Eure-Et-Loir",
-        "Finistere",
-        "Gironde",
-        "Herault",
-        "Loiret",
-        "Maine-Et-Loire",
-        "Meurthe-Et-Moselle",
-        "Moselle",
-        "Oise",
+        "Ain",
+        "Cote D'Or",
+        "Doubs",
+        "Isere",
+        "Jura",
         "Puy-De-Dome",
-        "Sarthe",
+        "Savoie",
         "Territoire De Belfort"
       ]
     }
@@ -149,32 +129,26 @@
     {
       "code_departement": "01",
       "nom": "Ain",
-      "cluster": 2,
+      "cluster": 4,
       "typologie": "Forte pluviométrie"
     },
     {
       "code_departement": "03",
       "nom": "Allier",
-      "cluster": 4,
-      "typologie": "Territoires ruraux"
+      "cluster": 3,
+      "typologie": "Revenus modestes"
     },
     {
       "code_departement": "05",
       "nom": "Hautes-Alpes",
-      "cluster": 1,
-      "typologie": "Réseaux qui fuient"
-    },
-    {
-      "code_departement": "06",
-      "nom": "Alpes-Maritimes",
-      "cluster": 0,
-      "typologie": "Réseaux performants"
+      "cluster": 2,
+      "typologie": "Territoires ruraux"
     },
     {
       "code_departement": "10",
       "nom": "Aube",
-      "cluster": 4,
-      "typologie": "Territoires ruraux"
+      "cluster": 3,
+      "typologie": "Revenus modestes"
     },
     {
       "code_departement": "11",
@@ -183,262 +157,226 @@
       "typologie": "Revenus modestes"
     },
     {
-      "code_departement": "12",
-      "nom": "Aveyron",
-      "cluster": 4,
-      "typologie": "Territoires ruraux"
-    },
-    {
-      "code_departement": "13",
-      "nom": "Bouches-Du-Rhone",
-      "cluster": 5,
-      "typologie": "Territoires denses"
-    },
-    {
       "code_departement": "14",
       "nom": "Calvados",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 1,
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "15",
       "nom": "Cantal",
-      "cluster": 1,
-      "typologie": "Réseaux qui fuient"
+      "cluster": 2,
+      "typologie": "Territoires ruraux"
     },
     {
       "code_departement": "17",
       "nom": "Charente-Maritime",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 1,
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "19",
       "nom": "Correze",
-      "cluster": 4,
-      "typologie": "Territoires ruraux"
+      "cluster": 3,
+      "typologie": "Revenus modestes"
     },
     {
       "code_departement": "21",
       "nom": "Cote D'Or",
-      "cluster": 1,
-      "typologie": "Réseaux qui fuient"
+      "cluster": 4,
+      "typologie": "Forte pluviométrie"
     },
     {
       "code_departement": "23",
       "nom": "Creuse",
-      "cluster": 1,
-      "typologie": "Réseaux qui fuient"
-    },
-    {
-      "code_departement": "24",
-      "nom": "Dordogne",
-      "cluster": 4,
+      "cluster": 2,
       "typologie": "Territoires ruraux"
     },
     {
       "code_departement": "25",
       "nom": "Doubs",
-      "cluster": 2,
+      "cluster": 4,
       "typologie": "Forte pluviométrie"
     },
     {
       "code_departement": "26",
       "nom": "Drome",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 1,
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "28",
       "nom": "Eure-Et-Loir",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 1,
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "29",
       "nom": "Finistere",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 1,
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "30",
       "nom": "Gard",
-      "cluster": 1,
-      "typologie": "Réseaux qui fuient"
+      "cluster": 0,
+      "typologie": "Territoires denses"
     },
     {
       "code_departement": "33",
       "nom": "Gironde",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 1,
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "34",
       "nom": "Herault",
-      "cluster": 5,
+      "cluster": 0,
       "typologie": "Territoires denses"
     },
     {
       "code_departement": "38",
       "nom": "Isere",
-      "cluster": 2,
+      "cluster": 4,
       "typologie": "Forte pluviométrie"
     },
     {
       "code_departement": "39",
       "nom": "Jura",
-      "cluster": 2,
+      "cluster": 4,
       "typologie": "Forte pluviométrie"
     },
     {
       "code_departement": "40",
       "nom": "Landes",
-      "cluster": 1,
-      "typologie": "Réseaux qui fuient"
+      "cluster": 2,
+      "typologie": "Territoires ruraux"
     },
     {
       "code_departement": "45",
       "nom": "Loiret",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 1,
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "48",
       "nom": "Lozere",
-      "cluster": 4,
-      "typologie": "Territoires ruraux"
+      "cluster": 3,
+      "typologie": "Revenus modestes"
     },
     {
       "code_departement": "49",
       "nom": "Maine-Et-Loire",
-      "cluster": 5,
-      "typologie": "Territoires denses"
-    },
-    {
-      "code_departement": "50",
-      "nom": "Manche",
       "cluster": 1,
-      "typologie": "Réseaux qui fuient"
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "52",
       "nom": "Haute-Marne",
-      "cluster": 4,
-      "typologie": "Territoires ruraux"
+      "cluster": 3,
+      "typologie": "Revenus modestes"
     },
     {
       "code_departement": "54",
       "nom": "Meurthe-Et-Moselle",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 1,
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "57",
       "nom": "Moselle",
-      "cluster": 5,
+      "cluster": 0,
       "typologie": "Territoires denses"
-    },
-    {
-      "code_departement": "59",
-      "nom": "Nord",
-      "cluster": 3,
-      "typologie": "Revenus modestes"
     },
     {
       "code_departement": "60",
       "nom": "Oise",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 1,
+      "typologie": "Réseaux performants"
     },
     {
       "code_departement": "61",
       "nom": "Orne",
-      "cluster": 1,
-      "typologie": "Réseaux qui fuient"
+      "cluster": 2,
+      "typologie": "Territoires ruraux"
     },
     {
       "code_departement": "62",
       "nom": "Pas-De-Calais",
-      "cluster": 3,
-      "typologie": "Revenus modestes"
+      "cluster": 0,
+      "typologie": "Territoires denses"
     },
     {
       "code_departement": "63",
       "nom": "Puy-De-Dome",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 4,
+      "typologie": "Forte pluviométrie"
     },
     {
       "code_departement": "64",
       "nom": "Pyrenees-Atlantiques",
-      "cluster": 0,
+      "cluster": 1,
       "typologie": "Réseaux performants"
     },
     {
       "code_departement": "66",
       "nom": "Pyrenees-Orientales",
-      "cluster": 3,
-      "typologie": "Revenus modestes"
-    },
-    {
-      "code_departement": "67",
-      "nom": "Bas-Rhin",
       "cluster": 0,
-      "typologie": "Réseaux performants"
+      "typologie": "Territoires denses"
     },
     {
       "code_departement": "69",
       "nom": "Rhone",
-      "cluster": 0,
+      "cluster": 1,
       "typologie": "Réseaux performants"
     },
     {
       "code_departement": "70",
       "nom": "Haute-Saone",
-      "cluster": 1,
-      "typologie": "Réseaux qui fuient"
+      "cluster": 2,
+      "typologie": "Territoires ruraux"
     },
     {
       "code_departement": "72",
       "nom": "Sarthe",
-      "cluster": 5,
+      "cluster": 0,
       "typologie": "Territoires denses"
     },
     {
       "code_departement": "73",
       "nom": "Savoie",
-      "cluster": 2,
+      "cluster": 4,
       "typologie": "Forte pluviométrie"
     },
     {
       "code_departement": "77",
       "nom": "Seine-Et-Marne",
-      "cluster": 0,
+      "cluster": 1,
       "typologie": "Réseaux performants"
     },
     {
       "code_departement": "80",
       "nom": "Somme",
-      "cluster": 3,
-      "typologie": "Revenus modestes"
+      "cluster": 0,
+      "typologie": "Territoires denses"
     },
     {
       "code_departement": "87",
       "nom": "Haute-Vienne",
-      "cluster": 4,
-      "typologie": "Territoires ruraux"
+      "cluster": 3,
+      "typologie": "Revenus modestes"
     },
     {
       "code_departement": "88",
       "nom": "Vosges",
-      "cluster": 4,
-      "typologie": "Territoires ruraux"
+      "cluster": 3,
+      "typologie": "Revenus modestes"
     },
     {
       "code_departement": "90",
       "nom": "Territoire De Belfort",
-      "cluster": 5,
-      "typologie": "Territoires denses"
+      "cluster": 4,
+      "typologie": "Forte pluviométrie"
     }
   ]
 }

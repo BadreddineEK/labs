@@ -1,20 +1,13 @@
 {
   "millesime": 2019,
   "n_departements": 76,
-  "seuil_services": 5,
-  "n_departements_robustes": 63,
+  "seuil_services": 10,
+  "n_departements_robustes": 55,
   "national": {
     "taux_fuite_median": 19.0,
     "lecture": "Taux de fuite = 100 - rendement du reseau, mediane par departement (>= 5 services)."
   },
   "departements_robustes": [
-    {
-      "code_departement": "89",
-      "nom": "Yonne",
-      "taux_fuite": 31.8,
-      "n_services": 6,
-      "revenu_median": 21940
-    },
     {
       "code_departement": "04",
       "nom": "Alpes-De-Haute-Provence",
@@ -107,13 +100,6 @@
       "revenu_median": 21530
     },
     {
-      "code_departement": "50",
-      "nom": "Manche",
-      "taux_fuite": 25.0,
-      "n_services": 8,
-      "revenu_median": 22480
-    },
-    {
       "code_departement": "90",
       "nom": "Territoire De Belfort",
       "taux_fuite": 25.0,
@@ -175,13 +161,6 @@
       "taux_fuite": 22.3,
       "n_services": 64,
       "revenu_median": 24810
-    },
-    {
-      "code_departement": "13",
-      "nom": "Bouches-Du-Rhone",
-      "taux_fuite": 21.0,
-      "n_services": 6,
-      "revenu_median": 22920
     },
     {
       "code_departement": "72",
@@ -296,13 +275,6 @@
       "revenu_median": 23010
     },
     {
-      "code_departement": "12",
-      "nom": "Aveyron",
-      "taux_fuite": 16.1,
-      "n_services": 6,
-      "revenu_median": 21860
-    },
-    {
       "code_departement": "69",
       "nom": "Rhone",
       "taux_fuite": 16.1,
@@ -336,13 +308,6 @@
       "taux_fuite": 14.2,
       "n_services": 57,
       "revenu_median": 21500
-    },
-    {
-      "code_departement": "59",
-      "nom": "Nord",
-      "taux_fuite": 14.1,
-      "n_services": 7,
-      "revenu_median": 21340
     },
     {
       "code_departement": "29",
@@ -422,32 +387,11 @@
       "revenu_median": 21910
     },
     {
-      "code_departement": "24",
-      "nom": "Dordogne",
-      "taux_fuite": 5.0,
-      "n_services": 9,
-      "revenu_median": 21410
-    },
-    {
-      "code_departement": "67",
-      "nom": "Bas-Rhin",
-      "taux_fuite": 3.7,
-      "n_services": 8,
-      "revenu_median": 24090
-    },
-    {
       "code_departement": "64",
       "nom": "Pyrenees-Atlantiques",
       "taux_fuite": 1.7,
       "n_services": 38,
       "revenu_median": 23300
-    },
-    {
-      "code_departement": "06",
-      "nom": "Alpes-Maritimes",
-      "taux_fuite": 0.0,
-      "n_services": 5,
-      "revenu_median": 23460
     }
   ],
   "departements": [
@@ -985,13 +929,13 @@
     }
   ],
   "correlation_revenu": {
-    "n": 63,
+    "n": 55,
     "correlations": {
       "revenu_median": {
-        "pearson_r": -0.15690420373922714,
-        "pearson_p": 0.219419541874022,
-        "spearman_r": -0.03088242354409717,
-        "spearman_p": 0.8101206667512258
+        "pearson_r": -0.14860388626848559,
+        "pearson_p": 0.2789024444387477,
+        "spearman_r": -0.02009633251278601,
+        "spearman_p": 0.8842136475774051
       }
     }
   }

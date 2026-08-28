@@ -127,7 +127,7 @@
       d'un département à l'autre, on passe de quelques pour cent à près d'un tiers de l'eau perdue.
     </p>
     <div class="chart-wrap"><div id="fuites-chart"></div></div>
-    <p class="chart-legend">Départements où le réseau perd le plus d'eau (au moins 5 services observés).</p>
+    <p class="chart-legend">Départements où le réseau perd le plus d'eau (au moins 10 services observés).</p>
     <p class="takeaway">
       On demande des douches plus courtes dans des territoires où près d'un tiers de l'eau potable part
       dans le sol avant même d'arriver au robinet.
@@ -172,13 +172,19 @@
   <section id="tendance-calculee">
     <h2>7. L'historique, calculé et pas seulement raconté <span class="badge-calcul">calculé localement</span></h2>
     <p class="section-intro">
-      «&nbsp;Ça s'aggrave&nbsp;» revient souvent, rarement avec une preuve. Sur une nappe suivie depuis 2000,
-      j'ai appliqué un test de tendance statistique (Mann-Kendall) et situé le niveau récent dans tout son
-      historique, sans jamais chercher à prédire l'avenir.
+      «&nbsp;Ça s'aggrave&nbsp;» revient souvent, rarement avec une preuve. J'ai constitué un petit
+      échantillon de longues séries piézométriques (celles que l'API expose facilement, surtout en Alsace
+      et une en Gironde), puis appliqué à chacune un test de tendance statistique (Mann-Kendall), sans
+      jamais chercher à prédire l'avenir.
     </p>
     <div class="chart-wrap"><div id="tendance-chart"></div></div>
     <p class="takeaway" id="tendance-summary">Chargement du résultat calculé…</p>
-    <p class="fig-cap">Source&nbsp;: Hub'Eau Piézométrie, échantillon de stations actives. Test de Mann-Kendall et rang percentile calculés localement. Ce résultat n'est pas une prévision.</p>
+    <p class="warn">
+      Cet échantillon est trop petit et trop concentré géographiquement pour un diagnostic national&nbsp;:
+      il illustre la méthode et montre surtout qu'un bulletin de fin d'été ne dit rien d'une tendance de
+      fond. Sur ces séries, il n'y a justement pas de signal unique.
+    </p>
+    <p class="fig-cap">Source&nbsp;: Hub'Eau Piézométrie (BRGM/ADES). Test de Mann-Kendall et rang percentile calculés localement. Ce résultat n'est pas une prévision.</p>
   </section>
 
   <section id="geographie-clustering">
@@ -222,8 +228,9 @@
   <section id="limites">
     <h2>Ce que ces données ne disent <em>pas</em></h2>
     <ul class="limites">
+      <li><strong>L'historique des nappes est une illustration, pas un diagnostic national.</strong> Le petit échantillon de longues séries est concentré géographiquement (surtout l'Alsace), et les tendances y divergent. Il sert à montrer la méthode, pas à trancher pour toute la France.</li>
       <li><strong>Le classement des fuites est un échantillon.</strong> Il s'appuie sur les services SISPEA du millésime 2019, pas sur l'exhaustif&nbsp;: les départements trop peu observés ont été écartés, et quelques rendements proches de 100&nbsp;% invitent à la prudence sur le bas du classement.</li>
-      <li><strong>La typologie est exploratoire.</strong> La séparation entre familles est faible et dépend des variables choisies. Elle ne doit pas être lue comme un classement de risque.</li>
+      <li><strong>La typologie est exploratoire.</strong> La séparation entre familles est faible et dépend des variables choisies. Chaque nom décrit la caractéristique dominante d'un groupe, pas un classement de risque.</li>
       <li><strong>Aucune prévision.</strong> Je ne projette jamais le niveau futur des nappes&nbsp;: une vraie prévision hydrogéologique demande un modèle physique complet, pas une extrapolation statistique.</li>
       <li><strong>Pas de pénurie structurelle.</strong> La France n'est pas dans la situation des pays du haut du classement mondial. C'est un stress saisonnier récurrent, pas une rareté chronique.</li>
     </ul>
