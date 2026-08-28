@@ -25,4 +25,4 @@ Identique aux autres Labs : pipeline Python (jamais en production) qui exporte d
 
 ## Statut
 
-🟡 Première tranche fonctionnelle : ingestion Hub'Eau, échantillon de stations actives, tendances Mann-Kendall et percentiles historiques exportés dans `data/tendance_percentile.json`, avec rendu local harmonisé aux autres Labs. Les sources Agreste/INSEE et la typologie départementale restent à joindre avant publication finale.
+🟡 Première tranche fonctionnelle : ingestion Hub'Eau, échantillon de stations actives, tendances Mann-Kendall et percentiles historiques exportés dans `data/tendance_percentile.json`, avec rendu local harmonisé aux autres Labs. Chapitre fuites calculé à partir de SISPEA (taux de fuite départemental, millésime 2019) croisé au revenu médian INSEE (`data/fuites_facteurs.json`) : médiane ~19 %, corrélation fuite × revenu non significative. Restent à joindre : usage agricole (Agreste), déficit pluviométrique et clustering départemental exploratoire.

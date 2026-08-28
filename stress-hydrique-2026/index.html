@@ -36,15 +36,19 @@
 
 <section id="paradoxe-fuites">
   <h2>4 · Le paradoxe des fuites</h2>
-  <p><strong>18,8% à 20%</strong> de l'eau potable produite en France se perd dans les canalisations avant d'arriver au robinet. Soit près d'1 milliard de m³ par an — l'équivalent de la consommation annuelle de 18 millions d'habitants, grosso modo Paris, Lyon, Marseille, Lille, Toulouse, Bordeaux et Nice réunies.</p>
-  <p>Certaines communes perdent jusqu'à 45-50% de leur eau en fuites. On demande des douches plus courtes pendant qu'un litre sur cinq part dans le sol.</p>
-  <p class="source">Eaufrance / SISPEA, 2023.</p>
+  <p>Ici, je ne recopie pas le « 20 % » qui circule partout : je le recalcule. En reprenant le rendement des réseaux service par service (SISPEA) et en agrégeant par département, la médiane du taux de fuite ressort à <strong id="fuites-median">…</strong>. Autrement dit, l'ordre de grandeur national se retrouve bien dans les données brutes — mais il masque de fortes disparités.</p>
+  <div class="chart-wrap"><div id="fuites-chart"></div></div>
+  <p class="chart-legend">Départements où le réseau perd le plus d'eau (au moins 5 services observés).</p>
+  <p class="takeaway">On demande des douches plus courtes dans des territoires où près d'un tiers de l'eau potable part dans le sol avant d'arriver au robinet.</p>
+  <p class="fig-cap">Source : Hub'Eau / SISPEA, indicateur P104.3 (rendement des réseaux), millésime 2019. Taux de fuite = 100 − rendement, médiane départementale calculée localement.</p>
 </section>
 
 <section id="qui-paie">
-  <h2>5 · Qui paie vs qui consomme</h2>
-  <p>Les usagers domestiques financent 51 à 67% des redevances versées aux agences de l'eau, pour seulement 24% de la consommation nette. L'agriculture, elle, paie 2 à 15% des redevances pour 45 à 58% de la consommation (jusqu'à 80% en été).</p>
-  <p class="nuance-box">Un vrai déséquilibre, à nuancer par les différences de valeur économique et sociale des usages — à développer dans la version finale.</p>
+  <h2>5 · Les fuites tiennent-elles à la richesse du territoire ?</h2>
+  <p>On pourrait croire que les départements les plus pauvres, avec des réseaux plus anciens, perdent davantage d'eau. J'ai croisé le taux de fuite départemental avec le revenu médian des habitants (INSEE).</p>
+  <p class="takeaway" id="fuites-correlation">Calcul en cours…</p>
+  <p class="warn">Corrélation n'est pas causalité, et l'absence de lien net ne dit pas que tout se vaut : elle suggère que les fuites relèvent surtout de l'entretien et de la gouvernance locale du réseau, pas du niveau de vie.</p>
+  <p class="fig-cap">Source : SISPEA 2019 (fuites) × INSEE Filosofi (revenu médian, réutilisé du Lab Rentrée). Corrélation de Pearson calculée localement.</p>
 </section>
 
 <section id="tendance-calculee">
@@ -68,7 +72,7 @@
 
 <section id="limites">
   <h2>9 · Ce que ça ne dit pas</h2>
-  <p>Le clustering du chapitre 7 est exploratoire, pas prédictif. Aucune projection future des niveaux de nappes n'est proposée dans ce Lab — une vraie prévision hydrogéologique demande un modèle physique complet, pas une extrapolation statistique. La France n'est pas en pénurie structurelle comme les pays du top mondial du stress hydrique : c'est un stress saisonnier récurrent, pas une rareté chronique.</p>
+  <p>Le classement des fuites s'appuie sur un échantillon de services SISPEA du millésime 2019, pas sur l'exhaustif : les départements avec trop peu de services observés ont été écartés, et quelques valeurs extrêmes (rendements proches de 100 %) invitent à la prudence sur le bas du classement. Aucune projection future des niveaux de nappes n'est proposée : une vraie prévision hydrogéologique demande un modèle physique complet, pas une extrapolation statistique. Enfin, la France n'est pas en pénurie structurelle comme les pays du haut du classement mondial : c'est un stress saisonnier récurrent, pas une rareté chronique.</p>
 </section>
 
 <script src="js/chart-hook-alerte.js"></script>

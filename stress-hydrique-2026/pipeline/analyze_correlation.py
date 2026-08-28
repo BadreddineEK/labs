@@ -6,9 +6,10 @@ Voir CONSIGNES.md §5.3
 import numpy as np
 from scipy.stats import pearsonr, spearmanr
 
-def correlation_fuites_facteurs(dataset):
-    """Calculate pairwise correlations from a dataframe-like object."""
-    required = {"taux_fuite", "densite", "revenu_median"}
+def correlation_fuites_facteurs(dataset, facteurs=("densite", "revenu_median")):
+    """Calculate pairwise correlations between leak rate and explanatory factors."""
+    facteurs = tuple(facteurs)
+    required = {"taux_fuite", *facteurs}
     missing = required.difference(dataset.columns)
     if missing:
         raise ValueError("Colonnes manquantes: " + ", ".join(sorted(missing)))
@@ -16,7 +17,7 @@ def correlation_fuites_facteurs(dataset):
     if len(clean) < 3:
         raise ValueError("Au moins 3 territoires complets sont necessaires")
     output = {"n": int(len(clean)), "correlations": {}}
-    for variable in ("densite", "revenu_median"):
+    for variable in facteurs:
         x = clean[variable].to_numpy(dtype=float)
         y = clean["taux_fuite"].to_numpy(dtype=float)
         pearson = pearsonr(x, y)
