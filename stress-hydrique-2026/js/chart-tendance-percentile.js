@@ -21,6 +21,9 @@
 			'<text x="' + (width - pad.right) + '" y="' + (height - 12) + '" text-anchor="end" fill="#8c887e" font-size="13">' + points[points.length - 1].annee + '</text>' +
 			'<text x="' + (width - pad.right) + '" y="24" text-anchor="end" fill="#2f6f73" font-size="14">' + station.departement + ' · ' + station.bss_id + '</text></svg>';
 		var summary = document.getElementById('tendance-summary');
-		if (summary) summary.textContent = 'Sur cette station, le test de Mann-Kendall conclut : ' + station.tendance.interpretation + ' (p = ' + station.tendance.p_value.toFixed(3) + '). Le dernier niveau se situe au ' + station.percentile_actuel.percentile + 'e percentile de son historique 2000–' + station.annee_fin + '.';
+		if (summary) {
+			var fr = function (x) { return String(x).replace('.', ','); };
+			summary.textContent = 'Sur cette station, le test de Mann-Kendall conclut : ' + station.tendance.interpretation + ' (p = ' + fr(station.tendance.p_value.toFixed(2)) + '). Le dernier niveau se situe au ' + fr(station.percentile_actuel.percentile) + 'e percentile de son historique 2000-' + station.annee_fin + '.';
+		}
 	}).catch(function () {});
 })();

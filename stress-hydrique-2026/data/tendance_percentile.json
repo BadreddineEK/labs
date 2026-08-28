@@ -14,7 +14,7 @@
         "p_value": 0.4156263533214717,
         "tau": 0.11396011396011396,
         "sens_slope": 0.0025000000000048317,
-        "interpretation": "pas de baisse statistiquement detectee"
+        "interpretation": "pas de baisse statistiquement détectée"
       },
       "percentile_actuel": {
         "n_historique": 27,
@@ -37,7 +37,7 @@
         "p_value": 0.08110553307474166,
         "tau": -0.2648221343873518,
         "sens_slope": -0.017500000000000664,
-        "interpretation": "pas de baisse statistiquement detectee"
+        "interpretation": "pas de baisse statistiquement détectée"
       },
       "percentile_actuel": {
         "n_historique": 23,
@@ -60,7 +60,7 @@
         "p_value": 0.003875214237283764,
         "tau": -0.40615384615384614,
         "sens_slope": -0.04249999999999924,
-        "interpretation": "baisse statistiquement detectee"
+        "interpretation": "baisse statistiquement détectée"
       },
       "percentile_actuel": {
         "n_historique": 26,
@@ -83,7 +83,7 @@
         "p_value": 0.024561006538256436,
         "tau": -0.3169230769230769,
         "sens_slope": -0.08199999999999932,
-        "interpretation": "baisse statistiquement detectee"
+        "interpretation": "baisse statistiquement détectée"
       },
       "percentile_actuel": {
         "n_historique": 26,
@@ -106,7 +106,7 @@
         "p_value": 0.0013253924982186138,
         "tau": 0.4415954415954416,
         "sens_slope": 0.14289473684210527,
-        "interpretation": "pas de baisse statistiquement detectee"
+        "interpretation": "pas de baisse statistiquement détectée"
       },
       "percentile_actuel": {
         "n_historique": 27,

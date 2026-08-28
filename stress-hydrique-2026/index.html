@@ -3,98 +3,271 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stress hydrique 2026 — La France a-t-elle un vrai problème d'eau ?</title>
+  <title>Stress hydrique 2026 : la France a-t-elle un vrai problème d'eau ?</title>
+  <meta name="description" content="Août 2026, 92 % des nappes en baisse. Vraie crise de l'eau ou problème de répartition et de fuites ? Enquête data à partir des données publiques (Hub'Eau, SISPEA, INSEE, Open-Meteo), calculée et pas seulement racontée. Un Lab de Badreddine EL KHAMLICHI.">
+  <meta name="author" content="Badreddine EL KHAMLICHI">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Stress hydrique 2026 : la France a-t-elle un vrai problème d'eau ?">
+  <meta property="og:description" content="Vraie crise de l'eau ou problème de répartition, de fuites et d'équité ? Enquête data calculée à partir des données publiques.">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Labs · Badreddine EK">
+  <meta property="og:url" content="https://labs.badreddineek.com/stress-hydrique-2026/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232f6f73'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='18' font-weight='700' text-anchor='middle' fill='white'%3EH%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<section id="intro">
-  <p class="kicker">Enquête data · labs.badreddineek.com</p>
-  <h1>92% des nappes phréatiques françaises sont en baisse. Est-ce vraiment une crise de l'eau ?</h1>
-  <p>Au 15 août 2026, la situation est qualifiée de « plus dégradée qu'en 2025 » par le BRGM : 92% des niveaux de nappes sont en baisse, 64% des points d'observation sous les normales mensuelles.</p>
-  <p class="source">BRGM, bulletin de situation des nappes, 15 août 2026.</p>
-</section>
-
-<section id="perspective-mondiale">
-  <h2>1 · Mise en perspective mondiale</h2>
-  <p>Avant de parler de « crise », un chiffre remet les choses à leur place : selon le World Resources Institute, <strong>25 à 27 pays</strong> vivent aujourd'hui en stress hydrique extrême — ils consomment plus de 80% de leur eau renouvelable disponible chaque année. Environ <strong>4 milliards de personnes</strong>, la moitié de l'humanité, subissent un stress hydrique sévère au moins un mois par an.</p>
-  <p>Le top du classement : Bahreïn, Chypre, Koweït, Liban, Oman. La France n'apparaît pas dans le top 25-30 — contrairement, par exemple, à la Belgique (18e). Des tensions géopolitiques réelles existent autour de l'eau (bassin Tigre-Euphrate, vallée du Pô, sud-ouest américain) mais parler de « guerres de l'eau » pour la France serait exagéré.</p>
-  <p class="source">World Resources Institute, Aqueduct 2026 · Al Jazeera, World Water Week 2026.</p>
-</section>
-
-<section id="pivot-france">
-  <h2>2 · Alors, la France a-t-elle un problème ?</h2>
-  <p>Oui, mais pas celui qu'on croit. Ce n'est pas une rareté absolue : la France reçoit chaque année une quantité d'eau considérable. Le vrai sujet, c'est la répartition dans le temps (pluie en hiver, besoins en été), les pertes en cours de route, et l'équité de l'effort demandé.</p>
-</section>
-
-<section id="usages-france">
-  <h2>3 · Qui consomme vraiment l'eau en France</h2>
-  <p>L'agriculture représente entre 45% et 58% de la consommation totale selon les périodes — jusqu'à <strong>80% en été</strong>, moment où les nappes sont justement les plus tendues. Viennent ensuite l'eau potable domestique (21-26%), le refroidissement des centrales électriques (12-31%), l'industrie (4%).</p>
-  <p class="nuance-box">Les chiffres varient sensiblement selon l'année et la saison considérée — le périmètre exact sera précisé dans la version finale.</p>
-  <p class="source">France Stratégie · Ministère de la Transition écologique.</p>
-</section>
-
-<section id="paradoxe-fuites">
-  <h2>4 · Le paradoxe des fuites</h2>
-  <p>Ici, je ne recopie pas le « 20 % » qui circule partout : je le recalcule. En reprenant le rendement des réseaux service par service (SISPEA) et en agrégeant par département, la médiane du taux de fuite ressort à <strong id="fuites-median">…</strong>. Autrement dit, l'ordre de grandeur national se retrouve bien dans les données brutes — mais il masque de fortes disparités.</p>
-  <div class="chart-wrap"><div id="fuites-chart"></div></div>
-  <p class="chart-legend">Départements où le réseau perd le plus d'eau (au moins 5 services observés).</p>
-  <p class="takeaway">On demande des douches plus courtes dans des territoires où près d'un tiers de l'eau potable part dans le sol avant d'arriver au robinet.</p>
-  <p class="fig-cap">Source : Hub'Eau / SISPEA, indicateur P104.3 (rendement des réseaux), millésime 2019. Taux de fuite = 100 − rendement, médiane départementale calculée localement.</p>
-</section>
-
-<section id="qui-paie">
-  <h2>5 · Les fuites tiennent-elles à la richesse du territoire ?</h2>
-  <p>On pourrait croire que les départements les plus pauvres, avec des réseaux plus anciens, perdent davantage d'eau. J'ai croisé le taux de fuite départemental avec le revenu médian des habitants (INSEE).</p>
-  <p class="takeaway" id="fuites-correlation">Calcul en cours…</p>
-  <p class="warn">Corrélation n'est pas causalité, et l'absence de lien net ne dit pas que tout se vaut : elle suggère que les fuites relèvent surtout de l'entretien et de la gouvernance locale du réseau, pas du niveau de vie.</p>
-  <p class="fig-cap">Source : SISPEA 2019 (fuites) × INSEE Filosofi (revenu médian, réutilisé du Lab Rentrée). Corrélation de Pearson calculée localement.</p>
-</section>
-
-<section id="tendance-calculee">
-  <h2>6 · L'historique, calculé et pas seulement raconté</h2>
-  <p>Voici un premier résultat calculé à partir des chroniques Hub'Eau/BRGM, et non recopié d'un bulletin : une station active, suivie depuis 2000, est résumée par sa médiane annuelle.</p>
-  <div class="chart-wrap"><div id="tendance-chart"></div></div>
-  <p class="takeaway" id="tendance-summary">Chargement du résultat calculé…</p>
-  <p class="fig-cap">Source : Hub'Eau Piézométrie, échantillon de stations actives. Test de Mann-Kendall et percentile calculés localement. Ce résultat n'est pas une prévision.</p>
-</section>
-
-<section id="geographie-clustering">
-  <h2>7 · La géographie du stress hydrique</h2>
-  <p>Dernière étape, la plus exploratoire : peut-on regrouper les départements en <em>familles</em> qui se ressemblent sur l'eau ? J'ai lancé un clustering (K-means) sur quatre variables réelles et indépendantes — taux de fuite (SISPEA), pluviométrie 2025 (Open-Meteo), densité de population (INSEE/IGN) et revenu médian. La méthode a retenu le découpage ci-dessous.</p>
-  <div class="panel">
-    <div id="map-typologie" class="map" role="img" aria-label="Carte des typologies départementales de stress hydrique"></div>
-    <div class="map-meta">
-      <span class="map-year" id="map-typologie-meta">Typologies · —</span>
-      <div class="map-legend" id="map-typologie-legend"></div>
-    </div>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker"><a href="https://labs.badreddineek.com">Labs · badreddineek.com</a> · enquête data, été 2026</p>
+    <h1>La France a-t-elle un vrai <em>problème d'eau ?</em></h1>
+    <p class="lede">
+      Été 2026, les nappes baissent et l'alerte revient chaque mois. On parle de «&nbsp;crise de l'eau&nbsp;»,
+      parfois de «&nbsp;guerres de l'eau&nbsp;». Plutôt que de choisir un ton, j'ai ouvert les données publiques
+      (Hub'Eau, SISPEA, INSEE, Open-Meteo) et regardé moi-même. La question n'est pas seulement «&nbsp;en
+      manque-t-on&nbsp;?&nbsp;», mais «&nbsp;où passe-t-elle, qui la perd, et qui paie pour qui&nbsp;?&nbsp;».
+    </p>
+    <p class="byline">
+      Par <a href="https://badreddineek.com" target="_blank" rel="noopener">Badreddine EL KHAMLICHI</a>
+      · data scientist, Lyon · <a href="#sources">sources en bas de page</a>
+    </p>
   </div>
-  <p class="warn">C'est une lecture <strong>exploratoire</strong>, pas un modèle de risque ni une prédiction. La séparation entre familles est faible (silhouette basse), ce qui est normal : les territoires forment un continuum, pas des groupes tranchés. Paris et la petite couronne, atypiques, sont exclus.</p>
-  <p class="fig-cap">Sources : SISPEA 2019 (fuites), Open-Meteo (pluviométrie 2025), INSEE/IGN (densité, revenu). K-means + score de silhouette calculés localement.</p>
-</section>
+</header>
 
-<section id="cout-economique">
-  <h2>8 · Le coût économique</h2>
-  <p>La sécheresse 2022 a coûté <strong>5,6 milliards d'euros</strong> à la France, dont 1,1 milliard en pertes agricoles directes. Le coût de 2026 reste à chiffrer précisément dès que les estimations officielles seront publiées.</p>
-  <p class="source">Ministère de la Transition écologique, avril 2025.</p>
-</section>
+<main class="wrap">
 
-<section id="limites">
-  <h2>9 · Ce que ça ne dit pas</h2>
-  <p>Le classement des fuites s'appuie sur un échantillon de services SISPEA du millésime 2019, pas sur l'exhaustif : les départements avec trop peu de services observés ont été écartés, et quelques valeurs extrêmes (rendements proches de 100 %) invitent à la prudence sur le bas du classement. La typologie du chapitre 7 est exploratoire : la séparation entre familles est faible et dépend des variables choisies, elle ne doit pas être lue comme un classement de risque. Aucune projection future des niveaux de nappes n'est proposée : une vraie prévision hydrogéologique demande un modèle physique complet, pas une extrapolation statistique. Enfin, la France n'est pas en pénurie structurelle comme les pays du haut du classement mondial : c'est un stress saisonnier récurrent, pas une rareté chronique.</p>
-</section>
+  <section id="intro" class="note-method">
+    <p>
+      <strong>Comment lire ce Lab.</strong> Je pars de l'alerte du moment, puis je remets la France à sa
+      place dans le monde, avant de descendre dans le concret&nbsp;: qui consomme l'eau, combien s'en perd
+      dans les tuyaux, qui la finance, et comment tout cela varie d'un territoire à l'autre. À chaque fois
+      que c'est possible, je ne recopie pas un chiffre déjà publié&nbsp;: je le recalcule à partir des
+      données brutes. Les chapitres marqués «&nbsp;calculé localement&nbsp;» sont mes propres résultats&nbsp;;
+      les autres posent le décor à partir de sources publiques, toujours datées.
+    </p>
+  </section>
+
+  <section id="alerte">
+    <h2>Le point de départ&nbsp;: 92&nbsp;% des nappes en baisse</h2>
+    <p class="section-intro">
+      Au 15 août 2026, le BRGM décrit une situation «&nbsp;plus dégradée qu'en 2025&nbsp;». C'est le genre de
+      phrase qui déclenche les gros titres. Voici les deux chiffres qui reviennent le plus, et ce qu'ils
+      disent exactement.
+    </p>
+    <div class="metric"><strong>92&nbsp;%</strong><span>des points de nappes affichent un niveau en baisse sur un mois.</span></div>
+    <div class="metric"><strong>64&nbsp;%</strong><span>des points se situent sous les normales de saison.</span></div>
+    <p>
+      Ces chiffres décrivent une dynamique de fin d'été, pas une réserve d'eau qui disparaîtrait pour de
+      bon. Une nappe basse en août peut remonter dès les pluies d'automne. La vraie question n'est donc
+      pas de savoir si l'eau «&nbsp;manque&nbsp;» à l'instant T, mais si quelque chose se dérègle sur la durée.
+    </p>
+    <p class="fig-cap">Source&nbsp;: BRGM, bulletin de situation des nappes, 15 août 2026.</p>
+  </section>
+
+  <section id="perspective-mondiale">
+    <h2>1. La France, vue du reste du monde</h2>
+    <p class="section-intro">
+      Avant de parler de crise, un détour par la carte mondiale remet les proportions en place. Le stress
+      hydrique se mesure&nbsp;: c'est la part de l'eau renouvelable qu'un pays prélève chaque année. Au-delà
+      de 80&nbsp;%, on parle de stress extrême.
+    </p>
+    <p>
+      Selon le World Resources Institute, <strong>25 à 27 pays</strong> vivent aujourd'hui dans cette
+      situation, et près de <strong>4 milliards de personnes</strong>, la moitié de l'humanité, subissent un
+      stress hydrique sévère au moins un mois par an. En tête&nbsp;: Bahreïn, Chypre, Koweït, Liban, Oman.
+    </p>
+    <p>
+      La France, elle, n'apparaît pas dans ce haut de tableau, là où figure par exemple la Belgique (18e).
+      Des tensions bien réelles existent autour de l'eau, du bassin Tigre-Euphrate à la vallée du Pô en
+      passant par le sud-ouest américain, mais parler de «&nbsp;guerre de l'eau&nbsp;» pour la France relève
+      de l'exagération. Notre problème, s'il existe, est d'une autre nature.
+    </p>
+    <p class="fig-cap">Source&nbsp;: World Resources Institute, Aqueduct 2026.</p>
+  </section>
+
+  <section id="pivot-france">
+    <h2>2. Alors, où est le problème&nbsp;?</h2>
+    <p>
+      Il est réel, mais il ne ressemble pas à une pénurie. La France reçoit chaque année énormément d'eau.
+      Ce qui coince tient en trois mots&nbsp;: le <strong>calendrier</strong> (il pleut en hiver, on a soif
+      en été), les <strong>pertes</strong> en cours de route, et l'<strong>équité</strong> de l'effort
+      demandé. Le reste du Lab suit ce fil, chiffres à l'appui.
+    </p>
+  </section>
+
+  <section id="usages-france">
+    <h2>3. Qui consomme vraiment l'eau</h2>
+    <p class="section-intro">
+      Quand on demande aux particuliers de fermer le robinet, on vise le poste le plus visible, pas le plus
+      gros. Sur l'année, l'agriculture domine la consommation nette, loin devant l'eau potable domestique.
+      Et l'écart se creuse au pire moment.
+    </p>
+    <div class="chart-wrap"><div id="usages-chart"></div></div>
+    <p class="chart-legend">Part de l'agriculture dans les prélèvements, en moyenne annuelle puis au cœur de l'été.</p>
+    <p>
+      En été, quand les nappes sont justement les plus basses, l'irrigation peut représenter jusqu'à
+      <strong>80&nbsp;%</strong> de l'eau consommée. Autrement dit, la pression maximale sur la ressource
+      arrive au moment où elle est la plus fragile. Les autres postes suivent&nbsp;: eau potable domestique
+      (autour de 21 à 26&nbsp;%), refroidissement des centrales, puis l'industrie.
+    </p>
+    <p class="fig-cap">Ordre de grandeur, en consommation nette. Les parts varient selon l'année, la saison et la méthode de comptage. Source&nbsp;: France Stratégie, ministère de la Transition écologique.</p>
+  </section>
+
+  <section id="paradoxe-fuites">
+    <h2>4. Le paradoxe des fuites <span class="badge-calcul">calculé localement</span></h2>
+    <p class="section-intro">
+      On entend partout qu'un cinquième de l'eau potable se perd avant le robinet. Plutôt que de reprendre
+      ce chiffre, je l'ai recalculé&nbsp;: rendement de chaque réseau (SISPEA), agrégé par département.
+    </p>
+    <p>
+      La médiane départementale du taux de fuite ressort à <strong id="fuites-median">…</strong>. L'ordre de
+      grandeur national se retrouve donc bien dans les données brutes, mais il cache de fortes disparités&nbsp;:
+      d'un département à l'autre, on passe de quelques pour cent à près d'un tiers de l'eau perdue.
+    </p>
+    <div class="chart-wrap"><div id="fuites-chart"></div></div>
+    <p class="chart-legend">Départements où le réseau perd le plus d'eau (au moins 5 services observés).</p>
+    <p class="takeaway">
+      On demande des douches plus courtes dans des territoires où près d'un tiers de l'eau potable part
+      dans le sol avant même d'arriver au robinet.
+    </p>
+    <p class="fig-cap">Source&nbsp;: Hub'Eau / SISPEA, indicateur P104.3 (rendement des réseaux), millésime 2019. Taux de fuite = 100 − rendement, médiane départementale calculée localement.</p>
+  </section>
+
+  <section id="qui-paie">
+    <h2>5. Qui paie, qui consomme</h2>
+    <p class="section-intro">
+      Voici le point qui dérange le plus, et il ne relève pas de la donnée brute mais de la répartition de
+      l'effort. Qui finance les agences de l'eau, et pour quelle part de la consommation&nbsp;?
+    </p>
+    <div class="chart-wrap"><div id="quipaie-chart"></div></div>
+    <p class="chart-legend">Part des redevances payées aux agences de l'eau, comparée à la part de la consommation nette.</p>
+    <p>
+      Les usagers domestiques financent l'essentiel des redevances (de l'ordre de la moitié aux deux tiers)
+      pour environ un quart de la consommation nette. L'agriculture, à l'inverse, consomme la plus grosse
+      part mais contribue beaucoup moins. Ce déséquilibre s'explique en partie (l'eau agricole a une valeur
+      économique et sociale spécifique), mais il éclaire pourquoi l'effort demandé au grand public paraît
+      parfois décalé par rapport aux volumes réels.
+    </p>
+    <p class="fig-cap">Ordre de grandeur, fourchettes selon les agences et les années. Source&nbsp;: agences de l'eau, Cour des comptes.</p>
+  </section>
+
+  <section id="correlation-fuites">
+    <h2>6. Les fuites tiennent-elles à la richesse du territoire&nbsp;? <span class="badge-calcul">calculé localement</span></h2>
+    <p class="section-intro">
+      On pourrait croire que les départements les plus modestes, avec des réseaux plus anciens, perdent
+      davantage d'eau. J'ai testé l'idée en croisant le taux de fuite départemental avec le revenu médian
+      des habitants (INSEE).
+    </p>
+    <p class="takeaway" id="fuites-correlation">Calcul en cours…</p>
+    <p class="warn">
+      Corrélation n'est pas causalité, et l'absence de lien net ne veut pas dire que tout se vaut. Elle
+      suggère surtout que les fuites relèvent de l'entretien et de la gouvernance locale du réseau, pas du
+      niveau de vie du territoire.
+    </p>
+    <p class="fig-cap">Source&nbsp;: SISPEA 2019 (fuites) × INSEE Filosofi (revenu médian). Corrélation de Pearson calculée localement.</p>
+  </section>
+
+  <section id="tendance-calculee">
+    <h2>7. L'historique, calculé et pas seulement raconté <span class="badge-calcul">calculé localement</span></h2>
+    <p class="section-intro">
+      «&nbsp;Ça s'aggrave&nbsp;» revient souvent, rarement avec une preuve. Sur une nappe suivie depuis 2000,
+      j'ai appliqué un test de tendance statistique (Mann-Kendall) et situé le niveau récent dans tout son
+      historique, sans jamais chercher à prédire l'avenir.
+    </p>
+    <div class="chart-wrap"><div id="tendance-chart"></div></div>
+    <p class="takeaway" id="tendance-summary">Chargement du résultat calculé…</p>
+    <p class="fig-cap">Source&nbsp;: Hub'Eau Piézométrie, échantillon de stations actives. Test de Mann-Kendall et rang percentile calculés localement. Ce résultat n'est pas une prévision.</p>
+  </section>
+
+  <section id="geographie-clustering">
+    <h2>8. La géographie du stress <span class="badge-calcul">calculé localement</span></h2>
+    <p class="section-intro">
+      Dernière étape, la plus exploratoire. Peut-on regrouper les départements en familles qui se
+      ressemblent sur l'eau&nbsp;? J'ai lancé un clustering (K-means) sur quatre variables réelles et
+      indépendantes&nbsp;: taux de fuite (SISPEA), pluviométrie 2025 (Open-Meteo), densité de population et
+      revenu médian. La méthode a retenu le découpage ci-dessous.
+    </p>
+    <div class="panel">
+      <div id="map-typologie" class="map" role="img" aria-label="Carte des typologies départementales de stress hydrique"></div>
+      <div class="map-meta">
+        <span class="map-year" id="map-typologie-meta">Typologies · …</span>
+        <div class="map-legend" id="map-typologie-legend"></div>
+      </div>
+    </div>
+    <p class="warn">
+      C'est une lecture <strong>exploratoire</strong>, pas un modèle de risque ni une prédiction. La
+      séparation entre familles est faible (silhouette basse), ce qui est normal&nbsp;: les territoires
+      forment un continuum, pas des groupes tranchés. Paris et la petite couronne, atypiques, sont exclus.
+    </p>
+    <p class="fig-cap">Sources&nbsp;: SISPEA 2019 (fuites), Open-Meteo (pluviométrie 2025), INSEE/IGN (densité, revenu). K-means et score de silhouette calculés localement.</p>
+  </section>
+
+  <section id="cout-economique">
+    <h2>9. Ce que coûte une sécheresse</h2>
+    <p class="section-intro">
+      Le stress hydrique n'est pas qu'une affaire de niveaux&nbsp;: il a un prix, agricole d'abord, mais pas
+      seulement.
+    </p>
+    <p>
+      La sécheresse de 2022 a coûté environ <strong>5,6 milliards d'euros</strong> à la France, dont près
+      d'<strong>1,1 milliard</strong> en pertes agricoles directes. Le reste se disperse dans les
+      collectivités, les infrastructures et l'assurance. Le montant de 2026 n'est pas encore consolidé&nbsp;;
+      il faudra attendre les bilans officiels pour le chiffrer sérieusement.
+    </p>
+    <p class="fig-cap">Source&nbsp;: ministère de la Transition écologique, rapport d'avril 2025.</p>
+  </section>
+
+  <section id="limites">
+    <h2>Ce que ces données ne disent <em>pas</em></h2>
+    <ul class="limites">
+      <li><strong>Le classement des fuites est un échantillon.</strong> Il s'appuie sur les services SISPEA du millésime 2019, pas sur l'exhaustif&nbsp;: les départements trop peu observés ont été écartés, et quelques rendements proches de 100&nbsp;% invitent à la prudence sur le bas du classement.</li>
+      <li><strong>La typologie est exploratoire.</strong> La séparation entre familles est faible et dépend des variables choisies. Elle ne doit pas être lue comme un classement de risque.</li>
+      <li><strong>Aucune prévision.</strong> Je ne projette jamais le niveau futur des nappes&nbsp;: une vraie prévision hydrogéologique demande un modèle physique complet, pas une extrapolation statistique.</li>
+      <li><strong>Pas de pénurie structurelle.</strong> La France n'est pas dans la situation des pays du haut du classement mondial. C'est un stress saisonnier récurrent, pas une rareté chronique.</li>
+    </ul>
+  </section>
+
+  <section id="conclusion">
+    <h2>Alors, un vrai problème d'eau&nbsp;?</h2>
+    <p>
+      Oui, mais pas celui qu'on brandit. La France ne manque pas d'eau au sens des pays en stress extrême.
+      Elle a un problème de <strong>calendrier</strong>, de <strong>tuyaux</strong> et de <strong>répartition
+      de l'effort</strong>. On perd près d'un cinquième de l'eau potable dans les réseaux, sans lien clair
+      avec la richesse des territoires&nbsp;; on demande surtout des gestes au grand public quand les gros
+      volumes se jouent ailleurs et surtout en été. La sobriété individuelle compte, mais l'essentiel se
+      joue dans l'entretien des réseaux et le partage de la ressource.
+    </p>
+    <p class="note-inline">
+      Ce Lab est un premier état des lieux, appelé à s'enrichir (usage agricole détaillé, anomalie des
+      nappes département par département). Les critiques et corrections sont bienvenues.
+    </p>
+  </section>
+
+  <section id="sources">
+    <h2>Sources</h2>
+    <ul class="sources">
+      <li>BRGM, bulletins mensuels de situation des nappes, 2026.</li>
+      <li>Hub'Eau (API Piézométrie, BRGM/ADES)&nbsp;: chroniques piézométriques.</li>
+      <li>Hub'Eau / SISPEA, indicateur P104.3 (rendement des réseaux d'eau potable), millésime 2019.</li>
+      <li>INSEE Filosofi&nbsp;: revenu médian par département. IGN / geo.api.gouv.fr&nbsp;: population et surface.</li>
+      <li>Open-Meteo (archive ERA5)&nbsp;: précipitations 2025 par département.</li>
+      <li>World Resources Institute, Aqueduct 2026&nbsp;: classement mondial du stress hydrique.</li>
+      <li>France Stratégie et ministère de la Transition écologique&nbsp;: usages de l'eau, coût des sécheresses.</li>
+      <li>Agences de l'eau et Cour des comptes&nbsp;: redevances et contributions par usage.</li>
+    </ul>
+    <p class="fig-cap">Traitements, calculs statistiques et clustering réalisés localement (Python&nbsp;: pandas, SciPy, scikit-learn, pymannkendall). Aucune donnée personnelle.</p>
+  </section>
+
+</main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="js/chart-hook-alerte.js"></script>
-<script src="js/chart-mondial.js"></script>
 <script src="js/chart-usages-france.js"></script>
 <script src="js/chart-fuites.js"></script>
 <script src="js/chart-qui-paie.js"></script>
 <script src="js/chart-tendance-percentile.js"></script>
 <script src="js/map-clustering-departements.js"></script>
-<script src="js/chart-cout-economique.js"></script>
 </body>
 </html>

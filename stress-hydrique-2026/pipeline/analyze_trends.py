@@ -24,7 +24,7 @@ def test_tendance_mann_kendall(serie_temporelle):
         "p_value": float(result.p),
         "tau": float(result.Tau),
         "sens_slope": slope,
-        "interpretation": "baisse statistiquement detectee" if result.trend == "decreasing" and result.h else "pas de baisse statistiquement detectee",
+        "interpretation": "baisse statistiquement détectée" if result.trend == "decreasing" and result.h else "pas de baisse statistiquement détectée",
     }
 
 
