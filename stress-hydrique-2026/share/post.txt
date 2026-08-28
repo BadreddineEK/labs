@@ -1,0 +1,26 @@
+« La France va manquer d'eau. »
+« Mais non, il pleut largement assez, c'est du catastrophisme. »
+
+Chaque été, ces deux phrases tournent en boucle. Et honnêtement, difficile de savoir laquelle croire.
+
+Alors cette fois, j'ai arrêté de deviner. J'ai ouvert les données publiques (Hub'Eau, SISPEA, INSEE, Open-Meteo) et j'ai recalculé moi-même, plutôt que de recopier les chiffres qui circulent.
+
+Voici ce que j'ai trouvé :
+
+→ La France n'est pas en pénurie. Le vrai stress hydrique extrême touche 25 à 27 pays (Bahreïn, Chypre, Koweït, Liban…). On n'y figure pas. Parler de « guerre de l'eau » chez nous, c'est exagéré.
+
+→ Mais on perd près d'un cinquième de l'eau potable dans les fuites des réseaux. Je l'ai recalculé département par département (médiane 19 %), et certains territoires dépassent 30 %. On demande des douches plus courtes pendant qu'un litre sur cinq part dans le sol.
+
+→ Et ces fuites n'ont presque aucun lien avec la richesse du territoire (corrélation quasi nulle, statistiquement non significative). Ce n'est pas une question de moyens, mais d'entretien et de gouvernance des réseaux.
+
+→ Le plus déséquilibré : on demande surtout l'effort aux ménages, qui paient l'essentiel des redevances pour environ un quart de la consommation, quand l'agriculture consomme la plus grosse part, surtout en été, au moment où les nappes sont déjà basses.
+
+Ma conclusion, après avoir regardé les chiffres : la France n'a pas un problème de pénurie. Elle a un problème de calendrier, de tuyaux et de répartition de l'effort. La sobriété individuelle compte, mais l'essentiel se joue dans l'entretien des réseaux et le partage de la ressource.
+
+J'assume les limites du travail : échantillon SISPEA 2019, typologie des territoires volontairement exploratoire, et aucune prévision (je ne prédis pas le niveau futur des nappes, ce serait malhonnête sans modèle hydrogéologique complet). Tout est détaillé, daté et sourcé.
+
+Le détail de ce Lab (méthode, sources, code, cartes) est en commentaire.
+
+---
+Premier commentaire :
+Le Lab complet, interactif et sourcé : https://labs.badreddineek.com/stress-hydrique-2026
