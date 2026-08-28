@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Carrousel LinkedIn - Stress hydrique 2026</title>
+<!--
+  Carrousel LinkedIn (1080x1080), 100 % autonome. Export : python share/export_carousel.py
+-->
+<style>
+  :root{
+    --bg:#fbfaf7; --ink:#1d1b17; --muted:#615d54; --faint:#8c887e;
+    --accent:#2f6f73; --warm:#a3472f; --ocre:#b5651d; --vert:#4a7a55; --ardoise:#35506b;
+    --rule:#e4ded1; --rule-strong:#d3ccbc;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#c9c4b8;font-family:var(--sans);padding:24px;display:flex;flex-direction:column;align-items:center;gap:24px;}
+  .slide{
+    width:1080px;height:1080px;background:var(--bg);color:var(--ink);
+    position:relative;overflow:hidden;padding:96px 88px 176px;display:flex;flex-direction:column;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .accent-bar{position:absolute;top:0;left:0;width:100%;height:12px;background:var(--accent);}
+  .eyebrow{font-size:26px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;}
+  .counter{position:absolute;top:96px;right:88px;font-size:26px;color:var(--faint);letter-spacing:.05em;}
+  .foot{position:absolute;left:88px;right:88px;bottom:64px;display:flex;justify-content:space-between;
+        align-items:center;font-size:24px;color:var(--faint);border-top:1px solid var(--rule);padding-top:24px;}
+  .foot b{color:var(--muted);font-weight:600;}
+  h1{font-family:var(--serif);font-weight:600;line-height:1.05;letter-spacing:-.01em;}
+  h2{font-family:var(--serif);font-weight:600;line-height:1.1;letter-spacing:-.01em;}
+  .lead{font-family:var(--serif);color:#35322c;line-height:1.4;}
+  .body{color:var(--muted);line-height:1.55;}
+  .spacer{flex:1;}
+  .big{font-family:var(--serif);font-weight:600;color:var(--accent);line-height:.9;}
+  .src{font-size:22px;color:var(--faint);margin-top:auto;}
+  .tag{display:inline-block;font-size:20px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600;}
+
+  .bars{display:flex;gap:40px;align-items:flex-end;margin:48px 0 24px;}
+  .bar{flex:1;display:flex;flex-direction:column;align-items:center;}
+  .bar .col{width:100%;border-radius:8px 8px 0 0;}
+  .bar .lbl{font-size:25px;color:var(--muted);margin-top:18px;text-align:center;line-height:1.2;}
+  .bar .val{font-family:var(--serif);font-size:36px;color:var(--ink);margin-bottom:14px;}
+
+  .duo{display:flex;gap:28px;margin:44px 0;}
+  .chip{flex:1;border:1px solid var(--rule-strong);border-radius:10px;padding:28px 30px;background:#fff;}
+  .chip .n{font-family:var(--serif);font-size:74px;font-weight:600;line-height:.9;}
+  .chip .c{font-size:24px;color:var(--muted);margin-top:12px;line-height:1.3;}
+
+  .grp{display:flex;gap:64px;align-items:flex-end;margin:44px 0 20px;justify-content:center;}
+  .grp .pair{display:flex;gap:22px;align-items:flex-end;}
+  .grp .b{width:96px;display:flex;flex-direction:column;align-items:center;}
+  .grp .b .col{width:100%;border-radius:8px 8px 0 0;}
+  .grp .b .v{font-family:var(--serif);font-size:32px;margin-bottom:12px;}
+  .grp .glbl{font-size:26px;color:var(--ink);font-weight:600;text-align:center;margin-top:16px;}
+  .legend{display:flex;gap:32px;justify-content:center;font-size:24px;color:var(--muted);margin-top:8px;}
+  .legend .sw{display:inline-flex;align-items:center;gap:10px;}
+  .legend .dot{width:18px;height:18px;border-radius:4px;display:inline-block;}
+
+  @media print{
+    html,body{margin:0;padding:0;background:#fff;gap:0;}
+    .slide{box-shadow:none;page-break-after:always;break-after:page;page-break-inside:avoid;}
+    .slide:last-child{page-break-after:auto;break-after:auto;}
+    @page{size:1080px 1080px;margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 1 - COUVERTURE -->
+<section class="slide">
+  <div class="accent-bar"></div>
+  <p class="eyebrow">Enquête data · labs.badreddineek.com</p>
+  <div class="spacer" style="max-height:110px"></div>
+  <h1 style="font-size:100px;">La France a-t-elle un vrai <span style="color:var(--accent);font-style:italic;">problème d'eau&nbsp;?</span></h1>
+  <p class="lead" style="font-size:40px;margin-top:44px;max-width:22ch;">
+    Été 2026, les nappes baissent et l'alerte revient. Vraie crise, ou problème de répartition&nbsp;?
+  </p>
+  <div class="spacer"></div>
+  <p class="body" style="font-size:30px;">Données publiques en main&nbsp;: Hub'Eau, SISPEA, INSEE, Open-Meteo.</p>
+  <div class="foot"><span><b>Badreddine EL KHAMLICHI</b> · data scientist</span><span>1 / 9</span></div>
+</section>
+
+<!-- 2 - L'ALERTE, RECADRÉE -->
+<section class="slide">
+  <div class="accent-bar"></div>
+  <p class="eyebrow">Le point de départ</p>
+  <span class="counter">2 / 9</span>
+  <h2 style="font-size:64px;margin-top:32px;max-width:18ch;">92&nbsp;% des nappes en baisse. Panique&nbsp;?</h2>
+  <div class="duo" style="margin:40px 0;">
+    <div class="chip"><div class="n" style="color:var(--accent);">92&nbsp;%</div><div class="c">des points de nappes en baisse sur un mois (mi-août 2026)</div></div>
+    <div class="chip"><div class="n" style="color:var(--accent);">64&nbsp;%</div><div class="c">sous les normales de saison</div></div>
+  </div>
+  <p class="lead" style="font-size:34px;max-width:28ch;">
+    Ces chiffres décrivent une fin d'été, pas une réserve qui disparaît. Une nappe basse en août peut remonter dès les pluies d'automne.
+  </p>
+  <p class="src">BRGM, bulletin de situation des nappes, 15 août 2026.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/stress-hydrique-2026</span><span>Badreddine EL KHAMLICHI</span></div>
+</section>
+
+<!-- 3 - VUE MONDIALE -->
+<section class="slide">
+  <div class="accent-bar"></div>
+  <p class="eyebrow">La France, vue du monde</p>
+  <span class="counter">3 / 9</span>
+  <h2 style="font-size:56px;margin-top:32px;max-width:18ch;">Le vrai stress hydrique est ailleurs</h2>
+  <p class="body" style="font-size:29px;margin-top:18px;max-width:30ch;">
+    On parle de «&nbsp;stress extrême&nbsp;» quand un pays prélève plus de 80&nbsp;% de son eau renouvelable chaque année.
+  </p>
+  <p style="margin:28px 0 16px;"><span class="big" style="font-size:120px;">25 à 27</span>
+     <span class="lead" style="font-size:38px;"> pays concernés</span></p>
+  <p class="lead" style="font-size:34px;max-width:30ch;">
+    Bahreïn, Chypre, Koweït, Liban… La France n'y figure pas. Parler de «&nbsp;guerre de l'eau&nbsp;» chez nous serait exagéré.
+  </p>
+  <p class="src">World Resources Institute, Aqueduct 2026.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/stress-hydrique-2026</span><span>Badreddine EL KHAMLICHI</span></div>
+</section>
+
+<!-- 4 - USAGES -->
+<section class="slide">
+  <div class="accent-bar"></div>
+  <p class="eyebrow">Qui consomme l'eau</p>
+  <span class="counter">4 / 9</span>
+  <h2 style="font-size:56px;margin-top:36px;max-width:20ch;">La pression maximale, au pire moment</h2>
+  <p class="body" style="font-size:29px;margin-top:20px;max-width:30ch;">
+    Part de l'agriculture dans les prélèvements&nbsp;: elle domine sur l'année, et explose en été, quand les nappes sont déjà basses.
+  </p>
+  <div class="bars" style="margin-top:auto;margin-bottom:14px;max-width:520px;align-self:center;width:100%;">
+    <div class="bar"><span class="val">~45&nbsp;%</span><div class="col" style="height:112px;background:var(--ocre);"></div><span class="lbl">En moyenne<br>annuelle</span></div>
+    <div class="bar"><span class="val">~80&nbsp;%</span><div class="col" style="height:200px;background:var(--warm);"></div><span class="lbl">Au cœur<br>de l'été</span></div>
+  </div>
+  <p class="src" style="margin-top:0;">Ordre de grandeur, consommation nette · France Stratégie.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/stress-hydrique-2026</span><span>Badreddine EL KHAMLICHI</span></div>
+</section>
+
+<!-- 5 - FUITES (calculé) -->
+<section class="slide">
+  <div class="accent-bar"></div>
+  <p class="eyebrow">Le paradoxe des fuites · calculé</p>
+  <span class="counter">5 / 9</span>
+  <h2 style="font-size:60px;margin-top:32px;max-width:18ch;">Un cinquième de l'eau perdu dans les tuyaux</h2>
+  <p class="body" style="font-size:29px;margin-top:18px;max-width:30ch;">
+    J'ai recalculé le rendement des réseaux (SISPEA) par département. Médiane&nbsp;: <b style="color:var(--accent);">19&nbsp;%</b> de fuites. Les extrêmes montent bien plus haut.
+  </p>
+  <div class="bars" style="margin-top:auto;margin-bottom:12px;">
+    <div class="bar"><span class="val">30&nbsp;%</span><div class="col" style="height:158px;background:var(--warm);"></div><span class="lbl">Alpes-<br>Hte-Prov.</span></div>
+    <div class="bar"><span class="val">30&nbsp;%</span><div class="col" style="height:155px;background:var(--warm);"></div><span class="lbl">Cantal</span></div>
+    <div class="bar"><span class="val">29&nbsp;%</span><div class="col" style="height:153px;background:var(--warm);"></div><span class="lbl">Isère</span></div>
+    <div class="bar"><span class="val">19&nbsp;%</span><div class="col" style="height:100px;background:var(--ardoise);"></div><span class="lbl">Médiane<br>France</span></div>
+  </div>
+  <p class="src" style="margin-top:0;">Hub'Eau / SISPEA, indicateur P104.3, millésime 2019. Taux de fuite = 100 − rendement.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/stress-hydrique-2026</span><span>Badreddine EL KHAMLICHI</span></div>
+</section>
+
+<!-- 6 - ÉQUITÉ -->
+<section class="slide">
+  <div class="accent-bar"></div>
+  <p class="eyebrow">Qui paie, qui consomme</p>
+  <span class="counter">6 / 9</span>
+  <h2 style="font-size:62px;margin-top:32px;max-width:18ch;">On demande l'effort à ceux qui consomment le moins</h2>
+  <div class="grp">
+    <div class="pair">
+      <div class="b"><span class="v" style="color:var(--accent);">24&nbsp;%</span><div class="col" style="height:77px;background:var(--accent);"></div></div>
+      <div class="b"><span class="v" style="color:var(--warm);">59&nbsp;%</span><div class="col" style="height:189px;background:var(--warm);"></div></div>
+    </div>
+    <div class="pair">
+      <div class="b"><span class="v" style="color:var(--accent);">50&nbsp;%</span><div class="col" style="height:160px;background:var(--accent);"></div></div>
+      <div class="b"><span class="v" style="color:var(--warm);">8&nbsp;%</span><div class="col" style="height:26px;background:var(--warm);"></div></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:220px;justify-content:center;">
+    <span class="glbl">Ménages</span><span class="glbl">Agriculture</span>
+  </div>
+  <div class="legend" style="margin-top:24px;">
+    <span class="sw"><span class="dot" style="background:var(--accent);"></span>part de la consommation</span>
+    <span class="sw"><span class="dot" style="background:var(--warm);"></span>part des redevances</span>
+  </div>
+  <p class="src" style="margin-top:auto;">Ordre de grandeur, fourchettes selon agences et années · agences de l'eau, Cour des comptes.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/stress-hydrique-2026</span><span>Badreddine EL KHAMLICHI</span></div>
+</section>
+
+<!-- 7 - CORRÉLATION (calculé) -->
+<section class="slide">
+  <div class="accent-bar"></div>
+  <p class="eyebrow">Idée reçue testée · calculé</p>
+  <span class="counter">7 / 9</span>
+  <h2 style="font-size:56px;margin-top:32px;max-width:18ch;">Les fuites, une affaire de pauvreté&nbsp;? Non.</h2>
+  <p class="body" style="font-size:29px;margin-top:18px;max-width:30ch;">
+    On imagine que les territoires modestes, aux réseaux plus vieux, fuient davantage. J'ai croisé taux de fuite et revenu médian&nbsp;:
+  </p>
+  <p style="margin:20px 0 16px;"><span class="big" style="font-size:130px;">−0,15</span>
+     <span class="lead" style="font-size:36px;"> de corrélation</span></p>
+  <p class="lead" style="font-size:33px;max-width:30ch;">
+    Lien quasi nul et non significatif. Les fuites relèvent de l'entretien du réseau, pas de la richesse du territoire.
+  </p>
+  <p class="src">SISPEA 2019 × INSEE (55 départements) · Pearson, p = 0,28.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/stress-hydrique-2026</span><span>Badreddine EL KHAMLICHI</span></div>
+</section>
+
+<!-- 8 - CONCLUSION -->
+<section class="slide">
+  <div class="accent-bar"></div>
+  <p class="eyebrow">La réponse</p>
+  <span class="counter">8 / 9</span>
+  <div class="spacer" style="max-height:40px"></div>
+  <h2 style="font-size:60px;max-width:18ch;">Pas une pénurie. Un problème de gestion.</h2>
+  <p class="lead" style="font-size:36px;margin-top:28px;max-width:26ch;">
+    La France ne manque pas d'eau au sens des pays en stress extrême. Elle a un problème de <b>calendrier</b>, de <b>tuyaux</b> et de <b>répartition de l'effort</b>.
+  </p>
+  <p class="body" style="font-size:30px;margin-top:24px;max-width:28ch;">
+    La sobriété individuelle compte, mais l'essentiel se joue dans l'entretien des réseaux et le partage de la ressource, surtout en été.
+  </p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/stress-hydrique-2026</span><span>Badreddine EL KHAMLICHI</span></div>
+</section>
+
+<!-- 9 - CTA -->
+<section class="slide" style="background:var(--ink);color:#f3efe7;">
+  <div class="accent-bar"></div>
+  <span class="counter" style="color:#6f6a60;">9 / 9</span>
+  <div class="spacer"></div>
+  <h2 style="font-size:78px;max-width:16ch;color:#f8f4ec;">L'enquête complète, méthode et sources</h2>
+  <p style="font-family:var(--serif);font-size:50px;color:var(--accent);margin-top:40px;">
+    labs.badreddineek.com/stress-hydrique-2026
+  </p>
+  <p style="font-size:32px;color:#c7c1b4;margin-top:36px;max-width:27ch;line-height:1.5;">
+    Nappes, fuites, équité, typologie des territoires&nbsp;: tout est recalculé à partir des données publiques, avec ses limites assumées.
+  </p>
+  <div class="spacer"></div>
+  <div class="foot" style="border-color:#3a372f;color:#8a857a;"><span><b style="color:#c7c1b4;">Badreddine EL KHAMLICHI</b> · data scientist, Lyon</span><span>Enquête data</span></div>
+</section>
+
+</body>
+</html>
