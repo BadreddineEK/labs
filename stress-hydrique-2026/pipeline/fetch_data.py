@@ -99,6 +99,66 @@ def fetch_insee_revenu_densite():
     raise RuntimeError("Source INSEE Filosofi a reutiliser depuis le dataset valide des Labs precedents")
 
 
+def _centroids_departements():
+    """Department centroids derived from the cached piezometer coordinates."""
+    stations = fetch_piezometrie_hubeau().get("data", [])
+    groups: dict[str, list[tuple[float, float]]] = {}
+    for station in stations:
+        code = station.get("code_departement")
+        x, y = station.get("x"), station.get("y")
+        if code and x and y:
+            groups.setdefault(code, []).append((float(x), float(y)))
+    return {
+        code: (sum(p[1] for p in pts) / len(pts), sum(p[0] for p in pts) / len(pts))
+        for code, pts in groups.items()
+    }
+
+
+def fetch_departements_context():
+    """Fetch real density (geo.api.gouv.fr) and yearly rainfall (Open-Meteo) per department.
+
+    Resumable: keeps departments already fetched in the local cache.
+    """
+    cache = RAW_DIR / "departements_context.json"
+    context = json.loads(cache.read_text(encoding="utf-8")) if cache.exists() else {}
+    centroids = _centroids_departements()
+    for code, (lat, lon) in sorted(centroids.items()):
+        if code in context:
+            continue
+        entry: dict = {}
+        try:
+            communes = requests.get(
+                f"https://geo.api.gouv.fr/departements/{code}/communes",
+                params={"fields": "population,surface"}, timeout=30,
+            ).json()
+            population = sum((c.get("population") or 0) for c in communes)
+            surface_km2 = sum((c.get("surface") or 0) for c in communes) / 100.0
+            if surface_km2 > 0:
+                entry["population"] = int(population)
+                entry["surface_km2"] = round(surface_km2, 1)
+                entry["densite"] = round(population / surface_km2, 1)
+        except (requests.RequestException, ValueError):
+            pass
+        try:
+            meteo = requests.get(
+                "https://archive-api.open-meteo.com/v1/archive",
+                params={
+                    "latitude": round(lat, 3), "longitude": round(lon, 3),
+                    "start_date": "2025-01-01", "end_date": "2025-12-31",
+                    "daily": "precipitation_sum", "timezone": "Europe/Paris",
+                }, timeout=30,
+            ).json()
+            values = [v for v in meteo.get("daily", {}).get("precipitation_sum", []) if v is not None]
+            if len(values) > 300:
+                entry["pluvio_2025_mm"] = round(sum(values), 1)
+        except (requests.RequestException, ValueError):
+            pass
+        if entry:
+            context[code] = entry
+            cache.write_text(json.dumps(context, ensure_ascii=False), encoding="utf-8")
+    return context
+
+
 if __name__ == "__main__":
     results = {}
     for name, function in (
@@ -110,6 +170,11 @@ if __name__ == "__main__":
             results[name] = {"ok": True, "count": len(payload.get("data", []))}
         except (requests.RequestException, RuntimeError) as error:
             results[name] = {"ok": False, "error": str(error)}
+    try:
+        context = fetch_departements_context()
+        results["context_departements"] = {"ok": True, "count": len(context)}
+    except requests.RequestException as error:
+        results["context_departements"] = {"ok": False, "error": str(error)}
     (ROOT / "data" / "fetch_status.json").write_text(
         json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8"
     )

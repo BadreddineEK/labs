@@ -25,4 +25,10 @@ Identique aux autres Labs : pipeline Python (jamais en production) qui exporte d
 
 ## Statut
 
-🟡 Première tranche fonctionnelle : ingestion Hub'Eau, échantillon de stations actives, tendances Mann-Kendall et percentiles historiques exportés dans `data/tendance_percentile.json`, avec rendu local harmonisé aux autres Labs. Chapitre fuites calculé à partir de SISPEA (taux de fuite départemental, millésime 2019) croisé au revenu médian INSEE (`data/fuites_facteurs.json`) : médiane ~19 %, corrélation fuite × revenu non significative. Restent à joindre : usage agricole (Agreste), déficit pluviométrique et clustering départemental exploratoire.
+� Lab construit et fonctionnel, entièrement alimenté par des résultats calculés localement :
+- **Historique des nappes** (Hub'Eau/BRGM) : tendance de Mann-Kendall + percentile, sans prévision.
+- **Fuites** (SISPEA, millésime 2019) : taux de fuite départemental (médiane ~19 %) et classement calculés.
+- **Corrélation** fuite × revenu médian (INSEE) : non significative — les fuites ne s'expliquent pas par la richesse.
+- **Typologie** (K-means exploratoire, 49 départements métropolitains hors Paris/petite couronne) sur quatre variables réelles : taux de fuite, pluviométrie 2025 (Open-Meteo), densité (INSEE/IGN), revenu médian. Carte choroplèthe Leaflet.
+
+Reste optionnel pour enrichir : usage agricole détaillé (Agreste) et anomalie piézométrique par département (l'API chroniques est instable en local).

@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 import pandas as pd
 
 from analyze_trends import calculer_rang_percentile, test_tendance_mann_kendall
 from analyze_correlation import correlation_fuites_facteurs
+from cluster_departements import determiner_nombre_clusters_optimal, kmeans_typologies_departements
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -120,13 +122,120 @@ def build_fuites_dataset():
     return result
 
 
+def _nommer_clusters(profils):
+    """Assign a unique label per cluster from its most distinctive standardized feature."""
+    libelles = {
+        ("pluvio_2025_mm", "-"): "Faible pluviométrie",
+        ("pluvio_2025_mm", "+"): "Forte pluviométrie",
+        ("taux_fuite", "+"): "Réseaux qui fuient",
+        ("taux_fuite", "-"): "Réseaux performants",
+        ("densite_log", "+"): "Territoires denses",
+        ("densite_log", "-"): "Territoires ruraux",
+        ("revenu_median", "+"): "Revenus élevés",
+        ("revenu_median", "-"): "Revenus modestes",
+    }
+    ranking = []
+    for cluster in profils.index:
+        for feature in profils.columns:
+            ranking.append((abs(profils.loc[cluster, feature]), cluster, feature))
+    ranking.sort(reverse=True)
+    noms, used_clusters, used_labels = {}, set(), set()
+    for _, cluster, feature in ranking:
+        if cluster in used_clusters:
+            continue
+        sign = "+" if profils.loc[cluster, feature] >= 0 else "-"
+        label = libelles.get((feature, sign))
+        if label is None or label in used_labels:
+            continue
+        noms[cluster] = label
+        used_clusters.add(cluster)
+        used_labels.add(label)
+    for cluster in profils.index:
+        noms.setdefault(cluster, "Profil intermédiaire")
+    return noms
+
+
+def build_typologie_dataset():
+    """Clustering exploratoire departemental sur des variables reelles et fiables."""
+    fuites = json.loads((OUT / "fuites_facteurs.json").read_text(encoding="utf-8"))
+    context = json.loads((RAW / "departements_context.json").read_text(encoding="utf-8"))
+    fuite_par_dep = {d["code_departement"]: d for d in fuites["departements_robustes"]}
+
+    rows = []
+    for code, ctx in context.items():
+        if not code[:2].isdigit() or code.startswith("97") or code == "20":
+            continue  # metropole uniquement, regimes DOM et Corse-2A/2B a part
+        if code in {"75", "92", "93", "94"}:
+            continue  # Paris + petite couronne : coeurs ultra-urbains non representatifs
+        base = fuite_par_dep.get(code)
+        if not base or base.get("revenu_median") is None:
+            continue
+        if ctx.get("densite") is None or ctx.get("pluvio_2025_mm") is None:
+            continue
+        rows.append({
+            "code_departement": code,
+            "nom": base["nom"],
+            "taux_fuite": base["taux_fuite"],
+            "densite": ctx["densite"],
+            "densite_log": round(math.log10(ctx["densite"]), 3) if ctx["densite"] > 0 else 0.0,
+            "pluvio_2025_mm": ctx["pluvio_2025_mm"],
+            "revenu_median": base["revenu_median"],
+        })
+    frame = pd.DataFrame(rows)
+    features = ["taux_fuite", "densite_log", "pluvio_2025_mm", "revenu_median"]
+    if len(frame) < 8:
+        raise ValueError("Pas assez de departements complets pour le clustering")
+
+    n_opt, scores = determiner_nombre_clusters_optimal(frame, features=features)
+    labelled, meta = kmeans_typologies_departements(frame, int(n_opt), features=features)
+
+    standardized = (labelled[features] - labelled[features].mean()) / labelled[features].std(ddof=0)
+    standardized["cluster"] = labelled["cluster"]
+    profils = standardized.groupby("cluster")[features].mean().round(2)
+    noms = _nommer_clusters(profils)
+
+    profil_features = ["taux_fuite", "densite", "pluvio_2025_mm", "revenu_median"]
+    reels = labelled.groupby("cluster")[profil_features].mean().round(1)
+    clusters = []
+    for c in profils.index:
+        membres = labelled[labelled["cluster"] == c]
+        clusters.append({
+            "cluster": int(c),
+            "nom": noms[c],
+            "n_departements": int(len(membres)),
+            "profil_moyen_reel": {f: float(reels.loc[c, f]) for f in profil_features},
+            "departements": sorted(membres["nom"].tolist()),
+        })
+
+    result = {
+        "n_departements": int(len(labelled)),
+        "features": features,
+        "n_clusters": int(n_opt),
+        "silhouette": round(meta["silhouette"], 3),
+        "silhouette_par_k": scores,
+        "exploratoire": True,
+        "clusters": clusters,
+        "departements": [
+            {"code_departement": r["code_departement"], "nom": r["nom"],
+             "cluster": int(labelled.loc[i, "cluster"]), "typologie": noms[labelled.loc[i, "cluster"]]}
+            for i, r in labelled.iterrows()
+        ],
+    }
+    (OUT / "typologie_departements.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    return result
+
+
 if __name__ == "__main__":
     result = build_departements_dataset()
     fuites = build_fuites_dataset()
+    typologie = build_typologie_dataset()
     print(json.dumps({
         "n_stations": result["n_stations"],
         "n_points_annuels": len(result["serie_annuelle"]),
         "millesime_fuites": fuites["millesime"],
         "n_departements_fuites": fuites["n_departements"],
         "correlation_revenu": fuites["correlation_revenu"]["correlations"]["revenu_median"]["pearson_r"] if fuites["correlation_revenu"] else None,
+        "n_clusters": typologie["n_clusters"],
+        "silhouette": typologie["silhouette"],
+        "typologies": [c["nom"] + " (" + str(c["n_departements"]) + ")" for c in typologie["clusters"]],
     }, ensure_ascii=False))

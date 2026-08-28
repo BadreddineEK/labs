@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stress hydrique 2026 — La France a-t-elle un vrai problème d'eau ?</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -61,7 +63,16 @@
 
 <section id="geographie-clustering">
   <h2>7 · La géographie du stress hydrique</h2>
-  <p>La typologie départementale viendra après la jointure des données Agreste, SISPEA et INSEE. Elle sera exploratoire, et ne sera pas présentée comme une carte de risque ou une prédiction.</p>
+  <p>Dernière étape, la plus exploratoire : peut-on regrouper les départements en <em>familles</em> qui se ressemblent sur l'eau ? J'ai lancé un clustering (K-means) sur quatre variables réelles et indépendantes — taux de fuite (SISPEA), pluviométrie 2025 (Open-Meteo), densité de population (INSEE/IGN) et revenu médian. La méthode a retenu le découpage ci-dessous.</p>
+  <div class="panel">
+    <div id="map-typologie" class="map" role="img" aria-label="Carte des typologies départementales de stress hydrique"></div>
+    <div class="map-meta">
+      <span class="map-year" id="map-typologie-meta">Typologies · —</span>
+      <div class="map-legend" id="map-typologie-legend"></div>
+    </div>
+  </div>
+  <p class="warn">C'est une lecture <strong>exploratoire</strong>, pas un modèle de risque ni une prédiction. La séparation entre familles est faible (silhouette basse), ce qui est normal : les territoires forment un continuum, pas des groupes tranchés. Paris et la petite couronne, atypiques, sont exclus.</p>
+  <p class="fig-cap">Sources : SISPEA 2019 (fuites), Open-Meteo (pluviométrie 2025), INSEE/IGN (densité, revenu). K-means + score de silhouette calculés localement.</p>
 </section>
 
 <section id="cout-economique">
@@ -72,9 +83,11 @@
 
 <section id="limites">
   <h2>9 · Ce que ça ne dit pas</h2>
-  <p>Le classement des fuites s'appuie sur un échantillon de services SISPEA du millésime 2019, pas sur l'exhaustif : les départements avec trop peu de services observés ont été écartés, et quelques valeurs extrêmes (rendements proches de 100 %) invitent à la prudence sur le bas du classement. Aucune projection future des niveaux de nappes n'est proposée : une vraie prévision hydrogéologique demande un modèle physique complet, pas une extrapolation statistique. Enfin, la France n'est pas en pénurie structurelle comme les pays du haut du classement mondial : c'est un stress saisonnier récurrent, pas une rareté chronique.</p>
+  <p>Le classement des fuites s'appuie sur un échantillon de services SISPEA du millésime 2019, pas sur l'exhaustif : les départements avec trop peu de services observés ont été écartés, et quelques valeurs extrêmes (rendements proches de 100 %) invitent à la prudence sur le bas du classement. La typologie du chapitre 7 est exploratoire : la séparation entre familles est faible et dépend des variables choisies, elle ne doit pas être lue comme un classement de risque. Aucune projection future des niveaux de nappes n'est proposée : une vraie prévision hydrogéologique demande un modèle physique complet, pas une extrapolation statistique. Enfin, la France n'est pas en pénurie structurelle comme les pays du haut du classement mondial : c'est un stress saisonnier récurrent, pas une rareté chronique.</p>
 </section>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="js/chart-hook-alerte.js"></script>
 <script src="js/chart-mondial.js"></script>
 <script src="js/chart-usages-france.js"></script>

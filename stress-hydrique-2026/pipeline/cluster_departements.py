@@ -8,8 +8,11 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import StandardScaler
 
-def determiner_nombre_clusters_optimal(dataset):
-    features = ["anomalie_piezometrique", "deficit_pluviometrique", "intensite_agricole", "taux_fuite"]
+DEFAULT_FEATURES = ["anomalie_piezometrique", "deficit_pluviometrique", "intensite_agricole", "taux_fuite"]
+
+
+def determiner_nombre_clusters_optimal(dataset, features=DEFAULT_FEATURES):
+    features = list(features)
     values = dataset[features].replace([np.inf, -np.inf], np.nan).dropna()
     if len(values) < 8:
         raise ValueError("Au moins 8 territoires complets sont necessaires")
@@ -21,8 +24,8 @@ def determiner_nombre_clusters_optimal(dataset):
     return max(scores, key=scores.get), scores
 
 
-def kmeans_typologies_departements(dataset, n_clusters):
-    features = ["anomalie_piezometrique", "deficit_pluviometrique", "intensite_agricole", "taux_fuite"]
+def kmeans_typologies_departements(dataset, n_clusters, features=DEFAULT_FEATURES):
+    features = list(features)
     clean = dataset[features].replace([np.inf, -np.inf], np.nan).dropna()
     if len(clean) <= n_clusters:
         raise ValueError("Le nombre de territoires doit depasser le nombre de clusters")
