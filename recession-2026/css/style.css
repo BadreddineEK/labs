@@ -32,4 +32,10 @@ main{padding-bottom:4rem}section{max-width:var(--maxw);margin:auto;padding:2.5re
 .tbl tr.hl td{background:#eef2f6}
 .sig{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 8px;border-radius:20px}
 .sig.neg{color:var(--warm);background:#f2e2d9}.sig.pos{color:var(--pos);background:#e0ede2}.sig.stable{color:var(--muted);background:#eae6dd}
+/* détail repliable (diagnostic secondaire) */
+.detail-secondaire{margin-top:1.4rem;border:1px solid var(--rule);border-radius:6px;padding:.9rem 1.1rem}
+.detail-secondaire summary{cursor:pointer;font-weight:600;color:var(--accent);font-size:.95rem}
+.detail-secondaire summary::marker{color:var(--accent)}
+/* pseudo-code coulisses techniques */
+.code-block{background:#232220;color:#e7e2d6;font:.85rem/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;padding:1rem 1.2rem;border-radius:6px;overflow-x:auto;white-space:pre;margin:.6rem 0 1.1rem}
 @media(max-width:560px){body{font-size:16px}.hero{padding-top:1.6rem}.metric strong{font-size:3.5rem}.chart-wrap{padding:.65rem}.badge-calcul{display:none}}

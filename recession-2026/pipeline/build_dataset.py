@@ -3,7 +3,11 @@
 - pib_hook.json          : serie PIB France (chapitres 1 et 2)
 - comparaison_europe.json: PIB par pays, classement du T2 2026 (chapitre 5)
 - revisions.json         : magnitude des revisions (chapitre 3, via analyze_revisions)
-- diagnostic_multi.json  : diagnostic multi-indicateurs (chapitre 4, via build_diagnostic_multi)
+- diagnostic_multi.json  : diagnostic 4 indicateurs, secondaire (via build_diagnostic_multi)
+- croissance_longue.json : croissance 10 ans multi-pays (via build_croissance_longue)
+- cycles_bry_boschan.json: points de retournement PIB (via build_cycles)
+- dette_deficit.json     : dette/deficit FR vs DE/IT/ES (via build_dette_deficit)
+- part_pib_europe.json   : part FR/IT/PL dans le PIB de l'UE, 2005-2025 (via build_part_pib_europe)
 """
 
 from __future__ import annotations
@@ -13,6 +17,10 @@ from pathlib import Path
 
 import analyze_revisions
 import build_diagnostic_multi
+import build_croissance_longue
+import build_cycles
+import build_dette_deficit
+import build_part_pib_europe
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "data" / "raw"
@@ -65,11 +73,20 @@ def main():
     comp = build_comparaison_europe()
     rev = analyze_revisions.main()
     diag = build_diagnostic_multi.main()
+    longue = build_croissance_longue.build_croissance_longue()
+    cycles = build_cycles.build_cycles()
+    dette = build_dette_deficit.build_dette_deficit()
+    part_ue = build_part_pib_europe.build_part_pib_europe()
     print(json.dumps({
         "pib_dernier": hook["dernier"],
         "france_rang": [c["pays"] for c in comp["classement_dernier"]],
         "revision_moyenne": rev["magnitude_moyenne"],
         "diagnostic_negatifs": f'{diag["n_negatifs"]}/{diag["n_total"]}',
+        "verdict_longue": longue["verdict"],
+        "cycles_n_evenements": cycles["n_evenements"],
+        "cycles_phase": cycles["phase_actuelle"],
+        "dette_derniere": dette["dette_derniere_fr"],
+        "part_ue_derniere": part_ue["derniere_annee"],
     }, ensure_ascii=False, indent=2))
 
 

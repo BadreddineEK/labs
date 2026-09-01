@@ -28,8 +28,8 @@
     {
       "nom": "Utilisation des capacités",
       "mesure": "niveau (industrie)",
-      "periode": "2026-Q3",
-      "valeur": 82.1,
+      "periode": "2026-Q2",
+      "valeur": 82.4,
       "unite": "%",
       "direction": "stable",
       "reference": 81.3,
@@ -39,6 +39,7 @@
   "n_negatifs": 1,
   "n_total": 4,
   "exploratoire": true,
+  "note_bases": "Chaque indicateur suit sa base de reference usuelle (le PIB et l'investissement en variation trimestrielle, l'emploi en glissement annuel, l'utilisation des capacites en niveau) : ce n'est pas un vote a poids egal entre series comparables, mais une juxtaposition de signaux de nature differente.",
   "lecture": "Les indicateurs ne pointent pas tous dans la meme direction : selon celui qu'on regarde, le diagnostic change. C'est justement pourquoi les economistes croisent plusieurs series plutot que la seule regle des deux trimestres negatifs.",
   "source": "Eurostat (comptes nationaux trimestriels et enquete de conjoncture), donnees 2026."
 }

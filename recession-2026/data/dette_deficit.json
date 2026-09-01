@@ -1,0 +1,146 @@
+{
+  "dette_trimestrielle_fr": [
+    {
+      "periode": "2022-Q1",
+      "valeur": 114.4
+    },
+    {
+      "periode": "2022-Q2",
+      "valeur": 112.9
+    },
+    {
+      "periode": "2022-Q3",
+      "valeur": 113.1
+    },
+    {
+      "periode": "2022-Q4",
+      "valeur": 111.4
+    },
+    {
+      "periode": "2023-Q1",
+      "valeur": 111.9
+    },
+    {
+      "periode": "2023-Q2",
+      "valeur": 111.3
+    },
+    {
+      "periode": "2023-Q3",
+      "valeur": 111.1
+    },
+    {
+      "periode": "2023-Q4",
+      "valeur": 109.5
+    },
+    {
+      "periode": "2024-Q1",
+      "valeur": 110.2
+    },
+    {
+      "periode": "2024-Q2",
+      "valeur": 111.8
+    },
+    {
+      "periode": "2024-Q3",
+      "valeur": 113.1
+    },
+    {
+      "periode": "2024-Q4",
+      "valeur": 112.6
+    },
+    {
+      "periode": "2025-Q1",
+      "valeur": 113.6
+    },
+    {
+      "periode": "2025-Q2",
+      "valeur": 115.4
+    },
+    {
+      "periode": "2025-Q3",
+      "valeur": 117.3
+    },
+    {
+      "periode": "2025-Q4",
+      "valeur": 115.7
+    },
+    {
+      "periode": "2026-Q1",
+      "valeur": 117.6
+    }
+  ],
+  "dette_derniere_fr": {
+    "periode": "2026-Q1",
+    "valeur": 117.6
+  },
+  "dette_comparaison": {
+    "annee": "2025",
+    "pays": [
+      {
+        "geo": "FR",
+        "pays": "France",
+        "valeur": 115.6
+      },
+      {
+        "geo": "DE",
+        "pays": "Allemagne",
+        "valeur": 63.5
+      },
+      {
+        "geo": "IT",
+        "pays": "Italie",
+        "valeur": 137.1
+      },
+      {
+        "geo": "ES",
+        "pays": "Espagne",
+        "valeur": 100.7
+      }
+    ]
+  },
+  "deficit_comparaison": {
+    "annee": "2025",
+    "pays": [
+      {
+        "geo": "FR",
+        "pays": "France",
+        "valeur": -5.1
+      },
+      {
+        "geo": "DE",
+        "pays": "Allemagne",
+        "valeur": -2.7
+      },
+      {
+        "geo": "IT",
+        "pays": "Italie",
+        "valeur": -3.1
+      },
+      {
+        "geo": "ES",
+        "pays": "Espagne",
+        "valeur": -2.4
+      }
+    ]
+  },
+  "projection_dette": {
+    "hypothese": "a legislation constante, sans nouvelle mesure de redressement",
+    "points": [
+      {
+        "annee": "2027",
+        "valeur": 120.0
+      },
+      {
+        "annee": "2030",
+        "valeur": 129.0
+      }
+    ],
+    "type": "projection conditionnelle, non une certitude"
+  },
+  "budget_2027": {
+    "deficit_vise_2027": 4.9,
+    "deficit_2025": -5.1,
+    "date_presentation": "30 septembre 2026"
+  },
+  "note_ecart_source": "Notre point calculé (Eurostat, comptes trimestriels harmonisés) porte sur le dernier trimestre disponible dans cette base, en général un trimestre derrière la publication nationale la plus récente de l'Insee (qui peut afficher un chiffre légèrement différent et plus à jour). Écart de calendrier de publication, pas une contradiction de fond."
+}

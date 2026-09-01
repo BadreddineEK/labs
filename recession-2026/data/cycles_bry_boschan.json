@@ -1,0 +1,416 @@
+{
+  "evenements": [
+    {
+      "periode": "2004-Q1",
+      "type": "creux",
+      "niveau": 483773.7
+    },
+    {
+      "periode": "2008-Q1",
+      "type": "pic",
+      "niveau": 530952.3
+    },
+    {
+      "periode": "2009-Q1",
+      "type": "creux",
+      "niveau": 509154.0
+    },
+    {
+      "periode": "2011-Q4",
+      "type": "pic",
+      "niveau": 535919.4
+    },
+    {
+      "periode": "2012-Q2",
+      "type": "creux",
+      "niveau": 533529.2
+    },
+    {
+      "periode": "2019-Q3",
+      "type": "pic",
+      "niveau": 590041.4
+    },
+    {
+      "periode": "2020-Q2",
+      "type": "creux",
+      "niveau": 489595.5
+    },
+    {
+      "periode": "2025-Q4",
+      "type": "pic",
+      "niveau": 624763.2
+    }
+  ],
+  "n_evenements": 8,
+  "phase_actuelle": "phase descendante ou de ralentissement depuis le dernier pic detecte",
+  "parametres": {
+    "fenetre": 2,
+    "phase_min_trimestres": 2,
+    "cycle_min_trimestres": 5
+  },
+  "exploratoire": true,
+  "methode": "Detection simplifiee de type Bry-Boschan (1971) sur le PIB en volume, CVS-CJO.",
+  "serie_niveau": [
+    {
+      "periode": "2004-Q1",
+      "valeur": 483773.7
+    },
+    {
+      "periode": "2004-Q2",
+      "valeur": 485940.6
+    },
+    {
+      "periode": "2004-Q3",
+      "valeur": 487680.9
+    },
+    {
+      "periode": "2004-Q4",
+      "valeur": 492025.8
+    },
+    {
+      "periode": "2005-Q1",
+      "valeur": 493465.4
+    },
+    {
+      "periode": "2005-Q2",
+      "valeur": 494497.1
+    },
+    {
+      "periode": "2005-Q3",
+      "valeur": 498386.8
+    },
+    {
+      "periode": "2005-Q4",
+      "valeur": 501809.0
+    },
+    {
+      "periode": "2006-Q1",
+      "valeur": 506130.3
+    },
+    {
+      "periode": "2006-Q2",
+      "valeur": 512302.0
+    },
+    {
+      "periode": "2006-Q3",
+      "valeur": 512698.3
+    },
+    {
+      "periode": "2006-Q4",
+      "valeur": 515401.8
+    },
+    {
+      "periode": "2007-Q1",
+      "valeur": 520807.3
+    },
+    {
+      "periode": "2007-Q2",
+      "valeur": 524213.4
+    },
+    {
+      "periode": "2007-Q3",
+      "valeur": 525990.7
+    },
+    {
+      "periode": "2007-Q4",
+      "valeur": 526250.4
+    },
+    {
+      "periode": "2008-Q1",
+      "valeur": 530952.3
+    },
+    {
+      "periode": "2008-Q2",
+      "valeur": 526949.1
+    },
+    {
+      "periode": "2008-Q3",
+      "valeur": 525799.5
+    },
+    {
+      "periode": "2008-Q4",
+      "valeur": 519029.8
+    },
+    {
+      "periode": "2009-Q1",
+      "valeur": 509154.0
+    },
+    {
+      "periode": "2009-Q2",
+      "valeur": 510075.3
+    },
+    {
+      "periode": "2009-Q3",
+      "valeur": 511252.9
+    },
+    {
+      "periode": "2009-Q4",
+      "valeur": 514950.2
+    },
+    {
+      "periode": "2010-Q1",
+      "valeur": 516368.6
+    },
+    {
+      "periode": "2010-Q2",
+      "valeur": 518869.0
+    },
+    {
+      "periode": "2010-Q3",
+      "valeur": 522404.4
+    },
+    {
+      "periode": "2010-Q4",
+      "valeur": 525353.0
+    },
+    {
+      "periode": "2011-Q1",
+      "valeur": 532309.7
+    },
+    {
+      "periode": "2011-Q2",
+      "valeur": 532348.1
+    },
+    {
+      "periode": "2011-Q3",
+      "valeur": 534125.4
+    },
+    {
+      "periode": "2011-Q4",
+      "valeur": 535919.4
+    },
+    {
+      "periode": "2012-Q1",
+      "valeur": 535765.3
+    },
+    {
+      "periode": "2012-Q2",
+      "valeur": 533529.2
+    },
+    {
+      "periode": "2012-Q3",
+      "valeur": 535287.2
+    },
+    {
+      "periode": "2012-Q4",
+      "valeur": 534971.1
+    },
+    {
+      "periode": "2013-Q1",
+      "valeur": 536056.6
+    },
+    {
+      "periode": "2013-Q2",
+      "valeur": 540807.1
+    },
+    {
+      "periode": "2013-Q3",
+      "valeur": 539658.4
+    },
+    {
+      "periode": "2013-Q4",
+      "valeur": 542942.5
+    },
+    {
+      "periode": "2014-Q1",
+      "valeur": 542900.3
+    },
+    {
+      "periode": "2014-Q2",
+      "valeur": 544143.5
+    },
+    {
+      "periode": "2014-Q3",
+      "valeur": 547785.4
+    },
+    {
+      "periode": "2014-Q4",
+      "valeur": 546181.8
+    },
+    {
+      "periode": "2015-Q1",
+      "valeur": 549317.3
+    },
+    {
+      "periode": "2015-Q2",
+      "valeur": 549547.5
+    },
+    {
+      "periode": "2015-Q3",
+      "valeur": 551197.7
+    },
+    {
+      "periode": "2015-Q4",
+      "valeur": 552725.3
+    },
+    {
+      "periode": "2016-Q1",
+      "valeur": 554441.2
+    },
+    {
+      "periode": "2016-Q2",
+      "valeur": 553015.9
+    },
+    {
+      "periode": "2016-Q3",
+      "valeur": 554001.4
+    },
+    {
+      "periode": "2016-Q4",
+      "valeur": 557561.7
+    },
+    {
+      "periode": "2017-Q1",
+      "valeur": 561254.6
+    },
+    {
+      "periode": "2017-Q2",
+      "valeur": 565390.3
+    },
+    {
+      "periode": "2017-Q3",
+      "valeur": 569660.3
+    },
+    {
+      "periode": "2017-Q4",
+      "valeur": 573076.1
+    },
+    {
+      "periode": "2018-Q1",
+      "valeur": 572744.5
+    },
+    {
+      "periode": "2018-Q2",
+      "valeur": 574039.1
+    },
+    {
+      "periode": "2018-Q3",
+      "valeur": 577198.3
+    },
+    {
+      "periode": "2018-Q4",
+      "valeur": 581356.0
+    },
+    {
+      "periode": "2019-Q1",
+      "valeur": 586877.0
+    },
+    {
+      "periode": "2019-Q2",
+      "valeur": 589790.1
+    },
+    {
+      "periode": "2019-Q3",
+      "valeur": 590041.4
+    },
+    {
+      "periode": "2019-Q4",
+      "valeur": 587073.7
+    },
+    {
+      "periode": "2020-Q1",
+      "valeur": 557703.4
+    },
+    {
+      "periode": "2020-Q2",
+      "valeur": 489595.5
+    },
+    {
+      "periode": "2020-Q3",
+      "valeur": 563744.8
+    },
+    {
+      "periode": "2020-Q4",
+      "valeur": 563683.7
+    },
+    {
+      "periode": "2021-Q1",
+      "valeur": 566215.9
+    },
+    {
+      "periode": "2021-Q2",
+      "valeur": 573076.5
+    },
+    {
+      "periode": "2021-Q3",
+      "valeur": 590048.0
+    },
+    {
+      "periode": "2021-Q4",
+      "valeur": 593069.1
+    },
+    {
+      "periode": "2022-Q1",
+      "valeur": 592986.3
+    },
+    {
+      "periode": "2022-Q2",
+      "valeur": 595334.2
+    },
+    {
+      "periode": "2022-Q3",
+      "valeur": 598352.3
+    },
+    {
+      "periode": "2022-Q4",
+      "valeur": 600767.7
+    },
+    {
+      "periode": "2023-Q1",
+      "valeur": 601631.7
+    },
+    {
+      "periode": "2023-Q2",
+      "valeur": 607231.4
+    },
+    {
+      "periode": "2023-Q3",
+      "valeur": 609461.1
+    },
+    {
+      "periode": "2023-Q4",
+      "valeur": 612534.0
+    },
+    {
+      "periode": "2024-Q1",
+      "valeur": 614032.9
+    },
+    {
+      "periode": "2024-Q2",
+      "valeur": 615391.4
+    },
+    {
+      "periode": "2024-Q3",
+      "valeur": 618068.2
+    },
+    {
+      "periode": "2024-Q4",
+      "valeur": 617994.2
+    },
+    {
+      "periode": "2025-Q1",
+      "valeur": 619035.1
+    },
+    {
+      "periode": "2025-Q2",
+      "valeur": 620495.5
+    },
+    {
+      "periode": "2025-Q3",
+      "valeur": 623124.8
+    },
+    {
+      "periode": "2025-Q4",
+      "valeur": 624763.2
+    },
+    {
+      "periode": "2026-Q1",
+      "valeur": 623639.3
+    },
+    {
+      "periode": "2026-Q2",
+      "valeur": 623860.3
+    }
+  ],
+  "source": "Eurostat, PIB en volume, niveau chaine (CVS-CJO), 2004-2026."
+}

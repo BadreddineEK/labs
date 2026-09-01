@@ -1,0 +1,145 @@
+{
+  "points": [
+    {
+      "annee": 2005,
+      "France": 18.4,
+      "Italie": 15.6,
+      "Pologne": 2.6
+    },
+    {
+      "annee": 2006,
+      "France": 18.2,
+      "Italie": 15.4,
+      "Pologne": 2.7
+    },
+    {
+      "annee": 2007,
+      "France": 18.0,
+      "Italie": 15.0,
+      "Pologne": 2.9
+    },
+    {
+      "annee": 2008,
+      "France": 17.9,
+      "Italie": 14.8,
+      "Pologne": 3.3
+    },
+    {
+      "annee": 2009,
+      "France": 18.2,
+      "Italie": 14.9,
+      "Pologne": 3.0
+    },
+    {
+      "annee": 2010,
+      "France": 18.1,
+      "Italie": 14.6,
+      "Pologne": 3.3
+    },
+    {
+      "annee": 2011,
+      "France": 18.1,
+      "Italie": 14.5,
+      "Pologne": 3.3
+    },
+    {
+      "annee": 2012,
+      "France": 18.2,
+      "Italie": 14.2,
+      "Pologne": 3.4
+    },
+    {
+      "annee": 2013,
+      "France": 18.3,
+      "Italie": 14.0,
+      "Pologne": 3.4
+    },
+    {
+      "annee": 2014,
+      "France": 18.1,
+      "Italie": 13.8,
+      "Pologne": 3.4
+    },
+    {
+      "annee": 2015,
+      "France": 17.9,
+      "Italie": 13.5,
+      "Pologne": 3.5
+    },
+    {
+      "annee": 2016,
+      "France": 17.7,
+      "Italie": 13.5,
+      "Pologne": 3.4
+    },
+    {
+      "annee": 2017,
+      "France": 17.4,
+      "Italie": 13.2,
+      "Pologne": 3.6
+    },
+    {
+      "annee": 2018,
+      "France": 17.3,
+      "Italie": 13.0,
+      "Pologne": 3.7
+    },
+    {
+      "annee": 2019,
+      "France": 17.2,
+      "Italie": 12.8,
+      "Pologne": 3.8
+    },
+    {
+      "annee": 2020,
+      "France": 17.1,
+      "Italie": 12.3,
+      "Pologne": 3.9
+    },
+    {
+      "annee": 2021,
+      "France": 17.0,
+      "Italie": 12.5,
+      "Pologne": 3.9
+    },
+    {
+      "annee": 2022,
+      "France": 16.4,
+      "Italie": 12.4,
+      "Pologne": 4.1
+    },
+    {
+      "annee": 2023,
+      "France": 16.4,
+      "Italie": 12.4,
+      "Pologne": 4.4
+    },
+    {
+      "annee": 2024,
+      "France": 16.3,
+      "Italie": 12.2,
+      "Pologne": 4.7
+    },
+    {
+      "annee": 2025,
+      "France": 15.9,
+      "Italie": 12.0,
+      "Pologne": 4.9
+    }
+  ],
+  "premiere_annee": {
+    "annee": 2005,
+    "France": 18.4,
+    "Italie": 15.6,
+    "Pologne": 2.6
+  },
+  "derniere_annee": {
+    "annee": 2025,
+    "France": 15.9,
+    "Italie": 12.0,
+    "Pologne": 4.9
+  },
+  "lecture": "La part de la France dans le PIB de l'UE27 recule sur 20 ans, mais elle n'est pas seule : l'Italie recule davantage sur la meme periode, pendant que des pays comme la Pologne montent. C'est une redistribution plus large au sein de l'UE, pas un decrochage franco-francais isole.",
+  "perimetre": "UE27 a composition actuelle (EU27_2020), PIB nominal (prix courants), sommes annuelles des 4 trimestres.",
+  "source": "Eurostat, comptes nationaux trimestriels (namq_10_gdp), PIB a prix courants."
+}

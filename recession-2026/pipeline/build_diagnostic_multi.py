@@ -53,7 +53,11 @@ def construire_diagnostic_multi_indicateurs():
     p_pib, v_pib = _last(pib)
     p_fbcf, v_fbcf = _last(fbcf)
     p_emp, v_emp = _yoy(emploi)
-    p_capa, v_capa = _last(capa)
+    # Aligner l'utilisation des capacites sur le meme trimestre que le PIB : l'enquete de conjoncture
+    # publie parfois un point plus recent (ex. T3) que les comptes nationaux (ex. T2) - on ne compare
+    # que des trimestres communs pour eviter un decalage silencieux de date.
+    capa_alignee = {p: v for p, v in capa.items() if p <= p_pib}
+    p_capa, v_capa = _last(capa_alignee)
     moy_capa = round(sum(capa.values()) / len(capa), 1)
 
     indicateurs = [
@@ -75,6 +79,11 @@ def construire_diagnostic_multi_indicateurs():
         "n_negatifs": negatifs,
         "n_total": len(indicateurs),
         "exploratoire": True,
+        "note_bases": (
+            "Chaque indicateur suit sa base de reference usuelle (le PIB et l'investissement en variation "
+            "trimestrielle, l'emploi en glissement annuel, l'utilisation des capacites en niveau) : ce n'est "
+            "pas un vote a poids egal entre series comparables, mais une juxtaposition de signaux de nature differente."
+        ),
         "lecture": (
             "Les indicateurs ne pointent pas tous dans la meme direction : selon celui qu'on regarde, "
             "le diagnostic change. C'est justement pourquoi les economistes croisent plusieurs series "

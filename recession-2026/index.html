@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>La France est-elle vraiment en récession ? · Lab</title>
-  <meta name="description" content="Fin août 2026, l'Insee a révisé la croissance du T2 à 0,0 %. Récession ou pas ? La réponse dépend de la définition. Enquête data : révisions recalculées, diagnostic multi-indicateurs, comparaison européenne. Un Lab de Badreddine EL KHAMLICHI.">
+  <meta name="description" content="Fin août 2026, l'Insee a révisé la croissance du T2 à 0,0 %. Récession ou pas ? La réponse dépend de la définition. Enquête data en profondeur : révisions recalculées, détection de cycles (Bry-Boschan), comparaison européenne sur 10 ans, déclin de la part française dans le PIB de l'UE, dette et déficit en contexte. Un Lab de Badreddine EL KHAMLICHI.">
   <meta name="author" content="Badreddine EL KHAMLICHI">
   <meta property="og:type" content="article">
   <meta property="og:title" content="La France est-elle vraiment en récession ?">
-  <meta property="og:description" content="Récession ou pas ? Ça dépend de la définition. Révisions Insee recalculées, diagnostic multi-indicateurs, comparaison européenne.">
+  <meta property="og:description" content="Récession ou pas ? Ça dépend de la définition. Révisions, cycles Bry-Boschan, comparaison européenne sur 10 ans, dette et déficit recalculés.">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Labs · Badreddine EK">
   <meta property="og:url" content="https://labs.badreddineek.com/recession-2026/">
@@ -38,10 +38,13 @@
   <section id="intro" class="note-method">
     <p>
       <strong>Comment lire ce Lab.</strong> Je pars du chiffre qui vient de tomber, puis je montre pourquoi
-      «&nbsp;récession ou pas&nbsp;» n'a pas de réponse unique. Trois chapitres sont <strong>calculés</strong>
-      à partir des données publiques (Eurostat)&nbsp;: l'ampleur des révisions, un diagnostic multi-indicateurs,
-      et la comparaison européenne. Le reste pose le décor. Chaque chiffre est daté, sourcé, et je distingue
-      toujours <em>première estimation</em> et <em>estimation détaillée</em>.
+      «&nbsp;récession ou pas&nbsp;» n'a pas de réponse unique. Plusieurs chapitres sont <strong>calculés</strong>
+      à partir des données publiques (Eurostat)&nbsp;: l'ampleur des révisions, une détection de cycles
+      (Bry-Boschan simplifié), la comparaison européenne étendue sur dix ans, le déclin de la part française
+      dans le PIB de l'UE, et la dette publique en contexte. Pour chaque grand chiffre macro, je pose la même
+      question&nbsp;: problème spécifiquement français, ou partagé avec l'Allemagne, l'Italie, l'Espagne et la
+      zone euro&nbsp;? Chaque chiffre est daté, sourcé, et je distingue toujours <em>première estimation</em> et
+      <em>estimation détaillée</em>.
     </p>
   </section>
 
@@ -91,43 +94,134 @@
     <p class="fig-cap">Révisions&nbsp;: Insee, comptes trimestriels (première estimation vs estimation détaillée). Référence historique&nbsp;: rapport du Sénat, écart moyen 2000-2005.</p>
   </section>
 
-  <!-- 4 · DIAGNOSTIC MULTI (calculé, exploratoire) -->
+  <!-- 4 · CYCLES (Bry-Boschan simplifié, calculé) -->
   <section id="diagnostic-multi">
-    <h2>4. Ce que disent les autres indicateurs <span class="badge-calcul">calculé</span></h2>
+    <h2>4. Une vraie méthode de datation, en version simplifiée <span class="badge-calcul">calculé</span></h2>
     <p class="section-intro">
-      Puisque les économistes regardent plusieurs séries, faisons pareil, en version simplifiée. Voici quatre
-      indicateurs de l'économie française, côte à côte, à leur dernier point connu.
+      Plutôt que de juxtaposer des indicateurs à l'œil, j'ai implémenté une version simplifiée de l'algorithme
+      de <strong>Bry-Boschan</strong> (1971)&nbsp;: il détecte automatiquement les pics et les creux d'une série,
+      avec des règles de durée minimale pour éviter le bruit. Appliqué au niveau du PIB français depuis 2004.
     </p>
-    <div class="chart-wrap"><div id="diagnostic-multi-table"></div></div>
-    <p class="takeaway" id="diagnostic-takeaway"></p>
+    <div class="chart-wrap"><div id="chart-cycles"></div></div>
+    <p class="chart-legend" id="cycles-legend"></p>
+    <p class="takeaway" id="cycles-takeaway"></p>
     <div class="nuance-box">
-      Version <strong>exploratoire</strong> et volontairement simplifiée&nbsp;: je juxtapose des séries, je ne
-      reproduis pas le modèle à seuils d'un comité de datation. L'idée n'est pas de trancher, mais de montrer
-      que le diagnostic change selon l'indicateur regardé.
+      <strong>Implémentation pédagogique, pas le modèle complet.</strong> Le vrai comité de datation (référence
+      AFSE) et les indicateurs probabilistes de retournement de la Banque de France (2007) croisent plusieurs
+      séries via des modèles à seuils bien plus sophistiqués. Ici, une seule série (le PIB), une règle simple.
+      Ça éclaire la logique, ce n'est pas une datation officielle.
     </div>
-    <p class="fig-cap">Source&nbsp;: Eurostat (comptes nationaux trimestriels et enquête de conjoncture dans l'industrie), données 2026.</p>
+    <details class="detail-secondaire">
+      <summary>Voir aussi&nbsp;: quatre indicateurs côte à côte (diagnostic secondaire)</summary>
+      <p class="section-intro" style="margin-top:.9rem">
+        Pour compléter, voici quatre séries à leur dernier point connu. <strong>Attention</strong>&nbsp;: elles
+        suivent chacune leur base usuelle (PIB et investissement en variation trimestrielle, emploi en
+        glissement annuel, capacités en niveau) — ce n'est pas un vote à poids égal, juste une photo côte à côte.
+      </p>
+      <div class="chart-wrap"><div id="diagnostic-multi-table"></div></div>
+      <p class="takeaway" id="diagnostic-takeaway"></p>
+    </details>
+    <p class="fig-cap">Sources&nbsp;: Eurostat (PIB en volume, niveau CVS-CJO). Références méthodologiques&nbsp;: Bry &amp; Boschan (1971)&nbsp;; Banque de France, document de travail sur les indicateurs de retournement cyclique (2007)&nbsp;; étude AFSE de datation des cycles français.</p>
   </section>
 
-  <!-- 5 · COMPARAISON EUROPÉENNE (calculé) -->
+  <!-- 5 · COMPARAISON EUROPÉENNE + PROFONDEUR TEMPORELLE (calculé) -->
   <section id="comparaison-europeenne">
-    <h2>5. Dernière de la classe européenne, ce trimestre <span class="badge-calcul">calculé</span></h2>
+    <h2>5. Dernière de la classe&nbsp;: depuis un trimestre, ou depuis plus longtemps&nbsp;? <span class="badge-calcul">calculé</span></h2>
     <p class="section-intro">
-      Un point qui, lui, ne dépend pas de la définition&nbsp;: comparée à ses voisines sur le même trimestre et
-      la même source harmonisée, la France est la moins bonne des grandes économies de la zone euro.
+      Un point qui ne dépend d'aucune définition&nbsp;: comparée à ses voisines sur le même trimestre et la même
+      source harmonisée, la France est la moins bonne des grandes économies de la zone euro. Reste à savoir si
+      c'est un accident d'un trimestre, ou une tendance plus installée.
     </p>
     <div class="chart-wrap"><div id="chart-comparaison"></div></div>
     <p class="chart-legend" id="comparaison-legend"></p>
     <p class="takeaway" id="comparaison-takeaway"></p>
+    <p style="margin-top:1.4rem">
+      Pour trancher, j'ai étendu la comparaison sur près de dix ans, plutôt que sur un seul trimestre&nbsp;:
+    </p>
+    <div class="chart-wrap"><div id="chart-croissance-longue"></div></div>
+    <p class="chart-legend" id="croissance-longue-legend"></p>
+    <p class="takeaway" id="croissance-longue-takeaway"></p>
     <div class="nuance-box">
       À manier avec prudence&nbsp;: sur un seul trimestre, l'écart est petit et chaque pays révise à son propre
-      rythme (estimation flash contre estimation détaillée). C'est une photo, pas une tendance.
+      rythme (estimation flash contre estimation détaillée). Le ralentissement français récent doit beaucoup au
+      1ᵉʳ trimestre 2026 (−0,2&nbsp;%), au moment où l'Allemagne accélérait&nbsp;: un trimestre pèse lourd dans
+      une moyenne courte.
     </div>
-    <p class="fig-cap">Source&nbsp;: Eurostat, PIB en volume, variation trimestrielle (CVS-CJO), séries harmonisées.</p>
+    <p class="fig-cap">Source&nbsp;: Eurostat, PIB en volume, variation trimestrielle (CVS-CJO), séries harmonisées depuis 2016.</p>
   </section>
 
-  <!-- 6 · LE VRAI MAL -->
+  <!-- 6 · DÉCLIN STRUCTUREL PART UE (calculé) -->
+  <section id="part-pib-europe">
+    <h2>6. Le vrai signal de fond&nbsp;: 20 ans de recul dans le PIB européen <span class="badge-calcul">calculé</span></h2>
+    <p class="section-intro">
+      Le trimestre fait la une, mais un chiffre plus lent en dit peut-être plus long&nbsp;: le poids de la France
+      dans l'économie de l'Union européenne recule depuis vingt ans. Est-ce un déclin franco-français isolé,
+      ou une redistribution plus large&nbsp;? J'ai recalculé la part de plusieurs pays dans le PIB nominal de l'UE.
+    </p>
+    <div class="chart-wrap"><div id="chart-part-pib-europe"></div></div>
+    <p class="takeaway" id="part-pib-europe-takeaway"></p>
+    <div class="nuance-box">
+      Périmètre UE27 à composition actuelle (EU27_2020), PIB nominal à prix courants&nbsp;: les effets de change
+      et d'inflation relative jouent aussi. C'est un ordre de grandeur sur longue période, pas un ajustement fin
+      trimestre par trimestre.
+    </div>
+    <p class="fig-cap">Source&nbsp;: Eurostat, comptes nationaux trimestriels (namq_10_gdp), PIB à prix courants, sommes annuelles 2005-2025.</p>
+  </section>
+
+  <!-- 7 · DETTE PUBLIQUE (calculé) -->
+  <section id="dette-publique">
+    <h2>7. La dette&nbsp;: la France n'est ni la meilleure, ni la pire</h2>
+    <p class="section-intro">
+      Autre chiffre macro qui mérite un point de repère avant de faire peur&nbsp;: la dette publique française.
+    </p>
+    <div class="chart-wrap"><div id="chart-dette-comparaison"></div></div>
+    <p class="chart-legend" id="dette-legend"></p>
+    <p class="takeaway" id="dette-takeaway"></p>
+    <p>
+      Sur les données trimestrielles les plus récentes disponibles dans la base harmonisée que j'utilise, la
+      dette française atteint <strong>117,6&nbsp;%</strong> du PIB au 1ᵉʳ trimestre 2026. L'Insee, dans sa
+      publication nationale la plus récente (fin août 2026), avance un chiffre légèrement supérieur, autour de
+      <strong>118,4&nbsp;%</strong> (3&nbsp;562&nbsp;Md€), pour le 2ᵉ trimestre&nbsp;: l'écart tient au calendrier
+      de publication (un trimestre d'avance pour l'Insee sur la base européenne harmonisée), pas à une
+      contradiction de fond.
+    </p>
+    <div class="nuance-box">
+      Des projections, débattues dans le cadre budgétaire, évoquent une trajectoire vers 120&nbsp;% en 2027 et
+      129&nbsp;% en 2030 <em>si aucune mesure de redressement n'est prise</em>. C'est une <strong>projection
+      conditionnelle</strong>, pas une certitude&nbsp;: elle dépend d'hypothèses de croissance, de taux d'intérêt
+      et de politique budgétaire qui peuvent toutes changer.
+    </div>
+    <p class="fig-cap">Source&nbsp;: Eurostat (comptes trimestriels et annuels des administrations publiques). Projection citée à titre indicatif, débat budgétaire 2026-2027.</p>
+  </section>
+
+  <!-- 8 · BUDGET 2027, DÉFICIT, RETRAITES -->
+  <section id="budget-retraites">
+    <h2>8. Déficit, budget 2027 et retraites&nbsp;: le contexte, sans prendre parti</h2>
+    <p class="section-intro">
+      Trois faits datés, à replacer dans la même grille de comparaison européenne&nbsp;:
+    </p>
+    <div class="chart-wrap"><div id="chart-deficit-comparaison"></div></div>
+    <p class="chart-legend" id="deficit-legend"></p>
+    <p>
+      Le déficit public français s'est établi à <strong>5,1&nbsp;%</strong> du PIB en 2025, loin au-dessus du
+      seuil de 3&nbsp;% fixé par les traités européens, mais aussi loin devant l'Allemagne et l'Espagne sur la
+      même année&nbsp;— l'Italie, elle, s'est rapprochée des 3&nbsp;%. Le budget présenté le 30&nbsp;septembre
+      2026 vise <strong>4,9&nbsp;%</strong> pour 2027. Plusieurs pistes d'économies envisagées ont déjà été
+      écartées à l'Assemblée avant même la présentation officielle&nbsp;: un fait, sans jugement sur le fond
+      des choix budgétaires.
+    </p>
+    <p>
+      Sur les <strong>retraites</strong>&nbsp;: la réforme de 2023 reste suspendue jusqu'en 2028, une mesure
+      annoncée fin 2025. Les modalités précises d'application pour les générations concernées (autour de
+      1964-1968) évoluent&nbsp;; je n'ai pas pu vérifier la date exacte de la dernière étape à une source
+      primaire au moment de la rédaction, donc je reste volontairement prudent sur ce point (voir limites).
+    </p>
+    <p class="fig-cap">Sources&nbsp;: Eurostat (déficit public, comptable européenne). Budget 2027&nbsp;: communication gouvernementale du 30 septembre 2026. Retraites&nbsp;: à vérifier à la source primaire (service-public.gouv.fr) avant toute citation précise de date.</p>
+  </section>
+
+  <!-- 9 · LE VRAI MAL + PONT SMIC -->
   <section id="pouvoir-achat-epargne">
-    <h2>6. Le vrai malaise, même sans le mot</h2>
+    <h2>9. Le vrai malaise, même sans le mot</h2>
     <p class="section-intro">
       Qu'on l'appelle récession ou pas, le ressenti des ménages a une base chiffrée. Deux indicateurs le
       résument mieux que le débat sémantique.
@@ -139,16 +233,47 @@
       sur la croissance. Le malaise est réel, indépendamment de savoir si le mot «&nbsp;récession&nbsp;» est
       techniquement mérité.
     </p>
+    <div class="nuance-box">
+      Ce Lab s'arrête volontairement à ces deux indicateurs. Pour la mécanique complète du pouvoir d'achat côté
+      salaires (SMIC, diffusion salariale, comparaison internationale), direction le Lab dédié&nbsp;:
+      <a href="https://labs.badreddineek.com/smic-2026" target="_blank" rel="noopener">SMIC 2026, ce qu'on ne
+      vous dit pas sur le salaire minimum</a>.
+    </div>
     <p class="fig-cap">Source&nbsp;: Insee, comptes nationaux trimestriels, 2ᵉ trimestre 2026 (estimation détaillée du 28 août 2026).</p>
   </section>
 
-  <!-- 7 · LIMITES -->
+  <!-- 10 · COULISSES TECHNIQUES -->
+  <section id="coulisses">
+    <h2>Les coulisses techniques</h2>
+    <p class="section-intro">
+      Pour que la mention «&nbsp;calculé&nbsp;» ne soit pas qu'un mot, voici la logique réelle derrière ce Lab.
+    </p>
+    <p>
+      <strong>Le pipeline</strong>&nbsp;: des séries Eurostat (PIB, investissement, emploi, capacités, dette,
+      déficit) sont récupérées via l'API publique, mises en cache localement, puis transformées en résultats
+      (révisions, cycles, comparaisons) exportés en JSON pour le site.
+    </p>
+    <p><strong>La logique de détection des points de retournement</strong>, en pseudo-code&nbsp;:</p>
+    <pre class="code-block">pour chaque trimestre i de la série PIB :
+    si niveau[i] est le plus haut dans la fenêtre [i-2, i+2] : marquer "pic"
+    si niveau[i] est le plus bas dans la fenêtre [i-2, i+2]  : marquer "creux"
+
+filtrer pour forcer l'alternance stricte pic / creux / pic / creux...
+exiger au moins 2 trimestres entre un pic et le creux suivant (une phase)
+exiger au moins 5 trimestres entre deux pics consécutifs (un cycle complet)</pre>
+    <p class="fig-cap">Stack&nbsp;: Python (requests, json), aucune dépendance lourde pour la détection de cycles — l'algorithme tient en une cinquantaine de lignes. Code du pipeline disponible dans le dépôt du Lab.</p>
+  </section>
+
+  <!-- 11 · LIMITES -->
   <section id="limites">
     <h2>Ce que ces chiffres ne disent <em>pas</em></h2>
     <ul class="limites">
       <li><strong>Rien n'est définitif.</strong> Le 0,0&nbsp;% du T2 est une estimation détaillée, pas un compte définitif. Il sera encore révisé, à la hausse comme à la baisse, dans les mois et années qui viennent.</li>
-      <li><strong>Le diagnostic multi-indicateurs est exploratoire.</strong> Juxtaposer quatre séries n'est pas dater un cycle. Les professionnels utilisent des modèles bien plus complets&nbsp;; ici, on éclaire, on ne tranche pas.</li>
+      <li><strong>Bry-Boschan simplifié n'est pas le modèle complet.</strong> Une seule série, une règle simple&nbsp;: ça éclaire la logique de datation, ce n'est pas la méthode à seuils des comités professionnels (référence AFSE) ni les indicateurs probabilistes de la Banque de France.</li>
+      <li><strong>Le diagnostic à quatre indicateurs est une photo, pas un vote.</strong> Chaque série suit sa base usuelle (variation trimestrielle, glissement annuel, niveau)&nbsp;: on ne les additionne pas à poids égal.</li>
       <li><strong>L'échantillon de révisions est limité.</strong> Faute de données «&nbsp;vintage&nbsp;» facilement accessibles, je ne compare que deux trimestres (T1 et T2 2026), sur un horizon court, à une référence historique de plus long terme.</li>
+      <li><strong>Les projections de dette sont conditionnelles.</strong> La trajectoire vers 120&nbsp;%-129&nbsp;% suppose l'absence de toute nouvelle mesure&nbsp;: un budget, une reprise de croissance ou une hausse de taux différente changerait le chiffre.</li>
+      <li><strong>La date précise de l'étape retraites n'est pas vérifiée à la source primaire.</strong> Je reste volontairement flou sur ce point plutôt que d'affirmer une date que je n'ai pas pu confirmer.</li>
       <li><strong>Dater une récession n'est pas une science exacte.</strong> Même les comités officiels tranchent avec retard et révisent leurs verdicts. «&nbsp;En récession&nbsp;» n'est jamais un simple oui/non.</li>
     </ul>
   </section>
@@ -158,10 +283,14 @@
     <h2>Alors, récession ou pas&nbsp;?</h2>
     <p>
       Selon la règle des deux trimestres négatifs, <strong>non</strong>&nbsp;: le T2 est stable, pas négatif.
-      Selon la lecture des économistes, <strong>ça se discute</strong>&nbsp;: l'investissement recule, la France
-      est dernière de sa classe européenne ce trimestre, et le pouvoir d'achat baisse. La vérité honnête, c'est
-      qu'un mot binaire ne capture pas une réalité en demi-teinte. Le plus important n'est pas l'étiquette, mais
-      ce qu'il y a derrière&nbsp;: une croissance à l'arrêt et des ménages sous pression.
+      Selon une méthode de datation, même simplifiée, <strong>ça se discute</strong>&nbsp;: le dernier pic du
+      cycle date de fin 2025, et l'économie ralentit depuis. Comparée à ses voisines, la France sous-performe
+      ce trimestre, et un peu plus largement depuis le début de l'année. Le vrai signal de fond, lui, est plus
+      lent&nbsp;: un poids économique qui recule en Europe depuis vingt ans, une dette dans une zone
+      intermédiaire mais qui grimpe plus vite que chez ses pairs, et un pouvoir d'achat qui recule. La vérité
+      honnête, c'est qu'un mot binaire ne capture aucune de ces nuances. Le plus important n'est pas
+      l'étiquette, mais la direction&nbsp;: une croissance à l'arrêt, un poids relatif qui s'effrite, et des
+      ménages sous pression.
     </p>
     <p class="note-inline">
       Ce Lab s'appuie sur des estimations encore susceptibles d'être révisées. Les corrections et critiques
@@ -173,12 +302,18 @@
     <h2>Sources</h2>
     <ul class="sources">
       <li>Insee, comptes nationaux trimestriels&nbsp;: première estimation (30 juillet 2026) et estimation détaillée (28 août 2026).</li>
-      <li>Eurostat, PIB en volume et composantes, variation trimestrielle (CVS-CJO), séries harmonisées France / Allemagne / Italie / Espagne / zone euro.</li>
+      <li>Eurostat, PIB en volume et composantes, variation trimestrielle et niveau (CVS-CJO), séries harmonisées France / Allemagne / Italie / Espagne / zone euro, depuis 2004.</li>
       <li>Eurostat, enquête de conjoncture&nbsp;: taux d'utilisation des capacités de production dans l'industrie.</li>
+      <li>Eurostat, comptes des administrations publiques&nbsp;: dette et déficit publics, % du PIB, France / Allemagne / Italie / Espagne.</li>
+      <li>Eurostat, PIB nominal (prix courants)&nbsp;: part de la France, de l'Italie et de la Pologne dans le PIB de l'UE27, 2005-2025.</li>
       <li>Sénat, rapport sur les révisions des comptes nationaux (écart moyen première estimation vs compte définitif, 2000-2005).</li>
       <li>AFSE / comité de datation des cycles économiques français&nbsp;: méthodologie multi-indicateurs de datation des récessions.</li>
+      <li>Bry, G. et Boschan, C. (1971), <em>Cyclical Analysis of Time Series</em>&nbsp;: algorithme de détection des points de retournement.</li>
+      <li>Banque de France, document de travail sur les indicateurs probabilistes de retournement cyclique (2007).</li>
+      <li>OFCE, prévisions de croissance (rapports d'octobre 2025 et avril 2026).</li>
+      <li>Communication gouvernementale, budget 2027 (présentation du 30 septembre 2026).</li>
     </ul>
-    <p class="fig-cap">Calculs (révisions, diagnostic, comparaison) réalisés localement en Python à partir des séries Eurostat. Estimations non définitives.</p>
+    <p class="fig-cap">Calculs (révisions, cycles, comparaisons, part dans le PIB de l'UE) réalisés localement en Python à partir des séries Eurostat. Estimations non définitives.</p>
   </section>
 
 </main>
@@ -187,6 +322,10 @@
 <script src="js/chart-definition-recession.js"></script>
 <script src="js/chart-magnitude-revisions.js"></script>
 <script src="js/chart-diagnostic-multi-indicateurs.js"></script>
+<script src="js/chart-cycles-bry-boschan.js"></script>
 <script src="js/chart-comparaison-europeenne.js"></script>
+<script src="js/chart-croissance-longue.js"></script>
+<script src="js/chart-part-pib-europe.js"></script>
+<script src="js/chart-dette-deficit.js"></script>
 </body>
 </html>
