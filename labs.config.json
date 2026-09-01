@@ -1,4 +1,19 @@
 [{
+    "slug": "recession-2026",
+    "title": "La France est-elle vraiment en récession ?",
+    "description": {
+      "fr": "Fin août 2026, l'Insee a révisé la croissance du 2e trimestre à 0,0 %. Récession ou pas ? La réponse dépend de la définition. J'ai recalculé l'ampleur des révisions, croisé plusieurs indicateurs et comparé la France à ses voisines européennes.",
+      "en": "In late August 2026, France's Q2 growth was revised to 0.0%. Recession or not? It depends on the definition. I recomputed the size of the revisions, cross-checked several indicators and compared France to its European neighbours."
+    },
+    "tags": ["Data Journalism", "Économie"],
+    "category": "Society",
+    "kind": "investigation",
+    "lang": "fr",
+    "date": "2026-09-01",
+    "color": "#35506b",
+    "status": "live"
+  },
+  {
     "slug": "stress-hydrique-2026",
     "title": "Stress hydrique 2026 : la France manque-t-elle d'eau ?",
     "description": {

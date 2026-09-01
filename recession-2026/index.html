@@ -3,24 +3,190 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recession 2026 — La France est-elle vraiment en recession ?</title>
+  <title>La France est-elle vraiment en récession ? · Lab</title>
+  <meta name="description" content="Fin août 2026, l'Insee a révisé la croissance du T2 à 0,0 %. Récession ou pas ? La réponse dépend de la définition. Enquête data : révisions recalculées, diagnostic multi-indicateurs, comparaison européenne. Un Lab de Badreddine EL KHAMLICHI.">
+  <meta name="author" content="Badreddine EL KHAMLICHI">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="La France est-elle vraiment en récession ?">
+  <meta property="og:description" content="Récession ou pas ? Ça dépend de la définition. Révisions Insee recalculées, diagnostic multi-indicateurs, comparaison européenne.">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Labs · Badreddine EK">
+  <meta property="og:url" content="https://labs.badreddineek.com/recession-2026/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2335506b'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='18' font-weight='700' text-anchor='middle' fill='white'%3ER%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Structure imposee : voir CONSIGNES.md §6 pour l'ordre exact des 7 chapitres -->
-  <section id="intro"><!-- Hook: le mot recession partout, 0.0% revise --></section>
-  <section id="definition-recession"><!-- 2. Regle simplifiee vs vraie methode AFSE --></section>
-  <section id="magnitude-revisions"><!-- 3. Calcule, voir CONSIGNES 5.1 --></section>
-  <section id="diagnostic-multi"><!-- 4. Calcule, voir CONSIGNES 5.2, exploratoire --></section>
-  <section id="comparaison-europeenne"><!-- 5. Calcule, voir CONSIGNES 5.3 --></section>
-  <section id="pouvoir-achat-epargne"><!-- 6. -0.6% pouvoir d'achat, 17.2% epargne --></section>
-  <section id="limites"><!-- 7. Ce que ca ne dit pas --></section>
 
-  <script src="js/chart-hook-pib.js"></script>
-  <script src="js/chart-definition-recession.js"></script>
-  <script src="js/chart-magnitude-revisions.js"></script>
-  <script src="js/chart-diagnostic-multi-indicateurs.js"></script>
-  <script src="js/chart-comparaison-europeenne.js"></script>
-  <script src="js/chart-pouvoir-achat-epargne.js"></script>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker"><a href="https://labs.badreddineek.com">Labs · badreddineek.com</a> · enquête data, septembre 2026</p>
+    <h1>La France est-elle vraiment en <em>récession ?</em></h1>
+    <p class="lede">
+      Fin août, le mot «&nbsp;récession&nbsp;» était partout. Le 28 août 2026, l'Insee a révisé la croissance
+      du 2ᵉ trimestre à 0,0&nbsp;%. Plutôt que de trancher, j'ai regardé ce que disent vraiment les chiffres.
+      Et la vraie réponse tient en une phrase&nbsp;: ça dépend de la définition qu'on choisit.
+    </p>
+    <p class="byline">
+      Par <a href="https://badreddineek.com" target="_blank" rel="noopener">Badreddine EL KHAMLICHI</a>
+      · data scientist, Lyon · <a href="#sources">sources en bas de page</a>
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="intro" class="note-method">
+    <p>
+      <strong>Comment lire ce Lab.</strong> Je pars du chiffre qui vient de tomber, puis je montre pourquoi
+      «&nbsp;récession ou pas&nbsp;» n'a pas de réponse unique. Trois chapitres sont <strong>calculés</strong>
+      à partir des données publiques (Eurostat)&nbsp;: l'ampleur des révisions, un diagnostic multi-indicateurs,
+      et la comparaison européenne. Le reste pose le décor. Chaque chiffre est daté, sourcé, et je distingue
+      toujours <em>première estimation</em> et <em>estimation détaillée</em>.
+    </p>
+  </section>
+
+  <!-- 1 · HOOK -->
+  <section id="intro-hook">
+    <h2>1. Le chiffre qui a tout déclenché</h2>
+    <p class="section-intro">
+      Le 30 juillet, l'Insee estimait la croissance du 2ᵉ trimestre 2026 à +0,2&nbsp;%. Le 28 août, dans son
+      estimation détaillée, elle l'a ramenée à <strong>0,0&nbsp;%</strong>. Le 1ᵉʳ trimestre, lui, est passé
+      de −0,1&nbsp;% à −0,2&nbsp;%. C'est ce petit tableau qui a relancé le mot «&nbsp;récession&nbsp;».
+    </p>
+    <div class="chart-wrap"><div id="chart-pib-hook"></div></div>
+    <p class="chart-legend" id="pib-hook-legend"></p>
+    <p class="fig-cap">Source&nbsp;: Eurostat, PIB en volume, variation trimestrielle (CVS-CJO). Reprend les comptes de l'Insee.</p>
+  </section>
+
+  <!-- 2 · DÉFINITION -->
+  <section id="definition-recession">
+    <h2>2. «&nbsp;Récession&nbsp;»&nbsp;: ça veut dire quoi, au juste&nbsp;?</h2>
+    <p class="section-intro">
+      La définition qui circule le plus est la <strong>récession technique</strong>&nbsp;: deux trimestres
+      consécutifs de croissance négative. Appliquée telle quelle, elle donne une réponse nette.
+    </p>
+    <div class="chart-wrap"><div id="chart-definition"></div></div>
+    <p class="chart-legend" id="definition-legend"></p>
+    <p class="takeaway" id="definition-takeaway"></p>
+    <p>
+      Sauf que les économistes ne s'arrêtent pas là. Les travaux de datation des cycles (comité de datation,
+      étude de l'AFSE) croisent plusieurs séries&nbsp;: PIB, mais aussi emploi, production industrielle,
+      investissement, utilisation des capacités, via des modèles bien plus sophistiqués. La règle des deux
+      trimestres n'est qu'un raccourci médiatique.
+    </p>
+    <p class="fig-cap">Règle simplifiée de la récession technique. Datation professionnelle&nbsp;: comité de datation des cycles, méthodologie type AFSE.</p>
+  </section>
+
+  <!-- 3 · RÉVISIONS (calculé) -->
+  <section id="magnitude-revisions">
+    <h2>3. Une révision, est-ce grave&nbsp;? <span class="badge-calcul">calculé</span></h2>
+    <p class="section-intro">
+      Passer de +0,2&nbsp;% à 0,0&nbsp;%, ça choque. Mais une première estimation est <em>faite pour</em> être
+      révisée. J'ai comparé l'ampleur des révisions récentes à une référence historique.
+    </p>
+    <div class="chart-wrap"><div id="chart-revisions"></div></div>
+    <p class="chart-legend" id="revisions-legend"></p>
+    <p class="takeaway" id="revisions-takeaway"></p>
+    <div class="nuance-box" id="revisions-nuance"></div>
+    <p class="fig-cap">Révisions&nbsp;: Insee, comptes trimestriels (première estimation vs estimation détaillée). Référence historique&nbsp;: rapport du Sénat, écart moyen 2000-2005.</p>
+  </section>
+
+  <!-- 4 · DIAGNOSTIC MULTI (calculé, exploratoire) -->
+  <section id="diagnostic-multi">
+    <h2>4. Ce que disent les autres indicateurs <span class="badge-calcul">calculé</span></h2>
+    <p class="section-intro">
+      Puisque les économistes regardent plusieurs séries, faisons pareil, en version simplifiée. Voici quatre
+      indicateurs de l'économie française, côte à côte, à leur dernier point connu.
+    </p>
+    <div class="chart-wrap"><div id="diagnostic-multi-table"></div></div>
+    <p class="takeaway" id="diagnostic-takeaway"></p>
+    <div class="nuance-box">
+      Version <strong>exploratoire</strong> et volontairement simplifiée&nbsp;: je juxtapose des séries, je ne
+      reproduis pas le modèle à seuils d'un comité de datation. L'idée n'est pas de trancher, mais de montrer
+      que le diagnostic change selon l'indicateur regardé.
+    </div>
+    <p class="fig-cap">Source&nbsp;: Eurostat (comptes nationaux trimestriels et enquête de conjoncture dans l'industrie), données 2026.</p>
+  </section>
+
+  <!-- 5 · COMPARAISON EUROPÉENNE (calculé) -->
+  <section id="comparaison-europeenne">
+    <h2>5. Dernière de la classe européenne, ce trimestre <span class="badge-calcul">calculé</span></h2>
+    <p class="section-intro">
+      Un point qui, lui, ne dépend pas de la définition&nbsp;: comparée à ses voisines sur le même trimestre et
+      la même source harmonisée, la France est la moins bonne des grandes économies de la zone euro.
+    </p>
+    <div class="chart-wrap"><div id="chart-comparaison"></div></div>
+    <p class="chart-legend" id="comparaison-legend"></p>
+    <p class="takeaway" id="comparaison-takeaway"></p>
+    <div class="nuance-box">
+      À manier avec prudence&nbsp;: sur un seul trimestre, l'écart est petit et chaque pays révise à son propre
+      rythme (estimation flash contre estimation détaillée). C'est une photo, pas une tendance.
+    </div>
+    <p class="fig-cap">Source&nbsp;: Eurostat, PIB en volume, variation trimestrielle (CVS-CJO), séries harmonisées.</p>
+  </section>
+
+  <!-- 6 · LE VRAI MAL -->
+  <section id="pouvoir-achat-epargne">
+    <h2>6. Le vrai malaise, même sans le mot</h2>
+    <p class="section-intro">
+      Qu'on l'appelle récession ou pas, le ressenti des ménages a une base chiffrée. Deux indicateurs le
+      résument mieux que le débat sémantique.
+    </p>
+    <div class="metric"><strong>−0,6&nbsp;%</strong><span>de pouvoir d'achat par unité de consommation au 2ᵉ&nbsp;trimestre 2026.</span></div>
+    <div class="metric"><strong>17,2&nbsp;%</strong><span>de taux d'épargne&nbsp;: les ménages, prudents, mettent de côté plutôt que de dépenser.</span></div>
+    <p>
+      Un pouvoir d'achat qui recule et une épargne haute (signe d'attentisme) pèsent sur la consommation, donc
+      sur la croissance. Le malaise est réel, indépendamment de savoir si le mot «&nbsp;récession&nbsp;» est
+      techniquement mérité.
+    </p>
+    <p class="fig-cap">Source&nbsp;: Insee, comptes nationaux trimestriels, 2ᵉ trimestre 2026 (estimation détaillée du 28 août 2026).</p>
+  </section>
+
+  <!-- 7 · LIMITES -->
+  <section id="limites">
+    <h2>Ce que ces chiffres ne disent <em>pas</em></h2>
+    <ul class="limites">
+      <li><strong>Rien n'est définitif.</strong> Le 0,0&nbsp;% du T2 est une estimation détaillée, pas un compte définitif. Il sera encore révisé, à la hausse comme à la baisse, dans les mois et années qui viennent.</li>
+      <li><strong>Le diagnostic multi-indicateurs est exploratoire.</strong> Juxtaposer quatre séries n'est pas dater un cycle. Les professionnels utilisent des modèles bien plus complets&nbsp;; ici, on éclaire, on ne tranche pas.</li>
+      <li><strong>L'échantillon de révisions est limité.</strong> Faute de données «&nbsp;vintage&nbsp;» facilement accessibles, je ne compare que deux trimestres (T1 et T2 2026), sur un horizon court, à une référence historique de plus long terme.</li>
+      <li><strong>Dater une récession n'est pas une science exacte.</strong> Même les comités officiels tranchent avec retard et révisent leurs verdicts. «&nbsp;En récession&nbsp;» n'est jamais un simple oui/non.</li>
+    </ul>
+  </section>
+
+  <!-- CONCLUSION -->
+  <section id="conclusion">
+    <h2>Alors, récession ou pas&nbsp;?</h2>
+    <p>
+      Selon la règle des deux trimestres négatifs, <strong>non</strong>&nbsp;: le T2 est stable, pas négatif.
+      Selon la lecture des économistes, <strong>ça se discute</strong>&nbsp;: l'investissement recule, la France
+      est dernière de sa classe européenne ce trimestre, et le pouvoir d'achat baisse. La vérité honnête, c'est
+      qu'un mot binaire ne capture pas une réalité en demi-teinte. Le plus important n'est pas l'étiquette, mais
+      ce qu'il y a derrière&nbsp;: une croissance à l'arrêt et des ménages sous pression.
+    </p>
+    <p class="note-inline">
+      Ce Lab s'appuie sur des estimations encore susceptibles d'être révisées. Les corrections et critiques
+      sont bienvenues.
+    </p>
+  </section>
+
+  <section id="sources">
+    <h2>Sources</h2>
+    <ul class="sources">
+      <li>Insee, comptes nationaux trimestriels&nbsp;: première estimation (30 juillet 2026) et estimation détaillée (28 août 2026).</li>
+      <li>Eurostat, PIB en volume et composantes, variation trimestrielle (CVS-CJO), séries harmonisées France / Allemagne / Italie / Espagne / zone euro.</li>
+      <li>Eurostat, enquête de conjoncture&nbsp;: taux d'utilisation des capacités de production dans l'industrie.</li>
+      <li>Sénat, rapport sur les révisions des comptes nationaux (écart moyen première estimation vs compte définitif, 2000-2005).</li>
+      <li>AFSE / comité de datation des cycles économiques français&nbsp;: méthodologie multi-indicateurs de datation des récessions.</li>
+    </ul>
+    <p class="fig-cap">Calculs (révisions, diagnostic, comparaison) réalisés localement en Python à partir des séries Eurostat. Estimations non définitives.</p>
+  </section>
+
+</main>
+
+<script src="js/chart-hook-pib.js"></script>
+<script src="js/chart-definition-recession.js"></script>
+<script src="js/chart-magnitude-revisions.js"></script>
+<script src="js/chart-diagnostic-multi-indicateurs.js"></script>
+<script src="js/chart-comparaison-europeenne.js"></script>
 </body>
 </html>

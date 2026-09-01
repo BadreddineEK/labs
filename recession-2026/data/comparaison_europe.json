@@ -1,0 +1,264 @@
+{
+  "trimestre": "2026-Q2",
+  "pays": [
+    {
+      "geo": "FR",
+      "pays": "France",
+      "points": [
+        {
+          "periode": "2024-Q1",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2024-Q2",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2024-Q3",
+          "valeur": 0.4
+        },
+        {
+          "periode": "2024-Q4",
+          "valeur": 0.0
+        },
+        {
+          "periode": "2025-Q1",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2025-Q2",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2025-Q3",
+          "valeur": 0.4
+        },
+        {
+          "periode": "2025-Q4",
+          "valeur": 0.3
+        },
+        {
+          "periode": "2026-Q1",
+          "valeur": -0.2
+        },
+        {
+          "periode": "2026-Q2",
+          "valeur": 0.0
+        }
+      ]
+    },
+    {
+      "geo": "DE",
+      "pays": "Allemagne",
+      "points": [
+        {
+          "periode": "2024-Q1",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2024-Q2",
+          "valeur": -0.1
+        },
+        {
+          "periode": "2024-Q3",
+          "valeur": 0.1
+        },
+        {
+          "periode": "2024-Q4",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2025-Q1",
+          "valeur": 0.1
+        },
+        {
+          "periode": "2025-Q2",
+          "valeur": 0.0
+        },
+        {
+          "periode": "2025-Q3",
+          "valeur": 0.0
+        },
+        {
+          "periode": "2025-Q4",
+          "valeur": 0.3
+        },
+        {
+          "periode": "2026-Q1",
+          "valeur": 0.4
+        },
+        {
+          "periode": "2026-Q2",
+          "valeur": 0.3
+        }
+      ]
+    },
+    {
+      "geo": "IT",
+      "pays": "Italie",
+      "points": [
+        {
+          "periode": "2024-Q1",
+          "valeur": 0.1
+        },
+        {
+          "periode": "2024-Q2",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2024-Q3",
+          "valeur": 0.0
+        },
+        {
+          "periode": "2024-Q4",
+          "valeur": 0.1
+        },
+        {
+          "periode": "2025-Q1",
+          "valeur": 0.3
+        },
+        {
+          "periode": "2025-Q2",
+          "valeur": 0.0
+        },
+        {
+          "periode": "2025-Q3",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2025-Q4",
+          "valeur": 0.3
+        },
+        {
+          "periode": "2026-Q1",
+          "valeur": 0.3
+        },
+        {
+          "periode": "2026-Q2",
+          "valeur": 0.2
+        }
+      ]
+    },
+    {
+      "geo": "ES",
+      "pays": "Espagne",
+      "points": [
+        {
+          "periode": "2024-Q1",
+          "valeur": 1.1
+        },
+        {
+          "periode": "2024-Q2",
+          "valeur": 0.9
+        },
+        {
+          "periode": "2024-Q3",
+          "valeur": 0.8
+        },
+        {
+          "periode": "2024-Q4",
+          "valeur": 0.8
+        },
+        {
+          "periode": "2025-Q1",
+          "valeur": 0.5
+        },
+        {
+          "periode": "2025-Q2",
+          "valeur": 0.7
+        },
+        {
+          "periode": "2025-Q3",
+          "valeur": 0.6
+        },
+        {
+          "periode": "2025-Q4",
+          "valeur": 0.8
+        },
+        {
+          "periode": "2026-Q1",
+          "valeur": 0.6
+        },
+        {
+          "periode": "2026-Q2",
+          "valeur": 0.7
+        }
+      ]
+    },
+    {
+      "geo": "EA20",
+      "pays": "Zone euro",
+      "points": [
+        {
+          "periode": "2024-Q1",
+          "valeur": 0.3
+        },
+        {
+          "periode": "2024-Q2",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2024-Q3",
+          "valeur": 0.5
+        },
+        {
+          "periode": "2024-Q4",
+          "valeur": 0.3
+        },
+        {
+          "periode": "2025-Q1",
+          "valeur": 0.6
+        },
+        {
+          "periode": "2025-Q2",
+          "valeur": 0.0
+        },
+        {
+          "periode": "2025-Q3",
+          "valeur": 0.3
+        },
+        {
+          "periode": "2025-Q4",
+          "valeur": 0.2
+        },
+        {
+          "periode": "2026-Q1",
+          "valeur": 0.0
+        },
+        {
+          "periode": "2026-Q2",
+          "valeur": 0.4
+        }
+      ]
+    }
+  ],
+  "classement_dernier": [
+    {
+      "geo": "FR",
+      "pays": "France",
+      "valeur": 0.0
+    },
+    {
+      "geo": "IT",
+      "pays": "Italie",
+      "valeur": 0.2
+    },
+    {
+      "geo": "DE",
+      "pays": "Allemagne",
+      "valeur": 0.3
+    },
+    {
+      "geo": "EA20",
+      "pays": "Zone euro",
+      "valeur": 0.4
+    },
+    {
+      "geo": "ES",
+      "pays": "Espagne",
+      "valeur": 0.7
+    }
+  ],
+  "france_valeur": 0.0,
+  "source": "Eurostat, PIB en volume, variation t/t-1 (CVS-CJO). Estimations pouvant differer du calendrier de publication national."
+}

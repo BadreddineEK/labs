@@ -1,0 +1,44 @@
+{
+  "indicateurs": [
+    {
+      "nom": "PIB",
+      "mesure": "variation trimestrielle",
+      "periode": "2026-Q2",
+      "valeur": 0.0,
+      "unite": "%",
+      "direction": "stable",
+      "lecture": "stable, ni positif ni negatif"
+    },
+    {
+      "nom": "Investissement (FBCF)",
+      "mesure": "variation trimestrielle",
+      "periode": "2026-Q2",
+      "valeur": -0.3,
+      "unite": "%",
+      "direction": "negatif"
+    },
+    {
+      "nom": "Emploi",
+      "mesure": "glissement annuel",
+      "periode": "2026-Q2",
+      "valeur": -0.02,
+      "unite": "%",
+      "direction": "stable"
+    },
+    {
+      "nom": "Utilisation des capacités",
+      "mesure": "niveau (industrie)",
+      "periode": "2026-Q3",
+      "valeur": 82.1,
+      "unite": "%",
+      "direction": "stable",
+      "reference": 81.3,
+      "lecture": "proche de sa moyenne recente (81,3 %)"
+    }
+  ],
+  "n_negatifs": 1,
+  "n_total": 4,
+  "exploratoire": true,
+  "lecture": "Les indicateurs ne pointent pas tous dans la meme direction : selon celui qu'on regarde, le diagnostic change. C'est justement pourquoi les economistes croisent plusieurs series plutot que la seule regle des deux trimestres negatifs.",
+  "source": "Eurostat (comptes nationaux trimestriels et enquete de conjoncture), donnees 2026."
+}

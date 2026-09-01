@@ -1,0 +1,26 @@
+{
+  "revisions": [
+    {
+      "trimestre": "T1 2026",
+      "premiere": -0.1,
+      "detaillee": -0.2,
+      "revision": -0.1,
+      "magnitude": 0.1
+    },
+    {
+      "trimestre": "T2 2026",
+      "premiere": 0.2,
+      "detaillee": 0.0,
+      "revision": -0.2,
+      "magnitude": 0.2
+    }
+  ],
+  "magnitude_moyenne": 0.15,
+  "magnitude_max": 0.2,
+  "n": 2,
+  "toutes_baissieres": true,
+  "ref_senat_points": 0.45,
+  "ref_senat_periode": "2000-2005",
+  "echantillon_limite": true,
+  "note_horizon": "Notre ecart (premiere estimation vers estimation detaillee) couvre l'horizon court (environ un mois). La reference Senat (0,45 point) couvre l'horizon long, jusqu'au compte definitif. La revision du T2 2026 peut donc encore evoluer."
+}

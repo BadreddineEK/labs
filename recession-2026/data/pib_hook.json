@@ -1,0 +1,53 @@
+{
+  "points": [
+    {
+      "periode": "2024-Q1",
+      "valeur": 0.2
+    },
+    {
+      "periode": "2024-Q2",
+      "valeur": 0.2
+    },
+    {
+      "periode": "2024-Q3",
+      "valeur": 0.4
+    },
+    {
+      "periode": "2024-Q4",
+      "valeur": 0.0
+    },
+    {
+      "periode": "2025-Q1",
+      "valeur": 0.2
+    },
+    {
+      "periode": "2025-Q2",
+      "valeur": 0.2
+    },
+    {
+      "periode": "2025-Q3",
+      "valeur": 0.4
+    },
+    {
+      "periode": "2025-Q4",
+      "valeur": 0.3
+    },
+    {
+      "periode": "2026-Q1",
+      "valeur": -0.2
+    },
+    {
+      "periode": "2026-Q2",
+      "valeur": 0.0
+    }
+  ],
+  "dernier": {
+    "periode": "2026-Q2",
+    "valeur": 0.0
+  },
+  "avant_dernier": {
+    "periode": "2026-Q1",
+    "valeur": -0.2
+  },
+  "source": "Eurostat, comptes nationaux trimestriels, volume, variation t/t-1 (donnees CVS-CJO)."
+}
