@@ -2,10 +2,11 @@
 (function () {
   var target = document.getElementById('quipaie-chart');
   if (!target) return;
-  // Valeurs representatives (milieu de fourchette), sourcees agences de l'eau / Cour des comptes.
+  // Consommation nette : France Stratégie (moyenne annuelle, cohérent avec le chapitre 3).
+  // Redevances : Cour des comptes / agences de l'eau. Valeurs représentatives (milieu de fourchette).
   var groups = [
     { label: 'Usagers domestiques', conso: 24, redevance: 59 },
-    { label: 'Agriculture', conso: 50, redevance: 8 }
+    { label: 'Agriculture', conso: 45, redevance: 8 }
   ];
   var CONSO = '#2f6f73', REDEV = '#a3472f';
   var width = 640, height = 300, pad = { top: 20, right: 20, bottom: 64, left: 60 };

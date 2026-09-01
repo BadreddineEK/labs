@@ -37,7 +37,7 @@ def main() -> None:
     pngs: list[Path] = []
     with sync_playwright() as p:
         browser = _launch(p)
-        page = browser.new_page(viewport={"width": 1200, "height": 1200}, device_scale_factor=2)
+        page = browser.new_page(viewport={"width": 1200, "height": 1400}, device_scale_factor=2)
         page.goto(SRC)
         page.wait_for_timeout(400)
         slides = page.query_selector_all(".slide")

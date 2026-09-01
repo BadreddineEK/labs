@@ -9,11 +9,11 @@ Voici ce que j'ai trouvé :
 
 → La France n'est pas en pénurie. Le vrai stress hydrique extrême touche 25 à 27 pays (Bahreïn, Chypre, Koweït, Liban…). On n'y figure pas. Parler de « guerre de l'eau » chez nous, c'est exagéré.
 
-→ Mais on perd près d'un cinquième de l'eau potable dans les fuites des réseaux. Je l'ai recalculé département par département (médiane 19 %), et certains territoires dépassent 30 %. On demande des douches plus courtes pendant qu'un litre sur cinq part dans le sol.
+→ Mais on perd près d'un cinquième de l'eau potable dans les fuites des réseaux. Je l'ai recalculé département par département à partir du dernier millésime disponible en open data (SISPEA 2019) : médiane 19 %. Un département dépasse 30 % (Alpes-de-Haute-Provence, 30,4 %), plusieurs autres l'avoisinent entre 25 et 30 %. On demande des douches plus courtes pendant qu'un litre sur cinq part dans le sol.
 
 → Et ces fuites n'ont presque aucun lien avec la richesse du territoire (corrélation quasi nulle, statistiquement non significative). Ce n'est pas une question de moyens, mais d'entretien et de gouvernance des réseaux.
 
-→ Le plus déséquilibré : on demande surtout l'effort aux ménages, qui paient l'essentiel des redevances pour environ un quart de la consommation, quand l'agriculture consomme la plus grosse part, surtout en été, au moment où les nappes sont déjà basses.
+→ Le plus déséquilibré : on demande surtout l'effort aux ménages, qui paient l'essentiel des redevances pour environ un quart de la consommation, quand l'agriculture consomme près de la moitié de l'eau, surtout en été, au moment où les nappes sont déjà basses.
 
 Ma conclusion, après avoir regardé les chiffres : la France n'a pas un problème de pénurie. Elle a un problème de calendrier, de tuyaux et de répartition de l'effort. La sobriété individuelle compte, mais l'essentiel se joue dans l'entretien des réseaux et le partage de la ressource.
 
