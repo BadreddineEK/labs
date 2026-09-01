@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Carrousel LinkedIn - Récession 2026</title>
+<!--
+  Carrousel LinkedIn 4:5 (1080x1350), 100 % autonome. Export : python share/export_carousel.py
+  DA alignée sur les carrousels precedents. PALETTE : ardoise = accent/PIB ; brique = negatif/alerte ; vert = recul.
+-->
+<style>
+  :root{
+    --bg:#ffffff; --ink:#1a1d24; --muted:#6b7280; --faint:#9ca3af;
+    --panel:#eef1f4; --rule:#e2e5ea;
+    --accent:#35506b; --accent-deep:#243a52;
+    --warm:#a3472f; --green:#2f8f5f;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#c9c4b8;font-family:var(--sans);padding:24px;display:flex;flex-direction:column;align-items:center;gap:24px;}
+  .slide{
+    width:1080px;height:1350px;background:var(--bg);color:var(--ink);
+    position:relative;overflow:hidden;padding:104px 88px 150px;display:flex;flex-direction:column;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .kicker{font-size:29px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);}
+  .kicker u{text-decoration:none;border-bottom:5px solid var(--accent);padding-bottom:6px;}
+  h1{font-weight:800;line-height:1.02;letter-spacing:-.02em;color:var(--ink);}
+  h2{font-weight:800;line-height:1.04;letter-spacing:-.015em;color:var(--ink);}
+  .accent{color:var(--accent);}
+  .sub{font-weight:800;line-height:1.08;letter-spacing:-.01em;}
+  .body{color:var(--muted);line-height:1.5;font-weight:500;}
+  .spacer{flex:1;}
+  .src{font-size:23px;color:var(--faint);font-weight:600;margin-top:auto;}
+  .foot{position:absolute;left:88px;right:88px;bottom:58px;display:flex;justify-content:space-between;
+        align-items:center;font-size:24px;color:var(--faint);border-top:2px solid var(--rule);padding-top:22px;font-weight:600;}
+  .foot b{color:var(--muted);font-weight:700;}
+
+  .cards{display:flex;gap:32px;}
+  .card{flex:1;background:var(--panel);border-radius:14px;padding:40px 34px 34px;position:relative;overflow:hidden;}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:var(--accent);}
+  .card.warm::before{background:var(--warm);}
+  .card .n{font-weight:800;font-size:140px;line-height:.9;letter-spacing:-.03em;}
+  .card .c{font-size:29px;color:var(--muted);margin-top:18px;line-height:1.32;font-weight:500;}
+
+  .callout{background:var(--panel);border-left:10px solid var(--green);border-radius:0 12px 12px 0;
+           padding:34px 38px;font-size:35px;line-height:1.4;color:var(--ink);font-weight:600;}
+  .callout b{color:var(--accent-deep);}
+  .warnbox{background:var(--panel);border-left:10px solid var(--warm);border-radius:0 12px 12px 0;
+           padding:30px 36px;font-size:30px;line-height:1.4;color:var(--muted);font-weight:500;}
+
+  .hero{font-weight:800;color:var(--accent);letter-spacing:-.03em;line-height:.9;}
+  .tag{display:inline-block;font-size:26px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;
+       color:var(--warm);background:#f2e2d9;border-radius:30px;padding:8px 22px;vertical-align:middle;}
+
+  .delta{display:flex;align-items:center;justify-content:center;gap:44px;margin:20px 0;}
+  .delta .v{display:flex;flex-direction:column;align-items:center;}
+  .delta .v .num{font-weight:800;line-height:.9;letter-spacing:-.03em;}
+  .delta .v .cap{font-size:28px;color:var(--muted);font-weight:600;margin-top:14px;text-align:center;}
+  .delta .arrow{font-size:90px;color:var(--warm);font-weight:800;line-height:.6;}
+
+  .bars{display:flex;gap:36px;align-items:flex-end;justify-content:center;}
+  .bar{width:150px;display:flex;flex-direction:column;align-items:center;}
+  .bar .col{width:100%;border-radius:8px 8px 0 0;}
+  .bar .v{font-weight:800;font-size:38px;margin-bottom:12px;letter-spacing:-.02em;}
+  .bar .lbl{font-size:26px;color:var(--muted);margin-top:16px;text-align:center;line-height:1.2;font-weight:600;height:34px;}
+
+  .rows{display:flex;flex-direction:column;gap:20px;}
+  .row{display:flex;align-items:center;justify-content:space-between;background:var(--panel);border-radius:12px;padding:26px 34px;}
+  .row .name{font-size:34px;font-weight:700;color:var(--ink);}
+  .row .sig{font-size:26px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:8px 22px;border-radius:30px;}
+  .sig.neg{color:var(--warm);background:#f2e2d9;}
+  .sig.stable{color:var(--muted);background:#e6e8ec;}
+
+  .chips{display:flex;gap:26px;}
+  .chip{flex:1;background:var(--panel);border-radius:14px;padding:36px 26px;position:relative;overflow:hidden;}
+  .chip::before{content:"";position:absolute;top:0;left:0;right:0;height:8px;background:var(--accent);}
+  .chip.warm::before{background:var(--warm);}
+  .chip .t{font-size:32px;font-weight:800;color:var(--muted);letter-spacing:.02em;text-transform:uppercase;}
+  .chip .d{font-size:40px;font-weight:800;color:var(--ink);margin-top:14px;line-height:1.15;}
+
+  .gradbar{height:16px;border-radius:8px;background:linear-gradient(90deg,#7d95b0,#4f6f90,#35506b,#243a52);}
+
+  @media print{
+    html,body{margin:0;padding:0;background:#fff;gap:0;}
+    .slide{box-shadow:none;page-break-after:always;break-after:page;page-break-inside:avoid;}
+    .slide:last-child{page-break-after:auto;break-after:auto;}
+    @page{size:1080px 1350px;margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 1 - COUVERTURE -->
+<section class="slide">
+  <p class="kicker"><u>Récession 2026</u> · enquête data</p>
+  <div class="spacer" style="max-height:150px"></div>
+  <h1 style="font-size:112px;">La France est-elle vraiment en <span class="accent">récession&nbsp;?</span></h1>
+  <p class="sub" style="font-size:52px;margin-top:52px;color:var(--warm);">On dit tout et son contraire.<br>Voici ce que disent les chiffres.</p>
+  <p class="body" style="font-size:32px;margin-top:44px;max-width:26ch;">Insee, Eurostat. Recalculé, pas recopié.</p>
+  <div class="spacer"></div>
+  <div class="gradbar" style="margin-bottom:40px;"></div>
+  <div class="foot"><span><b>Badreddine EL KHAMLICHI</b> · badreddineek.com</span><span style="color:var(--accent);font-weight:800;">swipe →</span></div>
+</section>
+
+<!-- 2 - LE CHIFFRE -->
+<section class="slide">
+  <p class="kicker"><u>Le point de départ</u> · août 2026</p>
+  <h2 style="font-size:76px;margin-top:34px;max-width:15ch;">Le chiffre qui a tout déclenché</h2>
+  <p class="body" style="font-size:32px;margin-top:24px;max-width:30ch;">Le 28 août, l'Insee révise sa première estimation de la croissance du 2ᵉ trimestre&nbsp;:</p>
+  <div class="spacer"></div>
+  <div class="delta">
+    <div class="v"><span class="num" style="font-size:96px;color:var(--muted);">+0,2&nbsp;%</span><span class="cap">première<br>estimation</span></div>
+    <span class="arrow">→</span>
+    <div class="v"><span class="num" style="font-size:150px;color:var(--warm);">0,0&nbsp;%</span><span class="cap">estimation<br>détaillée</span></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">Et le 1ᵉʳ trimestre passe de −0,1&nbsp;% à −0,2&nbsp;%. Deux révisions à la baisse, et le mot «&nbsp;récession&nbsp;» ressurgit.</div>
+  <p class="src" style="margin-top:32px;">Insee, comptes nationaux trimestriels · Eurostat.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>2 / 9</span></div>
+</section>
+
+<!-- 3 - DÉFINITION -->
+<section class="slide">
+  <p class="kicker"><u>Récession technique</u></p>
+  <h2 style="font-size:72px;margin-top:34px;max-width:16ch;">Deux trimestres négatifs d'affilée&nbsp;?</h2>
+  <div class="spacer" style="max-height:40px"></div>
+  <div class="rows">
+    <div class="row"><span class="name">1ᵉʳ trimestre 2026&nbsp;: −0,2&nbsp;%</span><span class="sig neg">négatif</span></div>
+    <div class="row"><span class="name">2ᵉ trimestre 2026&nbsp;: 0,0&nbsp;%</span><span class="sig stable">stable</span></div>
+  </div>
+  <div style="text-align:center;margin-top:50px;"><span class="hero" style="font-size:150px;color:var(--warm);">Non.</span>
+    <div class="body" style="font-size:40px;font-weight:700;color:var(--ink);margin-top:8px;">Un seul des deux, pas deux d'affilée.</div></div>
+  <div class="spacer"></div>
+  <div class="callout">Selon cette règle stricte, la France n'est <b>pas</b> en récession technique. Le verdict tient à un dixième de point.</div>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>3 / 9</span></div>
+</section>
+
+<!-- 4 - RÉVISIONS (calculé) -->
+<section class="slide">
+  <p class="kicker"><u>Une révision, est-ce grave</u> · calculé</p>
+  <h2 style="font-size:74px;margin-top:34px;max-width:16ch;">Une première estimation est faite pour bouger</h2>
+  <p class="body" style="font-size:32px;margin-top:22px;max-width:30ch;">J'ai comparé l'ampleur des révisions récentes à une référence historique&nbsp;:</p>
+  <div class="spacer"></div>
+  <div class="delta">
+    <div class="v"><span class="num" style="font-size:170px;color:var(--accent);">0,15</span><span class="cap">point de révision<br>(moyenne T1+T2 2026)</span></div>
+    <span class="arrow" style="color:var(--muted);">vs</span>
+    <div class="v"><span class="num" style="font-size:150px;color:var(--muted);">0,45</span><span class="cap">point, moyenne<br>historique</span></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">La révision qui a choqué est en réalité <b>plus petite</b> que l'écart moyen constaté historiquement. Banale.</div>
+  <p class="src" style="margin-top:30px;">Insee (révisions) · référence Sénat, 2000-2005. Échantillon limité à 2 trimestres.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>4 / 9</span></div>
+</section>
+
+<!-- 5 - DIAGNOSTIC (calculé) -->
+<section class="slide">
+  <p class="kicker"><u>Les autres indicateurs</u> · calculé</p>
+  <h2 style="font-size:74px;margin-top:34px;max-width:15ch;">Tous ne disent pas la même chose</h2>
+  <div style="text-align:center;margin-top:30px;"><span class="hero" style="font-size:150px;">1<span style="font-size:90px;color:var(--muted);">/4</span></span>
+    <div class="body" style="font-size:36px;font-weight:700;color:var(--ink);margin-top:4px;">indicateur nettement négatif</div></div>
+  <div class="rows" style="margin-top:36px;">
+    <div class="row"><span class="name">PIB</span><span class="sig stable">stable</span></div>
+    <div class="row"><span class="name">Investissement</span><span class="sig neg">négatif</span></div>
+    <div class="row"><span class="name">Emploi</span><span class="sig stable">stable</span></div>
+    <div class="row"><span class="name">Utilisation des capacités</span><span class="sig stable">stable</span></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="warnbox">Aucun signal univoque. C'est pour ça que les économistes croisent plusieurs séries, plutôt que la seule règle des deux trimestres. Version simplifiée, exploratoire.</div>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>5 / 9</span></div>
+</section>
+
+<!-- 6 - COMPARAISON (calculé) -->
+<section class="slide">
+  <p class="kicker"><u>Vue d'Europe</u> · calculé</p>
+  <h2 style="font-size:76px;margin-top:34px;max-width:15ch;">Dernière de la classe, ce trimestre</h2>
+  <p class="body" style="font-size:32px;margin-top:22px;max-width:30ch;">Croissance du PIB au 2ᵉ trimestre 2026, même source harmonisée&nbsp;:</p>
+  <div class="spacer"></div>
+  <div class="bars">
+    <div class="bar"><span class="v" style="color:var(--warm);">0,0</span><div class="col" style="height:4px;background:var(--warm);"></div><span class="lbl">France</span></div>
+    <div class="bar"><span class="v" style="color:var(--accent);">+0,2</span><div class="col" style="height:62px;background:var(--accent);"></div><span class="lbl">Italie</span></div>
+    <div class="bar"><span class="v" style="color:var(--accent);">+0,3</span><div class="col" style="height:94px;background:var(--accent);"></div><span class="lbl">Allemagne</span></div>
+    <div class="bar"><span class="v" style="color:var(--accent);">+0,4</span><div class="col" style="height:125px;background:var(--accent);"></div><span class="lbl">Zone euro</span></div>
+    <div class="bar"><span class="v" style="color:var(--accent);">+0,7</span><div class="col" style="height:219px;background:var(--accent);"></div><span class="lbl">Espagne</span></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">Ce point-là ne dépend d'<b>aucune définition</b>. Sur ce trimestre, la France est la plus faible des grandes économies de la zone euro.</div>
+  <p class="src" style="margin-top:30px;">Eurostat, PIB en volume, variation t/t−1 (CVS-CJO).</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>6 / 9</span></div>
+</section>
+
+<!-- 7 - LE VRAI MAL -->
+<section class="slide">
+  <p class="kicker"><u>Le vrai malaise</u></p>
+  <h2 style="font-size:80px;margin-top:34px;max-width:15ch;">Même sans le mot</h2>
+  <p class="body" style="font-size:32px;margin-top:24px;max-width:30ch;">Le ressenti des ménages a une base chiffrée&nbsp;:</p>
+  <div class="cards" style="margin-top:60px;">
+    <div class="card warm"><div class="n" style="color:var(--warm);">−0,6<span style="font-size:70px;">%</span></div><div class="c">de pouvoir d'achat par personne au 2ᵉ trimestre</div></div>
+    <div class="card"><div class="n" style="color:var(--accent);">17,2<span style="font-size:70px;">%</span></div><div class="c">de taux d'épargne&nbsp;: prudence et attentisme</div></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">Pouvoir d'achat en recul, épargne haute&nbsp;: la consommation cale, et la croissance avec. Le malaise est réel, quel que soit le mot.</div>
+  <p class="src" style="margin-top:30px;">Insee, comptes nationaux trimestriels, 2ᵉ trimestre 2026.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>7 / 9</span></div>
+</section>
+
+<!-- 8 - CONCLUSION -->
+<section class="slide">
+  <p class="kicker"><u>La réponse</u></p>
+  <h2 style="font-size:82px;margin-top:34px;max-width:15ch;">Récession ou pas&nbsp;? <span class="accent">Ça dépend de la définition.</span></h2>
+  <div class="spacer" style="max-height:70px"></div>
+  <div class="chips">
+    <div class="chip"><div class="t">Règle des 2 trimestres</div><div class="d">Non</div></div>
+    <div class="chip warm"><div class="t">Lecture des économistes</div><div class="d">Ça se discute</div></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">L'étiquette compte moins que ce qu'il y a derrière&nbsp;: une <b>croissance à l'arrêt</b> et des <b>ménages sous pression</b>.</div>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>8 / 9</span></div>
+</section>
+
+<!-- 9 - CTA -->
+<section class="slide" style="background:var(--ink);color:#eef1f4;">
+  <p class="kicker" style="color:#7fa0c4;"><u style="border-color:#7fa0c4;">L'enquête complète</u></p>
+  <div class="spacer"></div>
+  <h2 style="font-size:96px;max-width:14ch;color:#f4f7fa;">Méthode, sources et code&nbsp;: tout est ouvert.</h2>
+  <p style="font-size:46px;color:#7fa0c4;font-weight:800;margin-top:44px;">labs.badreddineek.com<br>/recession-2026</p>
+  <p style="font-size:32px;color:#aab3bd;margin-top:40px;max-width:28ch;line-height:1.5;font-weight:500;">Révisions, diagnostic multi-indicateurs, comparaison européenne. Recalculé à partir des données publiques, limites assumées.</p>
+  <div class="spacer"></div>
+  <div class="gradbar" style="margin-bottom:40px;"></div>
+  <div class="foot" style="border-color:#333a42;color:#7b848d;"><span><b style="color:#aab3bd;">Badreddine EL KHAMLICHI</b> · data scientist, Lyon</span><span>9 / 9</span></div>
+</section>
+
+</body>
+</html>
