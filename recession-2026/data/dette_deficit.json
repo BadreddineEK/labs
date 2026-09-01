@@ -140,7 +140,8 @@
   "budget_2027": {
     "deficit_vise_2027": 4.9,
     "deficit_2025": -5.1,
-    "date_presentation": "30 septembre 2026"
+    "date_presentation": "30 septembre 2026",
+    "statut": "prévision : présentation officielle non encore intervenue à la date de rédaction (1er septembre 2026), chiffre issu des orientations communiquées fin août 2026"
   },
   "note_ecart_source": "Notre point calculé (Eurostat, comptes trimestriels harmonisés) porte sur le dernier trimestre disponible dans cette base, en général un trimestre derrière la publication nationale la plus récente de l'Insee (qui peut afficher un chiffre légèrement différent et plus à jour). Écart de calendrier de publication, pas une contradiction de fond."
 }

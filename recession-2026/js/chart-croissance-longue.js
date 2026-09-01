@@ -4,7 +4,7 @@
   if (!el) return;
   var COL = { France: '#a3472f', Allemagne: '#35506b', Italie: '#b5651d', Espagne: '#4a7a55', 'Zone euro': '#8c887e' };
   fetch('data/croissance_longue.json').then(function (r) { return r.json(); }).then(function (d) {
-    var periodes = d.periodes.filter(function (p) { return p >= '2018-Q1'; });
+    var periodes = d.periodes.filter(function (p) { return p >= '2016-Q1'; });
     var offset = d.periodes.length - periodes.length;
     var W = 640, H = 300, pad = { top: 20, right: 20, bottom: 30, left: 34 };
     var plotH = H - pad.top - pad.bottom;

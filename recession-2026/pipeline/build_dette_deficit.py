@@ -52,6 +52,7 @@ def build_dette_deficit():
             "deficit_vise_2027": 4.9,
             "deficit_2025": deficit_annuelle["FR"].get(derniere_annee),
             "date_presentation": "30 septembre 2026",
+            "statut": "prévision : présentation officielle non encore intervenue à la date de rédaction (1er septembre 2026), chiffre issu des orientations communiquées fin août 2026",
         },
         "note_ecart_source": (
             "Notre point calculé (Eurostat, comptes trimestriels harmonisés) porte sur le dernier trimestre "
