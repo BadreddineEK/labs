@@ -116,7 +116,7 @@
   <div class="spacer"></div>
   <div class="callout">Et le 1ᵉʳ trimestre passe de −0,1&nbsp;% à −0,2&nbsp;%. Deux révisions à la baisse, et le mot «&nbsp;récession&nbsp;» ressurgit.</div>
   <p class="src" style="margin-top:32px;">Insee, comptes nationaux trimestriels · Eurostat.</p>
-  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>2 / 9</span></div>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>2 / 11</span></div>
 </section>
 
 <!-- 3 - DÉFINITION -->
@@ -132,41 +132,39 @@
     <div class="body" style="font-size:40px;font-weight:700;color:var(--ink);margin-top:8px;">Un seul des deux, pas deux d'affilée.</div></div>
   <div class="spacer"></div>
   <div class="callout">Selon cette règle stricte, la France n'est <b>pas</b> en récession technique. Le verdict tient à un dixième de point.</div>
-  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>3 / 9</span></div>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>3 / 11</span></div>
 </section>
 
 <!-- 4 - RÉVISIONS (calculé) -->
 <section class="slide">
   <p class="kicker"><u>Une révision, est-ce grave</u> · calculé</p>
-  <h2 style="font-size:74px;margin-top:34px;max-width:16ch;">Une première estimation est faite pour bouger</h2>
-  <p class="body" style="font-size:32px;margin-top:22px;max-width:30ch;">J'ai comparé l'ampleur des révisions récentes à une référence historique&nbsp;:</p>
-  <div class="spacer"></div>
+  <h2 style="font-size:66px;margin-top:30px;max-width:16ch;">Une première estimation est faite pour bouger</h2>
+  <p class="body" style="font-size:29px;margin-top:18px;max-width:30ch;">J'ai comparé l'ampleur des révisions récentes à une référence historique&nbsp;:</p>
+  <div class="spacer" style="max-height:30px"></div>
   <div class="delta">
-    <div class="v"><span class="num" style="font-size:170px;color:var(--accent);">0,15</span><span class="cap">point de révision<br>(moyenne T1+T2 2026)</span></div>
+    <div class="v"><span class="num" style="font-size:150px;color:var(--accent);">0,15</span><span class="cap">point de révision<br>(moyenne T1+T2 2026)</span></div>
     <span class="arrow" style="color:var(--muted);">vs</span>
-    <div class="v"><span class="num" style="font-size:150px;color:var(--muted);">0,45</span><span class="cap">point, moyenne<br>historique</span></div>
+    <div class="v"><span class="num" style="font-size:130px;color:var(--muted);">0,45</span><span class="cap">point, moyenne<br>historique</span></div>
   </div>
   <div class="spacer"></div>
-  <div class="callout">La révision qui a choqué est en réalité <b>plus petite</b> que l'écart moyen constaté historiquement. Banale.</div>
-  <p class="src" style="margin-top:30px;">Insee (révisions) · référence Sénat, 2000-2005. Échantillon limité à 2 trimestres.</p>
-  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>4 / 9</span></div>
+  <div class="callout">La révision qui a choqué est en réalité <b>plus petite</b> que l'écart moyen constaté historiquement.</div>
+  <div class="warnbox" style="margin-top:16px;">Nuance&nbsp;: notre écart couvre l'horizon court (première estimation → détaillée). La référence historique couvre le chemin complet jusqu'au compte définitif&nbsp;: la révision du T2 pourrait encore s'accentuer.</div>
+  <p class="src" style="margin-top:14px;">Insee (révisions) · référence Sénat, 2000-2005. Échantillon limité à 2 trimestres.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>4 / 11</span></div>
 </section>
 
-<!-- 5 - DIAGNOSTIC (calculé) -->
+<!-- 5 - CYCLES BRY-BOSCHAN (calculé) -->
 <section class="slide">
-  <p class="kicker"><u>Les autres indicateurs</u> · calculé</p>
-  <h2 style="font-size:74px;margin-top:34px;max-width:15ch;">Tous ne disent pas la même chose</h2>
-  <div style="text-align:center;margin-top:30px;"><span class="hero" style="font-size:150px;">1<span style="font-size:90px;color:var(--muted);">/4</span></span>
-    <div class="body" style="font-size:36px;font-weight:700;color:var(--ink);margin-top:4px;">indicateur nettement négatif</div></div>
-  <div class="rows" style="margin-top:36px;">
-    <div class="row"><span class="name">PIB</span><span class="sig stable">stable</span></div>
-    <div class="row"><span class="name">Investissement</span><span class="sig neg">négatif</span></div>
-    <div class="row"><span class="name">Emploi</span><span class="sig stable">stable</span></div>
-    <div class="row"><span class="name">Utilisation des capacités</span><span class="sig stable">stable</span></div>
-  </div>
+  <p class="kicker"><u>Une vraie méthode de datation</u> · calculé</p>
+  <h2 style="font-size:70px;margin-top:34px;max-width:16ch;">Depuis quand ça ralentit, vraiment&nbsp;?</h2>
+  <p class="body" style="font-size:30px;margin-top:22px;max-width:30ch;">J'ai implémenté une version simplifiée de l'algorithme Bry-Boschan (1971) sur le PIB français, pour détecter automatiquement pics et creux&nbsp;:</p>
   <div class="spacer"></div>
-  <div class="warnbox">Aucun signal univoque. C'est pour ça que les économistes croisent plusieurs séries, plutôt que la seule règle des deux trimestres. Version simplifiée, exploratoire.</div>
-  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>5 / 9</span></div>
+  <div style="text-align:center;"><span class="hero" style="font-size:100px;">pic en 2025-Q4</span></div>
+  <div class="spacer" style="max-height:24px"></div>
+  <div class="callout">Depuis ce pic, l'économie ralentit. <b>Ce n'est pas un accident soudain</b> de l'été 2026, mais une phase engagée depuis fin 2025.</div>
+  <div class="spacer"></div>
+  <p class="src" style="margin-top:30px;">Eurostat, PIB en volume (niveau). Méthode simplifiée, inspirée de Bry &amp; Boschan (1971) — pas le modèle complet des comités de datation.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>5 / 11</span></div>
 </section>
 
 <!-- 6 - COMPARAISON (calculé) -->
@@ -183,12 +181,46 @@
     <div class="bar"><span class="v" style="color:var(--accent);">+0,7</span><div class="col" style="height:219px;background:var(--accent);"></div><span class="lbl">Espagne</span></div>
   </div>
   <div class="spacer"></div>
-  <div class="callout">Ce point-là ne dépend d'<b>aucune définition</b>. Sur ce trimestre, la France est la plus faible des grandes économies de la zone euro.</div>
-  <p class="src" style="margin-top:30px;">Eurostat, PIB en volume, variation t/t−1 (CVS-CJO).</p>
-  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>6 / 9</span></div>
+  <div class="callout">Ce point-là ne dépend d'<b>aucune définition</b>. Et sur les deux dernières années, la France ralentit un peu plus que ses pairs&nbsp;: pas seulement ce trimestre.</div>
+  <p class="src" style="margin-top:30px;">Eurostat, PIB en volume, variation t/t−1 (CVS-CJO), comparaison étendue sur ~10 ans dans le Lab complet.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>6 / 11</span></div>
 </section>
 
-<!-- 7 - LE VRAI MAL -->
+<!-- 7 - DÉCLIN PART PIB UE (calculé) -->
+<section class="slide">
+  <p class="kicker"><u>Le vrai signal de fond</u> · calculé</p>
+  <h2 style="font-size:70px;margin-top:34px;max-width:16ch;">20 ans de recul dans le PIB européen</h2>
+  <div class="spacer" style="max-height:20px"></div>
+  <div class="delta" style="gap:24px;">
+    <div class="v"><span class="num" style="font-size:110px;color:var(--muted);">18,4&nbsp;%</span><span class="cap">part de la France<br>dans le PIB UE, 2005</span></div>
+    <span class="arrow" style="font-size:60px;">→</span>
+    <div class="v"><span class="num" style="font-size:130px;color:var(--warm);">15,9&nbsp;%</span><span class="cap">en 2025</span></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">Mais la France <b>n'est pas seule</b>&nbsp;: l'Italie recule encore plus (15,6&nbsp;% → 12&nbsp;%), pendant que la Pologne monte (2,6&nbsp;% → 4,9&nbsp;%). Une redistribution européenne, pas un décrochage franco-français isolé.</div>
+  <p class="src" style="margin-top:30px;">Eurostat, PIB nominal, UE27 à composition actuelle, 2005-2025.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>7 / 11</span></div>
+</section>
+
+<!-- 8 - DETTE COMPARÉE (calculé) -->
+<section class="slide">
+  <p class="kicker"><u>La dette, en contexte</u> · calculé</p>
+  <h2 style="font-size:74px;margin-top:34px;max-width:16ch;">Ni la meilleure, ni la pire</h2>
+  <p class="body" style="font-size:30px;margin-top:22px;max-width:30ch;">Dette publique, % du PIB, 2025&nbsp;:</p>
+  <div class="spacer" style="max-height:16px"></div>
+  <div class="bars">
+    <div class="bar"><span class="v" style="color:var(--accent);">63,5</span><div class="col" style="height:81px;background:var(--accent);"></div><span class="lbl">Allemagne</span></div>
+    <div class="bar"><span class="v" style="color:var(--warm);">115,6</span><div class="col" style="height:147px;background:var(--warm);"></div><span class="lbl">France</span></div>
+    <div class="bar"><span class="v" style="color:var(--accent);">100,7</span><div class="col" style="height:128px;background:var(--accent);"></div><span class="lbl">Espagne</span></div>
+    <div class="bar"><span class="v" style="color:var(--accent);">137,1</span><div class="col" style="height:174px;background:var(--accent);"></div><span class="lbl">Italie</span></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">Une <b>zone intermédiaire</b>, loin devant l'Allemagne mais sous l'Italie — avec une trajectoire de hausse plus rapide que ses pairs récemment.</div>
+  <p class="src" style="margin-top:30px;">Eurostat, comptes des administrations publiques, 2025.</p>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>8 / 11</span></div>
+</section>
+
+<!-- 9 - LE VRAI MAL -->
 <section class="slide">
   <p class="kicker"><u>Le vrai malaise</u></p>
   <h2 style="font-size:80px;margin-top:34px;max-width:15ch;">Même sans le mot</h2>
@@ -200,10 +232,10 @@
   <div class="spacer"></div>
   <div class="callout">Pouvoir d'achat en recul, épargne haute&nbsp;: la consommation cale, et la croissance avec. Le malaise est réel, quel que soit le mot.</div>
   <p class="src" style="margin-top:30px;">Insee, comptes nationaux trimestriels, 2ᵉ trimestre 2026.</p>
-  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>7 / 9</span></div>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>9 / 11</span></div>
 </section>
 
-<!-- 8 - CONCLUSION -->
+<!-- 10 - CONCLUSION -->
 <section class="slide">
   <p class="kicker"><u>La réponse</u></p>
   <h2 style="font-size:82px;margin-top:34px;max-width:15ch;">Récession ou pas&nbsp;? <span class="accent">Ça dépend de la définition.</span></h2>
@@ -213,20 +245,20 @@
     <div class="chip warm"><div class="t">Lecture des économistes</div><div class="d">Ça se discute</div></div>
   </div>
   <div class="spacer"></div>
-  <div class="callout">L'étiquette compte moins que ce qu'il y a derrière&nbsp;: une <b>croissance à l'arrêt</b> et des <b>ménages sous pression</b>.</div>
-  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>8 / 9</span></div>
+  <div class="callout">L'étiquette compte moins que la direction&nbsp;: une <b>croissance à l'arrêt</b>, un <b>poids qui s'effrite en Europe</b>, et des <b>ménages sous pression</b>.</div>
+  <div class="foot"><span><b>labs.badreddineek.com</b>/recession-2026</span><span>10 / 11</span></div>
 </section>
 
-<!-- 9 - CTA -->
+<!-- 11 - CTA -->
 <section class="slide" style="background:var(--ink);color:#eef1f4;">
   <p class="kicker" style="color:#7fa0c4;"><u style="border-color:#7fa0c4;">L'enquête complète</u></p>
   <div class="spacer"></div>
   <h2 style="font-size:96px;max-width:14ch;color:#f4f7fa;">Méthode, sources et code&nbsp;: tout est ouvert.</h2>
   <p style="font-size:46px;color:#7fa0c4;font-weight:800;margin-top:44px;">labs.badreddineek.com<br>/recession-2026</p>
-  <p style="font-size:32px;color:#aab3bd;margin-top:40px;max-width:28ch;line-height:1.5;font-weight:500;">Révisions, diagnostic multi-indicateurs, comparaison européenne. Recalculé à partir des données publiques, limites assumées.</p>
+  <p style="font-size:32px;color:#aab3bd;margin-top:40px;max-width:28ch;line-height:1.5;font-weight:500;">Révisions, cycles Bry-Boschan, comparaison européenne, dette et part dans le PIB de l'UE. Recalculé à partir des données publiques, limites assumées.</p>
   <div class="spacer"></div>
   <div class="gradbar" style="margin-bottom:40px;"></div>
-  <div class="foot" style="border-color:#333a42;color:#7b848d;"><span><b style="color:#aab3bd;">Badreddine EL KHAMLICHI</b> · data scientist, Lyon</span><span>9 / 9</span></div>
+  <div class="foot" style="border-color:#333a42;color:#7b848d;"><span><b style="color:#aab3bd;">Badreddine EL KHAMLICHI</b> · data scientist, Lyon</span><span>11 / 11</span></div>
 </section>
 
 </body>
