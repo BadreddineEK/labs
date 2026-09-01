@@ -3,19 +3,21 @@
 
 Chaque été, ces deux phrases tournent en boucle. Et honnêtement, difficile de savoir laquelle croire.
 
-Alors cette fois, j'ai arrêté de deviner. J'ai ouvert les données publiques (Hub'Eau, SISPEA, INSEE, Open-Meteo) et j'ai recalculé moi-même, plutôt que de recopier les chiffres qui circulent.
+Alors cette fois, j'ai arrêté de deviner : j'ai ouvert les données publiques (Hub'Eau, SISPEA, INSEE, Open-Meteo) et recalculé moi-même, au lieu de recopier les chiffres qui circulent.
 
 Voici ce que j'ai trouvé :
 
 → La France n'est pas en pénurie. Le vrai stress hydrique extrême touche 25 à 27 pays (Bahreïn, Chypre, Koweït, Liban…). On n'y figure pas. Parler de « guerre de l'eau » chez nous, c'est exagéré.
 
-→ Mais on perd près d'un cinquième de l'eau potable dans les fuites des réseaux. Je l'ai recalculé département par département à partir du dernier millésime disponible en open data (SISPEA 2019) : médiane 19 %. Un département dépasse 30 % (Alpes-de-Haute-Provence, 30,4 %), plusieurs autres l'avoisinent entre 25 et 30 %. On demande des douches plus courtes pendant qu'un litre sur cinq part dans le sol.
+→ Pourtant, on perd près d'un cinquième de l'eau potable dans les fuites des réseaux. Recalculé par département (médiane 19 %, sur le dernier open data disponible, SISPEA 2019) : un département dépasse 30 % (Alpes-de-Haute-Provence), plusieurs autres l'avoisinent.
+
+On demande des douches plus courtes pendant qu'un litre sur cinq part dans le sol.
 
 → Et ces fuites n'ont presque aucun lien avec la richesse du territoire (corrélation quasi nulle, statistiquement non significative). Ce n'est pas une question de moyens, mais d'entretien et de gouvernance des réseaux.
 
-→ Le plus déséquilibré : on demande surtout l'effort aux ménages, qui paient l'essentiel des redevances pour environ un quart de la consommation, quand l'agriculture consomme près de la moitié de l'eau, surtout en été, au moment où les nappes sont déjà basses.
+→ Le plus déséquilibré : on demande l'effort surtout aux ménages, qui paient l'essentiel des redevances pour un quart de la consommation. L'agriculture, elle, en consomme près de la moitié, surtout en été quand les nappes sont déjà basses.
 
-Une précision importante, parce que je sais ce qu'on va me répondre : oui, la sécheresse de surface est bien réelle. Les sols secs, la végétation grillée, les images satellites impressionnantes de l'été, tout ça existe, et le changement climatique l'aggrave. Mais c'est différent de manquer d'eau structurellement, au sens des pays du Golfe. La France vit une sécheresse saisonnière, pas une pénurie chronique. Ce Lab parle du second sujet.
+Une précision, parce que je sais ce qu'on va me répondre : oui, la sécheresse de surface est bien réelle (sols secs, végétation grillée, images satellites de l'été), et le climat l'aggrave. Mais manquer d'eau structurellement, comme les pays du Golfe, c'est autre chose. La France vit une sécheresse saisonnière, pas une pénurie chronique. Ce Lab parle du second sujet.
 
 Ma conclusion, après avoir regardé les chiffres : la France n'a pas un problème de pénurie. Elle a un problème de calendrier, de tuyaux et de répartition de l'effort. La sobriété individuelle compte, mais l'essentiel se joue dans l'entretien des réseaux et le partage de la ressource.
 
