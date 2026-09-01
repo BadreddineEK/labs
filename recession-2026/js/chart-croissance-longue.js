@@ -22,7 +22,7 @@
       var op = nom === 'France' ? 1 : 0.55;
       return '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + COL[nom] + '" stroke-width="' + w + '" stroke-opacity="' + op + '" stroke-linejoin="round"/>';
     }).join('');
-    el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Croissance trimestrielle du PIB, France et pairs européens depuis 2018">' +
+    el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Croissance trimestrielle du PIB, France et pairs européens depuis 2016">' +
       '<line x1="' + pad.left + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W - pad.right) + '" y2="' + zeroY.toFixed(1) + '" stroke="#d3ccbc"/>' + lines +
       '<text x="' + pad.left + '" y="' + (H - 6) + '" font-size="13" fill="#8c887e">' + periodes[0] + '</text>' +
       '<text x="' + (W - pad.right) + '" y="' + (H - 6) + '" text-anchor="end" font-size="13" fill="#8c887e">' + periodes[periodes.length - 1] + '</text></svg>';
