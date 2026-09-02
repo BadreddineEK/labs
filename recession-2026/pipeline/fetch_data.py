@@ -103,14 +103,23 @@ def fetch_dette_deficit_annuels():
 
 
 def fetch_pib_nominal_part_ue():
-    # PIB nominal (prix courants), pour calculer la part FR/IT/PL dans le PIB de l'UE27 depuis 2004.
+    # PIB nominal (prix courants), pour calculer la part des principaux pays
+    # dans le PIB de l'UE27 depuis 2004.
     out = {}
-    for geo in ("FR", "IT", "PL", "EU27_2020"):
+
+    for geo in ("DE", "FR", "IT", "ES", "PL", "EU27_2020"):
         out[geo] = eurostat_series(
             "namq_10_gdp",
-            {"geo": geo, "na_item": "B1GQ", "unit": "CP_MEUR", "s_adj": "NSA", "sinceTimePeriod": "2004-Q1"},
+            {
+                "geo": geo,
+                "na_item": "B1GQ",
+                "unit": "CP_MEUR",
+                "s_adj": "NSA",
+                "sinceTimePeriod": "2004-Q1",
+            },
             f"pib_nominal_{geo}.json",
         )
+
     return out
 
 

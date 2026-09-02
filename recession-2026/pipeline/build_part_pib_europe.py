@@ -1,7 +1,4 @@
-"""Part de la France (et de comparateurs) dans le PIB nominal de l'UE27, 2005-2025.
-
-Voir addendum : distinguer declin franco-italien specifique vs redistribution UE plus large
-(ex. montee de la Pologne).
+"""Part des principales économies dans le PIB nominal de l'UE27, 2005-2025.
 """
 
 from __future__ import annotations
@@ -26,13 +23,21 @@ def _annuel(serie, annee):
 
 
 def build_part_pib_europe():
+    de = _load("pib_nominal_DE.json")
     fr = _load("pib_nominal_FR.json")
     it = _load("pib_nominal_IT.json")
+    es = _load("pib_nominal_ES.json")
     pl = _load("pib_nominal_PL.json")
     eu = _load("pib_nominal_EU27_2020.json")
 
     annees = list(range(2005, 2026))
-    series = {"France": fr, "Italie": it, "Pologne": pl}
+    series = {
+    "Allemagne": de,
+    "France": fr,
+    "Italie": it,
+    "Espagne": es,
+    "Pologne": pl,
+    }
     points = []
     for annee in annees:
         eu_a = _annuel(eu, annee)
