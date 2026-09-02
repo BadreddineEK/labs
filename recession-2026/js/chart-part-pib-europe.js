@@ -16,6 +16,7 @@
     var reperes = [2005, 2015, d.derniere_annee.annee].filter(function (a, i, arr) { return byAnnee[a] && arr.indexOf(a) === i; });
     var noms = Object.keys(COL);
     var W = 700, H = 340, pad = { top: 24, right: 112, bottom: 38, left: 20 };
+    var plotH = H - pad.top - pad.bottom;
     var allVals = []; reperes.forEach(function (a) { noms.forEach(function (n) { if (byAnnee[a][n] != null) allVals.push(byAnnee[a][n]); }); });
     var min = 0, max = Math.max.apply(Math, allVals) * 1.15;
     var x = function (i) { return pad.left + i * (W - pad.left - pad.right) / (reperes.length - 1); };
