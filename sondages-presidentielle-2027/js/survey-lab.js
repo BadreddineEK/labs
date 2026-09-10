@@ -12,6 +12,15 @@
   ['sample-control', 'sample-output', 'mode-control', 'weight-control', 'run-poll', 'run-many', 'run-status', 'sample-chart', 'truth-value', 'estimate-value', 'estimate-note', 'error-value', 'effective-value', 'poll-interpretation', 'repeat-chart', 'coverage-value', 'coverage-note', 'weight-chart', 'case-chart', 'notice-grid'].forEach(function (id) { els[id] = document.getElementById(id); });
   if (!els['sample-control']) return;
 
+  var simulatorIntro = document.querySelector('#simulator .section-head');
+  if (simulatorIntro) {
+    var introText = simulatorIntro.querySelector('.section-intro');
+    if (introText) introText.textContent = 'La population fictive compte 100 000 électeurs. La simulation connaît la vraie intention de vote, puis vous montre ce que votre échantillon permet réellement d’en dire.';
+    simulatorIntro.insertAdjacentHTML('beforeend', '<div class="model-card"><strong>Fiche du modèle</strong><span><b>Population</b> synthétique · 100 000 personnes</span><span><b>Variable</b> soutien à une option fictive</span><span><b>Vérité pédagogique</b> 42 %</span><span><b>Résultat</b> aucune estimation de 2027</span></div>');
+  }
+  var chapterLabels = { weights: '04 · Voir le redressement agir', question: '05 · Le chiffre dépend aussi des mots', case: '06 · Retour au réel', notice: '07 · Votre kit de lecture' };
+  Object.keys(chapterLabels).forEach(function (id) { var label = document.querySelector('#' + id + ' .eyebrow'); if (label) label.textContent = chapterLabels[id]; });
+
   function fmt(value, decimals) { return value.toLocaleString('fr-FR', { minimumFractionDigits: decimals || 0, maximumFractionDigits: decimals || 0 }); }
   function pct(value, decimals) { return fmt(value * 100, decimals === undefined ? 1 : decimals) + ' %'; }
   function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
@@ -71,7 +80,7 @@
     var values = [], covered = 0, total = 500;
     for (var i = 0; i < total; i += 1) { var result = drawSample(settings); values.push(result.estimate); if (truth >= result.low && truth <= result.high) covered += 1; }
     var min = Math.max(0, Math.min.apply(null, values) - 0.03), max = Math.min(1, Math.max.apply(null, values) + 0.03);
-    els['repeat-chart'].innerHTML = repeatSvg(values, truth, truth - 1.96 * Math.sqrt(truth * (1 - truth) / settings.n), truth + 1.96 * Math.sqrt(truth * (1 - truth) / settings.n));
+    els['repeat-chart'].innerHTML = repeatSvg(values, truth, truth - 1.96 * Math.sqrt(truth * (1 - truth) / settings.n), truth + 1.96 * Math.sqrt(truth * (1 - truth) / settings.n)) + '<p class="chart-summary">Les 500 estimations s’étendent de ' + pct(Math.min.apply(null, values), 0) + ' à ' + pct(Math.max.apply(null, values), 0) + '. La vérité pédagogique est ' + pct(truth) + '.</p>';
     els['coverage-value'].textContent = pct(covered / total, 0);
     els['coverage-note'].textContent = settings.mode === 'random' ? 'Dans un tirage aléatoire, la couverture se rapproche de 95 % quand les hypothèses du modèle sont respectées.' : 'La couverture peut s’éloigner de 95 % : l’intervalle ne connaît pas le biais introduit par le recrutement.';
     els['run-status'].textContent = '500 tirages simulés · dispersion de ' + pct(Math.max(0, max - min), 1);
@@ -83,10 +92,17 @@
   els['run-poll'].addEventListener('click', run);
   els['run-many'].addEventListener('click', function () { run(); runMany(getSettings()); });
 
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) { entries.forEach(function (entry) { if (entry.isIntersecting) entry.target.classList.add('is-visible'); }); }, { threshold: 0.12 });
+    document.querySelectorAll('.lab-section, .opening').forEach(function (section) { section.classList.add('reveal'); observer.observe(section); });
+  }
+
   var caseRows = [['Institut déclaré', 'NON'], ['Notice déposée', 'NON'], ['Échantillon représentatif', 'ÉCARTS'], ['Redressement', 'ABSENT'], ['Ordre des questions', 'À RISQUE']];
   els['case-chart'].innerHTML = '<div class="case-list">' + caseRows.map(function (row) { return '<div class="case-row"><span>' + row[0] + '</span><b>' + row[1] + '</b></div>'; }).join('') + '</div>';
   var noticeRows = [['01', 'Producteur', 'Qui commande et réalise ?'], ['02', 'Population', 'Qui est censé être représenté ?'], ['03', 'Terrain', 'Quand, combien, par quel mode ?'], ['04', 'Questionnaire', 'Quel texte exact et quel ordre ?'], ['05', 'Corrections', 'Quels quotas, poids et redressements ?'], ['06', 'Incertitude', 'Quelle marge, avec quelles hypothèses ?']];
   els['notice-grid'].innerHTML = noticeRows.map(function (row) { return '<article class="notice-card"><b>' + row[0] + '</b><strong>' + row[1] + '</strong><p>' + row[2] + '</p></article>'; }).join('');
+  var historicalCaption = document.querySelector('#historical .fig-cap');
+  if (historicalCaption) historicalCaption.innerHTML += ' <a href="https://www.archives-resultats-elections.interieur.gouv.fr/resultats/presidentielle-2022/index.php" target="_blank" rel="noopener">Résultats officiels du ministère de l’Intérieur</a>.';
   run();
   runMany(getSettings());
 })();
