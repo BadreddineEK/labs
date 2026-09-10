@@ -1,9 +1,9 @@
 [{
     "slug": "sondages-presidentielle-2027",
-    "title": "Que mesure vraiment un sondage ?",
+    "title": "Derrière un chiffre de sondage, qu'est-ce qui est vraiment mesuré ?",
     "description": {
-      "fr": "À un an de la présidentielle, une enquête méthodologique sur les échantillons, quotas, panels, marges d'erreur, redressement et projections de sièges. Sans pronostic, sans prise de position partisane.",
-      "en": "One year before the presidential election, a methodological investigation into samples, quotas, online panels, margins of error, weighting and seat projections. No forecast, no partisan stance."
+      "fr": "Présidentielle 2027, études sur les jeunes, chiffres choc : apprendre à lire un sondage, son échantillon, ses quotas, sa marge, son redressement et ses limites. Sans pronostic, sans prise de position partisane.",
+      "en": "Presidential election 2027, youth studies and headline figures: learn to read a poll, its sample, quotas, margin, weighting and limitations. No forecast, no partisan stance."
     },
     "tags": ["Data Literacy", "Statistiques", "Élections"],
     "category": "Society",
