@@ -10,16 +10,16 @@ Le cas central est une mise au point de la Commission des sondages du 10 juillet
 
 ## Contenu du Lab
 
-- Échantillon, tirage aléatoire et quotas.
-- Formulation et ordre des questions.
-- Access panels, redressement et limites de la marge d'erreur.
-- Cas réel contrôlé par la Commission des sondages.
-- Guide de lecture d'une notice et trois réflexes avant de partager un chiffre.
+- Simulation reproductible d'un sondage sur une population synthétique.
+- Comparaison tirage aléatoire, panel biaisé et panel redressé.
+- Calcul de proportion pondérée, erreur-type, intervalle à 95 % et taille effective.
+- Répétition de 500 enquêtes pour séparer variance et biais.
+- Formulation des questions, cas réel contrôlé par la Commission et guide de notice.
 
 ## Particularité
 
-Pas de pipeline Python : le travail est méthodologique, rédactionnel et fondé sur des sources primaires. Le calculateur d'échantillon et les schémas sont exécutés côté navigateur.
+Pas de pipeline Python : la simulation est exécutée côté navigateur avec des données synthétiques. Elle ne produit aucune estimation de la présidentielle 2027. Les seules données réelles sont celles du cas FranceSoir et de ses sources officielles.
 
 ## Statut
 
-Lab web rédigé et mis en forme. Le post LinkedIn et le carrousel seront alignés sur cette version éditoriale dans une étape distincte.
+Lab web refondu autour d'une expérience interactive. Le post LinkedIn et le carrousel restent à réaligner sur cette version.

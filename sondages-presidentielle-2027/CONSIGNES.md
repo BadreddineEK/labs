@@ -13,16 +13,14 @@ La presidentielle 2027 est le fil rouge d'un Lab de litteratie statistique. Le s
 
 ## Structure du Lab
 
-1. Le chiffre affiche et la population reellement interrogee.
-2. Tirage aleatoire et methode des quotas.
-3. Formulation et ordre des questions.
-4. Access panels et auto-selection.
-5. Ce que couvre, et ne couvre pas, une marge d'erreur.
-6. Cas reel : mise au point de la Commission des sondages du 10 juillet 2026 sur une enquete publiee par FranceSoir.
-7. Redressement et choix methodologiques.
-8. Comparer plusieurs resultats sans faire une moyenne aveugle.
-9. Notice : les informations a verifier avant de discuter un titre.
-10. Trois reflexes avant de partager un chiffre.
+1. Definir signal, bruit et biais.
+2. Tirer un echantillon synthetique et calculer une proportion.
+3. Comparer recrutement aleatoire, panel et quotas.
+4. Appliquer des poids et calculer la taille effective.
+5. Rejouer 500 enquêtes pour mesurer la couverture des intervalles.
+6. Montrer que la formulation fabrique aussi la variable observee.
+7. Revenir a un cas reel documente par la Commission des sondages.
+8. Donner une grille de lecture technique d'une notice.
 
 ## Sources principales
 
@@ -33,4 +31,4 @@ La presidentielle 2027 est le fil rouge d'un Lab de litteratie statistique. Le s
 
 ## Perimetre technique
 
-Pas de pipeline Python. Le Lab est une page statique avec un calculateur d'echantillon et des schemas SVG. Les contenus post LinkedIn et carrousel doivent etre realignes dans une etape distincte, apres validation du Lab.
+Pas de pipeline Python. `js/survey-lab.js` genere les echantillons, poids, estimations, erreurs-types, intervalles et repetitions. Les donnees sont synthetiques et calibrées pour rendre visible le biais de panel. Les contenus post LinkedIn et carrousel doivent etre realignes dans une etape distincte, apres validation du Lab.
