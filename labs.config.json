@@ -1,4 +1,19 @@
 [{
+    "slug": "sondages-presidentielle-2027",
+    "title": "Que mesure vraiment un sondage ?",
+    "description": {
+      "fr": "À un an de la présidentielle, une enquête méthodologique sur les échantillons, quotas, panels, marges d'erreur, redressement et projections de sièges. Sans pronostic, sans prise de position partisane.",
+      "en": "One year before the presidential election, a methodological investigation into samples, quotas, online panels, margins of error, weighting and seat projections. No forecast, no partisan stance."
+    },
+    "tags": ["Data Literacy", "Statistiques", "Élections"],
+    "category": "Society",
+    "kind": "investigation",
+    "lang": "fr",
+    "date": "2026-09-10",
+    "color": "#6a5a8c",
+    "status": "live"
+  },
+  {
     "slug": "recession-2026",
     "title": "La France est-elle vraiment en récession ?",
     "description": {

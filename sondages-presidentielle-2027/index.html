@@ -1,97 +1,34 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sondages presidentielle 2027 — Ce qu'on ne vous dit jamais sur la marge d'erreur</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sondages présidentiels 2027 : ce que mesure vraiment un chiffre · Lab</title>
+<meta name="description" content="Comment sont construits les sondages électoraux, ce que signifie la marge d'erreur, et pourquoi une projection de sièges n'est pas un sondage. Une enquête méthodologique non partisane.">
+<meta name="author" content="Badreddine EL KHAMLICHI">
+<meta property="og:type" content="article"><meta property="og:title" content="Sondages présidentiels 2027 : ce que mesure vraiment un chiffre"><meta property="og:description" content="Échantillons, quotas, marges d'erreur, redressement et projections : lire un sondage sans se raconter d'histoires."><meta property="og:locale" content="fr_FR"><meta property="og:site_name" content="Labs · Badreddine EK"><meta property="og:url" content="https://labs.badreddineek.com/sondages-presidentielle-2027/">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<section id="intro">
-  <h1>Sondages presidentielle 2027 : la mecanique cachee derriere chaque chiffre</h1>
-  <p>Vous l'avez peut-etre vu passer : une personne sur environ 40 000 est interrogee pour un sondage donne. Ce Lab va plus loin : comment ces 40 000e sont-ils choisis, pourquoi les chiffres different d'un institut a l'autre, et pourquoi la "marge d'erreur" que vous voyez partout n'est peut-etre pas ce que vous croyez.</p>
-  <p><em>Aucune prise de position sur le resultat de l'election. Ce Lab parle de methode, pas de pronostic.</em></p>
-</section>
-
-<section id="methode-quotas">
-  <h2>1. Comment on construit un echantillon</h2>
-  <p>Il existe deux grandes familles de methodes d'echantillonnage. La <strong>methode aleatoire</strong> (theorisee par Jerzy Neyman en 1934) : chaque personne de la population a une probabilite connue et calculable d'etre choisie. C'est la seule methode pour laquelle on peut mathematiquement calculer une marge d'erreur rigoureuse.</p>
-  <p>La <strong>methode des quotas</strong>, historiquement introduite par le statisticien norvegien Anders Kiaer des 1895, consiste a constituer un echantillon qui reproduit la structure de la population sur quelques variables (age, sexe, region, categorie socio-professionnelle), sans que chaque individu ait une probabilite connue d'etre selectionne. C'est la methode dominante en France pour les sondages electoraux.</p>
-  <p>Difference cruciale : avec la methode aleatoire, la representativite est garantie par construction. Avec les quotas, elle n'est verifiee que sur les quelques variables choisies — rien ne garantit que l'echantillon ressemble a la population sur les variables qui comptent vraiment pour predire un vote.</p>
-</section>
-
-<section id="access-panels">
-  <h2>2. Les access panels et leurs biais reels</h2>
-  <p>Depuis le milieu des annees 2000, la plupart des instituts francais recrutent leurs repondants via des "access panels" : des bases de plusieurs milliers de personnes inscrites volontairement en ligne, souvent contre une petite remuneration.</p>
-  <p>Ce systeme cumule deux niveaux d'auto-selection : il faut d'abord choisir de s'inscrire au panel, puis choisir de repondre a chaque questionnaire envoye. Consequences documentees :</p>
-  <ul>
-    <li>Une part significative de la population, moins a l'aise avec le numerique, est structurellement sous-representee voire absente de ces panels.</li>
-    <li>Les personnes tres actives sur internet, plus exposees aux reseaux sociaux et aux discours politiques clives, tendent a etre sur-representees. Sur les regionales 2021, les donnees brutes non redressees de plusieurs instituts montraient une sur-representation d'environ 2 points pour le Rassemblement National par rapport au score final reel.</li>
-    <li>Les panelistes ont un interet pour la politique superieur a la moyenne (ils repondent preferentiellement aux enquetes qui les interessent), ce qui gonfle artificiellement les intentions declarees de participation au vote (souvent mesurees a 90-95%, bien au-dessus du taux de participation reel observe historiquement).</li>
-  </ul>
-  <p class="incertitude">Ces biais ne sont pas des erreurs de calcul : ce sont des consequences structurelles de la methode de recrutement, connues et documentees par les statisticiens du secteur eux-memes.</p>
-</section>
-
-<section id="marge-erreur">
-  <h2>3. Le vrai probleme de la marge d'erreur</h2>
-  <p>La loi du 25 avril 2016 impose a chaque sondage electoral publie en France d'afficher une marge d'erreur, "le cas echeant par reference a la methode aleatoire".</p>
-  <p>Le probleme : la quasi-totalite des sondages francais n'utilisent pas la methode aleatoire, mais la methode des quotas ou des access panels. Or, pour ces methodes, la probabilite qu'un individu donne appartienne a l'echantillon est inconnue — ce qui rend, mathematiquement, le calcul rigoureux d'une marge d'erreur impossible au sens statistique classique.</p>
-  <p>Pascal Ardilly, ancien inspecteur general de l'Insee et auteur d'un ouvrage de reference sur les techniques de sondage, l'a explicitement declare lors d'une audition au Senat : considerer que les marges d'erreur des methodes par quotas sont comparables a celles des methodes aleatoires repose sur une hypothese forte et non verifiee pour la methode des quotas.</p>
-  <p>La loi a neanmoins fige cette reference par defaut, ce qui laisse penser au public qu'une marge affichee de ±3 points est une mesure de precision rigoureuse et complete — alors qu'elle ignore largement les biais structurels evoques au chapitre 2.</p>
-</section>
-
-<section id="cas-2022">
-  <h2>4. Un cas chiffre : la presidentielle 2022</h2>
-  <p>Selon une analyse statistique publiee sur The Conversation, pour la presidentielle de 2022, les marges d'erreur theoriques affichees pour les intentions de vote se situaient generalement entre 1,8 et 2 points. Or, une analyse retrospective des ecarts reels entre les dernieres estimations publiees et les resultats effectifs des candidats a montre des ecarts reellement compris entre 4 et 6 points.</p>
-  <p>Concretement : un candidat credite de 25% d'intentions de vote, presente avec une marge theorique de ±2 points (donc "entre 23% et 27%"), avait en realite une precision reelle plus proche de "entre 21% et 29%".</p>
-  <p class="incertitude">Ce decalage ne vient pas uniquement de la variance d'echantillonnage (le flou statistique normal) mais aussi d'un biais systematique lie aux methodes de collecte et de redressement, plus difficile a quantifier a l'avance.</p>
-</section>
-
-<section id="redressement">
-  <h2>5. Le redressement politique : une boite noire assumee</h2>
-  <p>Apres la collecte des reponses brutes, chaque institut applique un "redressement" : des corrections statistiques destinees a compenser des biais connus, notamment la sous-declaration historique de certains votes (le vote Front National/Rassemblement National a longtemps ete sous-estime dans les declarations spontanees).</p>
-  <p>Le probleme n'est pas l'existence du redressement en soi — c'est une pratique statistique legitime et necessaire — mais son opacite : chaque institut applique sa propre methode de correction, non rendue publique dans le detail, seule son existence etant mentionnee dans la notice technique transmise a la Commission des sondages.</p>
-  <p>Consequence observable : deux instituts peuvent publier des chiffres differents pour le meme candidat au meme moment, non pas parce que l'un se trompe et l'autre a raison, mais parce que leurs recettes de redressement different. Par exemple, il a ete documente que certains instituts appliquent des corrections qui moderent davantage les scores du Rassemblement National que d'autres, sans que cela constitue necessairement un biais au sens pejoratif : c'est une difference methodologique validee par la Commission des sondages.</p>
-</section>
-
-<section id="convergence">
-  <h2>6. Le phenomene de convergence en fin de campagne</h2>
-  <p>Un phenomene statistique documente par plusieurs chercheurs specialistes des sondages : a l'approche du jour du vote, les chiffres publies par differents instituts, utilisant pourtant des methodes et des echantillons independants, ont tendance a converger de maniere improbable si l'on considere qu'il s'agit d'estimations statistiquement independantes.</p>
-  <p>L'explication avancee par les statisticiens du secteur : aucun institut ne souhaite publier un chiffre trop eloigne du consensus ambiant, par crainte de se tromper visiblement si le consensus s'avere juste. Ce "gregarisme" reduit la variance apparente entre instituts, mais ne garantit absolument pas une amelioration de la precision reelle par rapport aux resultats finaux.</p>
-</section>
-
-<section id="tableau-instituts">
-  <h2>7. Les 7 instituts accredites pour la presidentielle 2027</h2>
-  <div id="table-instituts-container"><!-- Rempli par js/table-instituts.js a partir de data/instituts_2027.json --></div>
-  <p class="incertitude">Donnees verifiees aupres des sites officiels des instituts et de la Commission des sondages. A reverifier avant publication finale (voir CONSIGNES.md point 7).</p>
-</section>
-
-<section id="cas-legislatives-2024">
-  <h2>8. Sondage regule vs projection en sieges : la lecon des legislatives 2024</h2>
-  <p>Un point souvent confondu par le grand public : le "sondage" d'intentions de vote (encadre et controle par la Commission des sondages depuis 1977) et la "projection en sieges" (un exercice de traduction des votes nationaux en sieges parlementaires, non regule methodologiquement).</p>
-  <p>Lors des legislatives 2024, les instituts estimaient le Rassemblement National et ses allies entre 170 et 230 sieges. Le resultat final a ete de 143 sieges, troisieme position. Cet ecart tient moins a une erreur sur les intentions de vote nationales (relativement correctes) qu'a la difficulte extreme de traduire un pourcentage national en 577 resultats de circonscriptions locales, chacune dependant de dynamiques propres : desistements, configurations de duels ou triangulaires, taux de participation local.</p>
-  <p>La Commission des sondages elle-meme distingue ces deux exercices et appelle a davantage de prudence sur les projections en sieges que sur les intentions de vote brutes.</p>
-</section>
-
-<section id="regle-3-questions">
-  <h2>9. La regle des 3 questions pour lire un sondage 2027</h2>
-  <p>En echo au mini-chapitre pedagogique deja aborde dans le Lab "Esperance de vie 2026" de cette meme serie, voici la version specifique aux sondages electoraux :</p>
-  <ol>
-    <li><strong>Quelle methode ?</strong> Quotas, panel en ligne, ou combinaison des deux — chaque methode a ses biais propres.</li>
-    <li><strong>Sondage ou projection ?</strong> Une intention de vote nationale n'est pas un nombre de sieges.</li>
-    <li><strong>Quel ecart avec les autres instituts ?</strong> Un ecart de 2-3 points entre deux instituts au meme moment n'est generalement pas une erreur, mais une difference methodologique de redressement.</li>
-  </ol>
-</section>
-
-<section id="limites">
-  <h2>10. Ce que ce Lab ne dit pas</h2>
-  <p>Ce Lab ne pretend pas que les sondages sont inutiles ou trompeurs par nature. Ils restent l'outil le plus rigoureux et le plus transparent disponible pour suivre l'evolution d'une campagne, a condition d'etre lus comme des indicateurs de tendance et non comme des predictions exactes du resultat final.</p>
-  <p>Ce Lab ne se prononce sur aucun candidat, aucun parti, aucun scenario de second tour. Le sujet est exclusivement la methode de mesure, jamais le resultat mesure.</p>
-</section>
-
-<script src="js/calc-proba-sondage.js"></script>
-<script src="js/table-instituts.js"></script>
-<script src="js/chart-marge-reelle.js"></script>
-</body>
-</html>
+<header class="hero"><div class="wrap">
+<p class="kicker"><a href="https://labs.badreddineek.com">Labs · badreddineek.com</a> · méthode, présidentielle 2027</p>
+<h1>Que mesure vraiment un <em>sondage&nbsp;?</em></h1>
+<p class="lede">À un an de la présidentielle, les chiffres s'accumulent. Ils sont utiles, mais ils ne sont ni des prédictions ni une photographie parfaite du pays. Voici leur mécanique, leurs limites et trois réflexes pour les lire sans s'y perdre.</p>
+<p class="byline">Par <a href="https://badreddineek.com" target="_blank" rel="noopener">Badreddine EL KHAMLICHI</a> · data scientist, Lyon · <a href="#sources">sources en bas de page</a></p>
+</div></header>
+<main class="wrap">
+<section id="intro" class="note-method"><p><strong>Le point de départ.</strong> Un sondage électoral ne dit pas qui va gagner. Il mesure, à une date donnée, des réponses recueillies auprès d'un échantillon puis corrigées avec une méthode déclarée dans une notice. Ce Lab ne commente aucun candidat ni parti. Il explique la mesure, pas le résultat mesuré. Le post d'introduction pose la première question&nbsp;: «&nbsp;avez-vous déjà été sondé&nbsp;?&nbsp;».</p></section>
+<section id="proba"><h2>1. Avez-vous déjà été sondé&nbsp;?</h2><p class="section-intro">Probablement pas. Un échantillon de 1&nbsp;300 personnes rapporté à environ 53&nbsp;millions d'adultes représente une fraction minuscule du pays. Ce n'est pas suspect&nbsp;: c'est le principe même d'un sondage.</p><div class="sim"><label for="sample-size">Taille de l'échantillon&nbsp;: <strong id="sample-label">1&nbsp;300</strong> personnes</label><input id="sample-size" type="range" min="1000" max="2000" value="1300" step="50"><p class="sim-result" id="proba-result"></p></div><p class="takeaway">La qualité d'un sondage ne vient pas du fait d'interroger «&nbsp;beaucoup&nbsp;» de monde. Elle vient surtout de <em>qui</em> est interrogé, de ce qui est corrigé ensuite, et de ce qui ne peut pas l'être.</p><p class="fig-cap">Calcul&nbsp;: population adulte France ≈ 53&nbsp;millions ; échantillon indicatif de 1&nbsp;000 à 2&nbsp;000 personnes selon les enquêtes.</p></section>
+<section id="quotas"><h2>2. Comment choisit-on les personnes interrogées&nbsp;?</h2><p class="section-intro">Deux approches sont souvent confondues. Elles n'offrent pas les mêmes garanties statistiques.</p><div class="chart-wrap"><div id="quotas-visual"></div></div><p><strong>Le tirage aléatoire</strong> donne à chaque personne une probabilité connue d'être sélectionnée. C'est le cadre dans lequel la marge d'erreur classique est calculable. <strong>Les quotas</strong>, méthode dominante en France, cherchent à reproduire quelques caractéristiques de la population (âge, sexe, région, catégorie socioprofessionnelle), puis pondèrent les réponses. C'est rapide et pratique, mais la probabilité individuelle d'être sélectionné n'est pas connue.</p><p class="warn">Les quotas ne sont pas une «&nbsp;fausse science&nbsp;». Ils sont une méthode différente, avec une part de jugement méthodologique plus importante sur les variables retenues et les corrections appliquées.</p></section>
+<section id="panels"><h2>3. Les panels en ligne&nbsp;: où commence le biais&nbsp;?</h2><p>Beaucoup de répondants viennent d'access panels&nbsp;: des personnes inscrites volontairement pour répondre à des questionnaires, puis sélectionnées selon des quotas. Il y a donc deux étapes d'auto-sélection&nbsp;: s'inscrire, puis accepter de répondre.</p><p>Ce mécanisme peut sous-représenter des profils peu présents en ligne, peu disponibles ou peu enclins à participer aux enquêtes. Il peut aussi surreprésenter des personnes davantage intéressées par la politique. C'est précisément ce que le redressement tente de compenser, sans pouvoir garantir qu'il corrige chaque différence invisible.</p><div class="incertitude"><strong>Ce que je ne chiffre pas ici.</strong> Le brouillon initial avançait «&nbsp;40&nbsp;% exclus par fracture numérique&nbsp;» et «&nbsp;+2 points&nbsp;» sur un vote précis. Je ne les présente pas comme faits établis faute d'une source primaire récente et d'un périmètre identique. Le mécanisme suffit à expliquer pourquoi une marge d'erreur ne résume pas tout.</div></section>
+<section id="marge"><h2>4. La marge d'erreur ne mesure pas tout <span class="badge-calcul">calculé</span></h2><p class="section-intro">La loi impose d'indiquer qu'un sondage est affecté de marges d'erreur, et les marges publiées peuvent être données «&nbsp;par référence à la méthode aléatoire&nbsp;». C'est une information utile, mais il faut lire ce qu'elle couvre.</p><div class="chart-wrap"><div id="chart-marge"></div></div><p class="takeaway">Pour un échantillon aléatoire de 1&nbsp;000 personnes, une proportion proche de 50&nbsp;% a un intervalle théorique d'environ <em>±3 points</em> à 95&nbsp;%. Avec des quotas et des panels, cet intervalle ne capture pas les biais de recrutement, de non-réponse ou de redressement.</p><p class="fig-cap">Loi n°2016-508 du 25 avril 2016, art. 2&nbsp;: mentions obligatoires, dont marges d'erreur «&nbsp;le cas échéant par référence à la méthode aléatoire&nbsp;». Commission des sondages.</p></section>
+<section id="cas-2022"><h2>5. Pourquoi la marge affichée et l'écart final peuvent diverger</h2><p class="section-intro">À la présidentielle 2022, des analyses rétrospectives ont trouvé des écarts de plusieurs points entre dernières estimations et résultats. Ce n'est pas la preuve que «&nbsp;les sondages ne valent rien&nbsp;»&nbsp;: c'est la démonstration qu'un intervalle d'échantillonnage ne couvre pas tous les aléas d'une campagne.</p><div class="chart-wrap"><div id="chart-marge-reelle"></div></div><p>Une intention de vote évolue jusqu'au scrutin. À cela s'ajoutent la mobilisation effective, les indécis, les effets de question, le redressement et les erreurs non observables. La bonne lecture n'est pas «&nbsp;25&nbsp;% ± 2&nbsp;% = résultat garanti&nbsp;», mais «&nbsp;un indicateur, avec une incertitude plus large que la seule marge publiée&nbsp;».</p><p class="fig-cap">Exemple pédagogique, fondé sur des analyses rétrospectives de 2022. Les écarts varient selon les candidats et les instituts&nbsp;; aucun chiffre unique ne résume une élection.</p></section>
+<section id="redressement"><h2>6. Le redressement&nbsp;: nécessaire, mais difficile à auditer</h2><p>Après la collecte, les instituts redressent les réponses pour rapprocher l'échantillon de caractéristiques connues de la population et, souvent, des souvenirs de vote. Ce n'est pas une manipulation clandestine&nbsp;: la notice déposée auprès de la Commission doit préciser la méthode, le nombre de personnes interrogées, les dates et les questions.</p><p>Mais le détail des modèles, des variables retenues et des pondérations reste rarement assez fin pour qu'un lecteur extérieur puisse reproduire le chiffre. Deux instituts peuvent donc différer sans que l'un «&nbsp;mente&nbsp;»&nbsp;: ils font des choix de modèle différents. La bonne question est de comparer les notices, pas de chercher un institut infaillible.</p></section>
+<section id="convergence"><h2>7. Quand les instituts se rapprochent, faut-il être rassuré&nbsp;?</h2><p>Pas automatiquement. Des résultats proches peuvent signaler une tendance robuste, mais aussi une information commune, des méthodes voisines ou une prudence partagée. Sans accès aux données brutes et aux modèles, il est difficile de séparer ces explications.</p><p class="warn">Je ne transforme donc pas le «&nbsp;grégaire&nbsp;» en accusation. La convergence est un phénomène à surveiller et à questionner, pas une preuve d'erreur ou de collusion.</p></section>
+<section id="instituts"><h2>8. Les instituts à comparer, et surtout leurs notices</h2><p class="section-intro">Le nom de l'institut ne suffit pas. Les éléments utiles sont les dates de terrain, la taille et le mode de recueil, les quotas, les pondérations et le commanditaire. Voici les informations de contexte disponibles dans le dataset du Lab.</p><div class="chart-wrap"><div id="table-instituts-container"></div></div><p class="fig-cap">Sources à revérifier au moment de chaque publication&nbsp;: notices déposées auprès de la Commission des sondages et sites des instituts. Les méthodes peuvent évoluer d'une enquête à l'autre.</p></section>
+<section id="legislatives"><h2>9. Sondage d'intentions ou projection de sièges&nbsp;?</h2><p class="section-intro">Ce sont deux objets différents. Les confondre est la façon la plus rapide de mal lire une soirée électorale.</p><div class="chart-wrap"><div id="sieges-visual"></div></div><p>Lors des législatives de 2024, plusieurs projections annonçaient pour le RN et ses alliés une fourchette de 170 à 230 sièges. Le résultat final a été 143. La difficulté n'était pas seulement le vote national&nbsp;: il fallait le traduire dans 577 circonscriptions, avec les désistements, les duels, les triangulaires et la participation locale.</p><p class="takeaway">Une intention de vote nationale est un sondage encadré et contrôlé. Une projection de sièges est une <em>modélisation</em> de cette intention dans des centaines de cas locaux&nbsp;: elle n'est pas soumise au même contrôle méthodologique.</p><p class="fig-cap">Commission des sondages, rapport d'activité 2024&nbsp;: distinction explicite entre sondages et projections de sièges. Résultat législatives 2024&nbsp;: 143 sièges RN et alliés.</p></section>
+<section id="questions"><h2>10. Trois questions avant de partager un sondage</h2><ol class="limites"><li><strong>Qui a été interrogé, quand, et comment&nbsp;?</strong> Ouvrir la notice plutôt que se contenter du titre.</li><li><strong>Est-ce une intention de vote ou une projection&nbsp;?</strong> Un pourcentage national ne se transforme pas mécaniquement en sièges.</li><li><strong>Que mesure l'incertitude annoncée&nbsp;?</strong> La marge est une référence utile, pas une assurance tous risques contre les biais de collecte ou les changements de campagne.</li></ol></section>
+<section id="limites"><h2>Ce que ce Lab ne dit <em>pas</em></h2><ul class="limites"><li><strong>Il ne prédit aucune élection.</strong> Aucune lecture ici ne permet de déduire qui gagnera en 2027.</li><li><strong>Il ne disqualifie pas les sondages.</strong> Bien lus, ils restent utiles pour suivre une tendance et comparer des évolutions dans le temps.</li><li><strong>Il ne transforme pas les biais en faute.</strong> Quotas, panels et redressements ont des limites structurelles, mais ils répondent aussi à des contraintes réelles de coût et de délai.</li><li><strong>Les notices restent la source à privilégier.</strong> Ce Lab explique comment les lire&nbsp;; il ne remplace pas la notice propre à chaque enquête.</li></ul></section>
+<section id="sources"><h2>Sources</h2><ul class="sources"><li>Commission des sondages&nbsp;: obligations légales et notices, notamment l'article 2 modifié par la loi n°2016-508 du 25 avril 2016.</li><li>Commission des sondages, rapport d'activité 2024&nbsp;: distinction sondages/projections de sièges lors des législatives.</li><li>Pascal Ardilly, <em>Les techniques de sondage</em>, et audition au Sénat&nbsp;: discussion des marges appliquées aux méthodes non probabilistes.</li><li>INSEE&nbsp;: population adulte, sources sur les usages numériques (les statistiques non reprises ici faute de périmètre vérifié).</li><li>Notices des instituts déposées auprès de la Commission des sondages.</li></ul><p class="fig-cap">Dernière vérification éditoriale&nbsp;: septembre 2026. Les données propres à chaque enquête doivent toujours être vérifiées dans la notice du sondage concerné.</p></section>
+</main>
+<script src="js/calc-proba-sondage.js"></script><script src="js/table-instituts.js"></script><script src="js/chart-marge-reelle.js"></script>
+</body></html>

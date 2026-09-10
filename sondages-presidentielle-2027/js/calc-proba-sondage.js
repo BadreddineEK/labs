@@ -1,11 +1,15 @@
-// Calcul interactif: proba d'etre sonde selon taille d'echantillon saisie par l'utilisateur
-// Base: population adulte France ~53M (voir data/instituts_2027.json)
-const POPULATION_ADULTE_FRANCE = 53000000;
-
-function calculerProbaSondage(tailleEchantillon) {
-  const proba = tailleEchantillon / POPULATION_ADULTE_FRANCE;
-  const uneSur = Math.round(POPULATION_ADULTE_FRANCE / tailleEchantillon);
-  return { proba, uneSur };
-}
-
-// TODO: brancher sur un input utilisateur + affichage dans la section intro
+(function () {
+  var population = 53000000;
+  var input = document.getElementById('sample-size');
+  var label = document.getElementById('sample-label');
+  var result = document.getElementById('proba-result');
+  if (!input || !label || !result) return;
+  function format(n) { return new Intl.NumberFormat('fr-FR').format(n); }
+  function render() {
+    var sample = Number(input.value);
+    label.textContent = format(sample);
+    result.innerHTML = 'Avec <strong>' + format(sample) + ' personnes</strong>, cela représente environ <strong>1 adulte sur ' + format(Math.round(population / sample)) + '</strong>, soit <strong>' + (sample / population * 100).toFixed(4).replace('.', ',') + '&nbsp;%</strong> de la population adulte.';
+  }
+  input.addEventListener('input', render);
+  render();
+})();
