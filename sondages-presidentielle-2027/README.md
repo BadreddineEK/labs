@@ -1,18 +1,25 @@
-# 🗳️ Sondages presidentielle 2027 — Lab
+# Sondages et chiffres choc - Lab
 
-> Lab methodologique et pedagogique, different des Labs "enquete chiffree" de la serie. Sujet : la fiabilite reelle des sondages d'opinion, sans aucune prise de position sur le resultat de l'election.
+> Un Lab de lecture critique des sondages et des statistiques, sans prise de position sur le résultat d'une élection.
 
-## Deux contenus, un seul sujet
+## Angle
 
-- **Post LinkedIn + carrousel** (`content/post-linkedin-acte1.md`) : hook accessible a tous, "avez-vous deja ete sonde ?", calcul de probabilite, panels d'acces, exemple de chiffre choc decortique.
-- **Lab complet** (`index.html`, sur labs.badreddineek.com) : la vraie mecanique des sondages presidentiels — methode des quotas vs aleatoire, le probleme non resolu de la marge d'erreur (citation d'un statisticien devant le Senat), le redressement politique, un tableau comparatif des 7 instituts accredites, et le cas d'ecole des legislatives 2024.
+La présidentielle 2027 sert de fil rouge, mais le Lab donne des outils applicables à tout chiffre médiatique : étude sur les jeunes, santé, travail ou habitudes numériques. Il suit le chemin d'un pourcentage, de la question posée à la notice méthodologique.
 
-**Brief complet et etat d'avancement : voir [CONSIGNES.md](./CONSIGNES.md).**
+Le cas central est une mise au point de la Commission des sondages du 10 juillet 2026 sur une enquête présidentielle publiée par FranceSoir. Il illustre des manquements documentés sans transformer l'article en commentaire politique.
 
-## Particularite de ce Lab
+## Contenu du Lab
 
-Pas de pipeline Python : le travail central est la recherche, la verification des sources et la rigueur redactionnelle, pas l'ingenierie de donnees. Le contenu est deja redige a 70-80%, avec les chiffres verifies et sources. Reste a l'agent : verifier les points ouverts listes dans CONSIGNES.md §7, affiner le ton, et faire la mise en forme visuelle (carrousel + interactif web).
+- Échantillon, tirage aléatoire et quotas.
+- Formulation et ordre des questions.
+- Access panels, redressement et limites de la marge d'erreur.
+- Cas réel contrôlé par la Commission des sondages.
+- Guide de lecture d'une notice et trois réflexes avant de partager un chiffre.
+
+## Particularité
+
+Pas de pipeline Python : le travail est méthodologique, rédactionnel et fondé sur des sources primaires. Le calculateur d'échantillon et les schémas sont exécutés côté navigateur.
 
 ## Statut
 
-🟡 Contenu redige, en attente de verification finale des points ouverts et de mise en forme.
+Lab web rédigé et mis en forme. Le post LinkedIn et le carrousel seront alignés sur cette version éditoriale dans une étape distincte.

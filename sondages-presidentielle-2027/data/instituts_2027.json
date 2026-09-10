@@ -12,10 +12,7 @@
   ],
   "chiffres_cles": {
     "population_adulte_france": 53000000,
-    "proba_etre_sonde_un_sondage": "1 sur ~40770 (calcul propre, echantillon moyen 1300)",
-    "marge_erreur_legale_n1000": "environ +/-3 points a 95% de confiance",
-    "ecart_reel_mesure_2022": "4 a 6 points (vs 1.8-2 points affiches)",
-    "legislatives_2024_projection_sieges_rn": "170-230 sieges annonces, 143 sieges reels",
-    "surrepresentation_rn_access_panels_non_redresses_2021": "environ +2 points"
+    "proba_etre_sonde_un_sondage": "Calcul illustratif pour un échantillon de 1 300 personnes",
+    "marge_echantillonnage_n1000": "Environ +/-3 points à 95 %, uniquement sous hypothèse de tirage aléatoire"
   }
 }
