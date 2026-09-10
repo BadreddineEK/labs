@@ -10,16 +10,19 @@ Le cas central est une mise au point de la Commission des sondages du 10 juillet
 
 ## Contenu du Lab
 
+- Hook d'ouverture : A à 16 %, B à 14 %, échantillon de 1 000 personnes, puis question sur la comparabilité de l'écart.
 - Simulation interactive d'un sondage sur une population synthétique.
 - Comparaison tirage aléatoire, panel biaisé et panel redressé.
 - Calcul de proportion pondérée, erreur-type, intervalle à 95 % et taille effective.
 - Répétition de 500 enquêtes pour séparer variance et biais.
-- Comparaison pédagogique entre une dernière vague d'intentions de vote et le résultat officiel du premier tour 2022.
-- Formulation des questions, cas réel contrôlé par la Commission et guide de notice.
+- Distinction entre incertitude de modèle et couverture empirique des intervalles.
+- Effet combiné de la formulation, des modalités de réponse et du cadrage.
+- Emplacement réservé pour une comparaison historique intentions/résultat, masqué tant qu'une notice primaire complète n'est pas identifiée.
+- Cas réel contrôlé par la Commission et guide de notice.
 
 ## Particularité
 
-Pas de pipeline Python : la simulation est exécutée côté navigateur avec des données synthétiques. Elle ne produit aucune estimation de la présidentielle 2027. Le comparatif 2022 est séparé du simulateur et distingue explicitement intentions publiées et résultats officiels.
+Pas de pipeline Python : la simulation est exécutée côté navigateur avec des données synthétiques. Elle ne produit aucune estimation de la présidentielle 2027. La comparaison historique reste masquée tant que l'institut, le commanditaire, le terrain, la base et la notice du sondage ne sont pas retrouvés.
 
 ## Statut
 
