@@ -9,3 +9,4 @@
 @media(max-width:760px){.historical-section{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}.history-card{padding:15px 10px}.history-meta{display:grid;gap:4px}.history-row{grid-template-columns:76px 1fr;gap:8px}.history-row>strong{font-size:12px}.history-track{height:22px}.history-track b,.history-track em{font-size:9px}.history-axis{margin-left:84px;font-size:9px}.history-reading{grid-template-columns:1fr}.history-reading strong{grid-column:1/-1}}
 @media(max-width:760px){.hook{padding:25px 0 28px}.hook-grid{grid-template-columns:1fr;gap:16px}.hook h2{font-size:38px}.hook-cta{width:100%;justify-content:space-between}.method-note{font-size:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.viz-dark circle{animation:none}}
+.historical-section{display:none!important}

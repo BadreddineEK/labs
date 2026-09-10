@@ -28,6 +28,7 @@
   var question = document.getElementById('question');
   if (main && historical && weights && question) {
     question.after(historical);
+    historical.hidden = true;
     historical.innerHTML = '<div class="section-head"><p class="eyebrow">06 · Quand le sondage rencontre le réel</p><h2>Un exemple historique attend encore sa source primaire.</h2><p class="section-intro">La comparaison entre une dernière intention de vote et un résultat électoral peut être très instructive. Mais elle n’est publiable ici que si l’on peut retrouver l’institut, le commanditaire, les dates exactes du terrain, la taille et la base de l’échantillon, ainsi que la notice complète.</p></div><div class="source-gap"><strong>Section mise en attente</strong><p>Les chiffres précédemment affichés pour le premier tour de 2022 ne sont pas conservés : leur attribution complète n’est pas identifiable dans les fichiers du Lab. Aucun ordre de grandeur ne doit remplacer une source primaire.</p><p>Les résultats officiels du ministère de l’Intérieur sont disponibles, mais ils ne suffisent pas à documenter la dernière vague de sondage. La comparaison sera réintroduite lorsque les deux objets seront traçables.</p><a href="https://www.archives-resultats-elections.interieur.gouv.fr/resultats/presidentielle-2022/index.php" target="_blank" rel="noopener">Voir les résultats officiels 2022 →</a></div>';
   }
   var questionNote = document.querySelector('#question .question-demo small');
@@ -36,7 +37,7 @@
   if (caseTitle) caseTitle.textContent = 'Quand un chiffre ne peut plus être audité';
   var repeatedHead = document.querySelector('#repeated .section-head');
   if (repeatedHead) repeatedHead.insertAdjacentHTML('beforeend', '<div class="method-note"><strong>À lire correctement :</strong> en tirage aléatoire, la couverture empirique peut être comparée à 95 %. Pour un panel, des quotas ou un redressement, l’intervalle normal reste une référence de modèle : il ne couvre pas toutes les sources d’erreur.</div>');
-  var chapterLabels = { weights: '04 · Voir le redressement agir', question: '05 · Le chiffre dépend aussi des mots', historical: '06 · Quand le sondage rencontre le réel', case: '07 · Quand un chiffre ne peut plus être audité', notice: '08 · Votre kit de lecture' };
+  var chapterLabels = { weights: '04 · Voir le redressement agir', question: '05 · Le chiffre dépend aussi des mots', case: '06 · Quand un chiffre ne peut plus être audité', notice: '07 · Votre kit de lecture' };
   Object.keys(chapterLabels).forEach(function (id) { var label = document.querySelector('#' + id + ' .eyebrow'); if (label) label.textContent = chapterLabels[id]; });
 
   function fmt(value, decimals) { return value.toLocaleString('fr-FR', { minimumFractionDigits: decimals || 0, maximumFractionDigits: decimals || 0 }); }
