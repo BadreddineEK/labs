@@ -1,0 +1,12 @@
+{
+  "name": "sondages-linkedin-carousel",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "export": "node export-fallback.mjs"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "sharp": "^0.35.4"
+  }
+}
