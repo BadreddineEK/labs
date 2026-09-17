@@ -18,18 +18,12 @@
     if (introText) introText.textContent = 'La population fictive compte 100 000 électeurs. La simulation connaît la vraie intention de vote, puis vous montre ce que votre échantillon permet réellement d’en dire.';
     simulatorIntro.insertAdjacentHTML('beforeend', '<div class="model-card"><strong>Fiche du modèle</strong><span><b>Population</b> synthétique · 100 000 personnes</span><span><b>Variable</b> soutien à une option fictive</span><span><b>Vérité pédagogique</b> 42 %</span><span><b>Résultat</b> aucune estimation de 2027</span></div>');
   }
-  var hero = document.querySelector('.hero');
-  if (hero) {
-    hero.insertAdjacentHTML('afterend', '<section id="hook" class="hook wrap"><p class="eyebrow">Le test que les titres oublient</p><div class="hook-grid"><div><h2>A : <strong>16 %</strong> · B : <strong>14 %</strong></h2><p>Échantillon : 1 000 personnes. Question : <em>peut-on réellement affirmer que A est devant&nbsp;?</em></p></div><div class="hook-answer"><strong>Pas si vite.</strong><span>Un écart de 2 points peut être plus petit que l’incertitude autour des estimations. Le Lab vous montre pourquoi.</span></div></div><a class="hook-cta" href="#simulator">Voir ce que cache l’écart <span aria-hidden="true">↓</span></a></section>');
-  }
   var main = document.querySelector('main');
-  var historical = document.getElementById('historical');
   var weights = document.getElementById('weights');
   var question = document.getElementById('question');
-  if (main && historical && weights && question) {
-    question.after(historical);
-    historical.hidden = true;
-    historical.innerHTML = '<div class="section-head"><p class="eyebrow">06 · Quand le sondage rencontre le réel</p><h2>Un exemple historique attend encore sa source primaire.</h2><p class="section-intro">La comparaison entre une dernière intention de vote et un résultat électoral peut être très instructive. Mais elle n’est publiable ici que si l’on peut retrouver l’institut, le commanditaire, les dates exactes du terrain, la taille et la base de l’échantillon, ainsi que la notice complète.</p></div><div class="source-gap"><strong>Section mise en attente</strong><p>Les chiffres précédemment affichés pour le premier tour de 2022 ne sont pas conservés : leur attribution complète n’est pas identifiable dans les fichiers du Lab. Aucun ordre de grandeur ne doit remplacer une source primaire.</p><p>Les résultats officiels du ministère de l’Intérieur sont disponibles, mais ils ne suffisent pas à documenter la dernière vague de sondage. La comparaison sera réintroduite lorsque les deux objets seront traçables.</p><a href="https://www.archives-resultats-elections.interieur.gouv.fr/resultats/presidentielle-2022/index.php" target="_blank" rel="noopener">Voir les résultats officiels 2022 →</a></div>';
+  if (main && weights && question) {
+    var historical = document.getElementById('historical');
+    if (historical) historical.remove();
   }
   var questionNote = document.querySelector('#question .question-demo small');
   if (questionNote) questionNote.textContent = 'Exemple synthétique : il illustre l’effet combiné du cadrage, des modalités de réponse et de la formulation, pas l’effet de quelques mots isolés.';
@@ -37,7 +31,7 @@
   if (caseTitle) caseTitle.textContent = 'Quand un chiffre ne peut plus être audité';
   var repeatedHead = document.querySelector('#repeated .section-head');
   if (repeatedHead) repeatedHead.insertAdjacentHTML('beforeend', '<div class="method-note"><strong>À lire correctement :</strong> en tirage aléatoire, la couverture empirique peut être comparée à 95 %. Pour un panel, des quotas ou un redressement, l’intervalle normal reste une référence de modèle : il ne couvre pas toutes les sources d’erreur.</div>');
-  var chapterLabels = { weights: '04 · Voir le redressement agir', question: '05 · Le chiffre dépend aussi des mots', case: '06 · Quand un chiffre ne peut plus être audité', notice: '07 · Votre kit de lecture' };
+  var chapterLabels = { weights: '03 · Voir le redressement agir', question: '04 · Le chiffre dépend aussi des mots', case: '05 · Quand un chiffre ne peut plus être audité', notice: '06 · Votre kit de lecture' };
   Object.keys(chapterLabels).forEach(function (id) { var label = document.querySelector('#' + id + ' .eyebrow'); if (label) label.textContent = chapterLabels[id]; });
 
   function fmt(value, decimals) { return value.toLocaleString('fr-FR', { minimumFractionDigits: decimals || 0, maximumFractionDigits: decimals || 0 }); }
@@ -93,7 +87,7 @@
     function x(value) { return left + (value - min) / (max - min) * (width - left - right); }
     var dots = values.map(function (value, index) { return '<circle cx="' + x(value) + '" cy="' + (top + (index % 17) * 10) + '" r="3" fill="#e8bd54" opacity=".7"/>'; }).join('');
     var labels = [min, (min + max) / 2, max].map(function (value) { return '<text x="' + x(value) + '" y="' + (height - 12) + '" text-anchor="middle" class="axis-label" fill="#b6c9c0">' + pct(value, 0) + '</text>'; }).join('');
-    return '<svg class="chart-svg" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Distribution de 500 estimations avec vérité et intervalle"><line x1="' + x(truthValue) + '" y1="' + top + '" x2="' + x(truthValue) + '" y2="' + (height - bottom) + '" stroke="#c26339" stroke-width="3"/><line x1="' + x(low) + '" y1="' + (height - 27) + '" x2="' + x(high) + '" y2="' + (height - 27) + '" stroke="#8fb8a9" stroke-width="6" stroke-linecap="round"/><text x="' + x(truthValue) + '" y="18" text-anchor="middle" class="axis-label" fill="#f0c66a">VÉRITÉ</text>' + dots + labels + '</svg>';
+    return '<svg class="chart-svg" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Distribution de 500 estimations avec vérité et repère théorique"><line x1="' + x(truthValue) + '" y1="' + top + '" x2="' + x(truthValue) + '" y2="' + (height - bottom) + '" stroke="#c26339" stroke-width="3"/><line x1="' + x(low) + '" y1="' + (height - 27) + '" x2="' + x(high) + '" y2="' + (height - 27) + '" stroke="#8fb8a9" stroke-width="6" stroke-linecap="round"/><text x="' + x(truthValue) + '" y="18" text-anchor="middle" class="axis-label" fill="#f0c66a">VALEUR CIBLE</text><text x="' + (width - right) + '" y="' + (height - 34) + '" text-anchor="end" class="axis-label" fill="#b6c9c0">Repère théorique pour n choisi</text>' + dots + labels + '</svg>';
   }
   function runMany(settings) {
     var values = [], covered = 0, total = 500;
@@ -101,7 +95,7 @@
     var min = Math.max(0, Math.min.apply(null, values) - 0.03), max = Math.min(1, Math.max.apply(null, values) + 0.03);
     els['repeat-chart'].innerHTML = repeatSvg(values, truth, truth - 1.96 * Math.sqrt(truth * (1 - truth) / settings.n), truth + 1.96 * Math.sqrt(truth * (1 - truth) / settings.n)) + '<p class="chart-summary">Les 500 estimations s’étendent de ' + pct(Math.min.apply(null, values), 1) + ' à ' + pct(Math.max.apply(null, values), 1) + '. La vérité pédagogique est ' + pct(truth) + '.</p>';
     els['coverage-value'].textContent = pct(covered / total, 0);
-    els['coverage-note'].textContent = settings.mode === 'random' ? 'Dans un tirage aléatoire, la couverture se rapproche de 95 % quand les hypothèses du modèle sont respectées.' : 'La couverture peut s’éloigner de 95 % : l’intervalle ne connaît pas le biais introduit par le recrutement.';
+    els['coverage-note'].textContent = 'Sur ces 500 répétitions, ' + pct(covered / total, 0) + ' des intervalles calculés contiennent la valeur cible. Ce résultat fluctue d’une série de simulations à l’autre.' + (settings.mode === 'random' ? ' Dans un tirage aléatoire, il peut se rapprocher de 95 % lorsque les hypothèses du modèle sont respectées.' : ' Pour ce recrutement, il ne résume pas toutes les sources d’erreur.');
     els['run-status'].textContent = '500 tirages simulés · dispersion de ' + pct(Math.max(0, max - min), 1);
   }
   function run() { var settings = getSettings(); var result = drawSample(settings); updatePoll(result, settings); els['run-status'].textContent = 'Échantillon de ' + fmt(settings.n) + ' répondants tiré.'; }
@@ -120,8 +114,6 @@
   els['case-chart'].innerHTML = '<div class="case-list">' + caseRows.map(function (row) { return '<div class="case-row"><span>' + row[0] + '</span><b>' + row[1] + '</b></div>'; }).join('') + '</div>';
   var noticeRows = [['01', 'Producteur', 'Qui commande et réalise ?'], ['02', 'Population', 'Qui est censé être représenté ?'], ['03', 'Terrain', 'Quand, combien, par quel mode ?'], ['04', 'Questionnaire', 'Quel texte exact et quel ordre ?'], ['05', 'Corrections', 'Quels quotas, poids et redressements ?'], ['06', 'Incertitude', 'Quelle marge, avec quelles hypothèses ?']];
   els['notice-grid'].innerHTML = noticeRows.map(function (row) { return '<article class="notice-card"><b>' + row[0] + '</b><strong>' + row[1] + '</strong><p>' + row[2] + '</p></article>'; }).join('');
-  var historicalCaption = document.querySelector('#historical .fig-cap');
-  if (historicalCaption) historicalCaption.innerHTML += ' <a href="https://www.archives-resultats-elections.interieur.gouv.fr/resultats/presidentielle-2022/index.php" target="_blank" rel="noopener">Résultats officiels du ministère de l’Intérieur</a>.';
   run();
   runMany(getSettings());
 })();
