@@ -8,3 +8,4 @@
 @media(max-width:760px){.model-card{grid-template-columns:1fr 1fr}.model-card strong{grid-column:1/-1}.lab-actions .button{flex:0 0 100%;width:100%}.reveal{transform:translateY(10px)}}
 @media(max-width:760px){.hook{padding:25px 0 28px}.hook-grid{grid-template-columns:1fr;gap:16px}.hook h2{font-size:38px}.hook-cta{width:100%;justify-content:space-between}.method-note{font-size:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.viz-dark circle{animation:none}}
+@media(max-width:760px){.dark-section,.case-section{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}}
