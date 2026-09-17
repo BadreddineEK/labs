@@ -18,13 +18,8 @@
     if (introText) introText.textContent = 'La population fictive compte 100 000 électeurs. La simulation connaît la vraie intention de vote, puis vous montre ce que votre échantillon permet réellement d’en dire.';
     simulatorIntro.insertAdjacentHTML('beforeend', '<div class="model-card"><strong>Fiche du modèle</strong><span><b>Population</b> synthétique · 100 000 personnes</span><span><b>Variable</b> soutien à une option fictive</span><span><b>Vérité pédagogique</b> 42 %</span><span><b>Résultat</b> aucune estimation de 2027</span></div>');
   }
-  var main = document.querySelector('main');
   var weights = document.getElementById('weights');
   var question = document.getElementById('question');
-  if (main && weights && question) {
-    var historical = document.getElementById('historical');
-    if (historical) historical.remove();
-  }
   var questionNote = document.querySelector('#question .question-demo small');
   if (questionNote) questionNote.textContent = 'Exemple synthétique : il illustre l’effet combiné du cadrage, des modalités de réponse et de la formulation, pas l’effet de quelques mots isolés.';
   var caseTitle = document.querySelector('#case h2');
