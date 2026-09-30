@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Transformer Architecture - Labs</title>
+<meta name="description" content="The Transformer architecture, explained block by block: self-attention, multi-head attention, encoder and decoder, with an interactive playground.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300..700&display=swap" rel="stylesheet">
@@ -159,7 +160,7 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
     </a>
     <div class="nav-right">
       <a href="../" class="nav-back">&#8592; Labs</a>
-      <button class="lang-btn" id="lang-toggle">FR</button>
+      <button class="lang-btn" id="lang-toggle" aria-label="Switch language">FR</button>
       <button class="theme-toggle" data-theme-toggle aria-label="Switch theme">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
@@ -170,15 +171,15 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
 <main>
   <section class="hero">
     <div class="container">
-      <div class="hero-tag">Deep Learning &#183; Architecture</div>
-      <h1>The <em>Transformer</em><br>Architecture</h1>
+      <div class="hero-tag"><span class="lang-en">Deep Learning · Architecture</span><span class="lang-fr" style="display:none">Apprentissage profond · Architecture</span></div>
+      <h1><span class="lang-en">The <em>Transformer</em><br>Architecture</span><span class="lang-fr" style="display:none">L'architecture<br>du <em>Transformer</em></span></h1>
       <p class="hero-lead lang-en">GPT, Claude, Gemini, Llama: every modern LLM is built on one 2017 paper. Here is the full architecture, block by block, with an interactive attention playground.</p>
       <p class="hero-lead lang-fr" style="display:none">GPT, Claude, Gemini, Llama: chaque grand mod&#232;le de langage moderne repose sur un seul article de 2017. Voici l'architecture compl&#232;te, bloc par bloc, avec un playground interactif.</p>
       <div class="hero-meta">
         <div class="hero-meta-item">
           <span class="hero-meta-label lang-en">Published</span>
           <span class="hero-meta-label lang-fr" style="display:none">Publi&#233;</span>
-          <span class="hero-meta-value">April 2026</span>
+          <span class="hero-meta-value"><span class="lang-en">April 2026</span><span class="lang-fr" style="display:none">Avril 2026</span></span>
         </div>
         <div class="hero-meta-item">
           <span class="hero-meta-label lang-en">Reading time</span>
@@ -601,6 +602,14 @@ footer{border-top:1px solid var(--color-border);padding:var(--space-10) 0;margin
     document.querySelectorAll('.lang-en').forEach(el=>el.style.display=lang==='en'?'':'none');
     document.querySelectorAll('.lang-fr').forEach(el=>el.style.display=lang==='fr'?'':'none');
     btn.textContent=lang==='en'?'FR':'EN';
+    btn.setAttribute('aria-label',lang==='fr'?'Passer en anglais':'Switch to French');
+    document.documentElement.setAttribute('lang',lang);
+    document.title=lang==='fr'?'L\u2019architecture Transformer - Labs':'The Transformer Architecture - Labs';
+    const description=document.querySelector('meta[name="description"]');
+    if(description)description.setAttribute('content',lang==='fr'
+      ?'L\u2019architecture Transformer expliquée bloc par bloc : auto-attention, attention multi-tête, encodeur et décodeur, avec un playground interactif.'
+      :'The Transformer architecture, explained block by block: self-attention, multi-head attention, encoder and decoder, with an interactive playground.');
+    document.querySelector('[data-theme-toggle]')?.setAttribute('aria-label',lang==='fr'?'Changer de thème':'Switch theme');
   }
   applyLang();
   btn.addEventListener('click',()=>{

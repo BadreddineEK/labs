@@ -175,18 +175,19 @@
 <header class="hero">
   <div class="hero-kicker">
     <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
-    <span data-i18n="kicker">Interactive Explainer</span>
+    <span class="lang-en">Interactive Explainer</span>
+    <span class="lang-fr" style="display:none">Explainer interactif</span>
   </div>
   <h1 data-i18n="h1-en" class="lang-en">The Embedding <em>Space</em></h1>
   <h1 data-i18n="h1-fr" class="lang-fr" style="display:none">L'espace des <em>embeddings</em></h1>
   <p class="hero-sub lang-en">Words are not numbers. But to reason about language, a model must make them so. This is the story of how meaning becomes geometry.</p>
   <p class="hero-sub lang-fr" style="display:none">Les mots ne sont pas des nombres. Pourtant, pour raisonner sur le langage, un modèle doit les transformer en vecteurs. Voici comment le sens devient géométrie.</p>
   <div class="hero-meta">
-    <div class="meta-item"><span class="meta-val">6</span><span class="meta-lbl" data-i18n="meta-concepts">Concepts</span></div>
+    <div class="meta-item"><span class="meta-val">6</span><span class="meta-lbl">Concepts</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">~7 min</span><span class="meta-lbl" data-i18n="meta-read">Read</span></div>
+    <div class="meta-item"><span class="meta-val">~7 min</span><span class="meta-lbl lang-en">Read</span><span class="meta-lbl lang-fr" style="display:none">Lecture</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl" data-i18n="meta-published">Published</span></div>
+    <div class="meta-item"><span class="meta-val"><span class="lang-en">Apr 2026</span><span class="lang-fr" style="display:none">Avr. 2026</span></span><span class="meta-lbl lang-en">Published</span><span class="meta-lbl lang-fr" style="display:none">Publié</span></div>
   </div>
 </header>
 
@@ -381,6 +382,13 @@ function applyLang(){
   document.querySelectorAll('.lang-fr').forEach(el=>el.style.display=lang==='fr'?'':'none');
   langToggle.textContent=lang==='en'?'FR':'EN';
   html.setAttribute('lang',lang);
+  document.title=lang==='fr'?"L'espace des embeddings · Labs · Badreddine EK":"The Embedding Space · Labs · Badreddine EK";
+  const description=document.querySelector('meta[name="description"]');
+  if(description)description.setAttribute('content',lang==='fr'
+    ?"Comment un modèle transforme les mots en nombres et pourquoi la géométrie de cet espace est le socle de l'IA moderne."
+    :'How a model turns words into numbers, and why the geometry of that space is the foundation of all modern AI.');
+  langToggle.setAttribute('aria-label',lang==='fr'?'Passer en anglais':'Switch to French');
+  toggleBtn?.setAttribute('aria-label',lang==='fr'?'Changer de thème':'Toggle theme');
 }
 applyLang();
 langToggle.addEventListener('click',()=>{

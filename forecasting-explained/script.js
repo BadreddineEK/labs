@@ -9,6 +9,8 @@
 
 const translations = {
   en: {
+    'page.title': 'Forecasting Explained: Pattern Reading Under Uncertainty',
+    'page.description': 'An interactive explainer on how time series forecasting works: decomposing signals, understanding uncertainty, and why models sometimes fail. By Badreddine El Khamlichi.',
     'nav.anatomy':    'Anatomy',
     'nav.difficulty': 'Difficulty',
     'nav.metrics':    'Metrics',
@@ -19,6 +21,7 @@ const translations = {
     'nav.ideas':      'Key Ideas',
 
     'hero.eyebrow':  'An interactive explainer',
+    'hero.headline': 'Forecasting<br>is not magic.',
     'hero.sub':      'It is pattern reading under uncertainty.',
     'hero.body':     'A visual exploration of how we predict time: what makes a good forecast, why it fails, and what the data is really telling us.',
     'hero.past':     'Past',
@@ -147,6 +150,8 @@ const translations = {
   },
 
   fr: {
+    'page.title': 'Prévision : lire les motifs sous incertitude | Labs',
+    'page.description': 'Un explainer interactif sur la prévision des séries temporelles : décomposer les signaux, comprendre l’incertitude et expliquer pourquoi les modèles échouent. Par Badreddine El Khamlichi.',
     'nav.anatomy':    'Anatomie',
     'nav.difficulty': 'Difficultés',
     'nav.metrics':    'Métriques',
@@ -157,6 +162,7 @@ const translations = {
     'nav.ideas':      'A retenir',
 
     'hero.eyebrow':  'Un explainer interactif',
+    'hero.headline': 'La prévision<br>n’est pas magique.',
     'hero.sub':      'C\'est lire des patterns dans l\'incertitude.',
     'hero.body':     'Une exploration visuelle de la prédiction dans le temps: ce qui rend une prévision fiable, pourquoi elle échoue, et ce que les données essaient vraiment de dire.',
     'hero.past':     'Passé',
@@ -316,8 +322,10 @@ function applyTranslations(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (t[key] !== undefined) {
+      if (key === 'hero.headline') {
+        el.innerHTML = t[key];
       // Preserve child elements (like <strong id="horizon-value">)
-      if (el.children.length > 0) {
+      } else if (el.children.length > 0) {
         // Only update text nodes, keep child elements intact
         const firstText = Array.from(el.childNodes).find(n => n.nodeType === 3);
         if (firstText) {
@@ -334,10 +342,18 @@ function applyTranslations(lang) {
 
   // Update html lang attribute
   document.documentElement.setAttribute('lang', lang);
+  document.title = t['page.title'];
+  document.querySelector('meta[name="description"]')?.setAttribute('content', t['page.description']);
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', t['page.title']);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', t['page.description']);
+  document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', t['page.title']);
+  document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', t['page.description']);
 
   // Update lang toggle label (shows the OTHER language)
   const langLabel = document.getElementById('lang-label');
   if (langLabel) langLabel.textContent = lang === 'en' ? 'FR' : 'EN';
+  const langToggle = document.getElementById('lang-toggle');
+  if (langToggle) langToggle.setAttribute('aria-label', lang === 'en' ? 'Switch to French' : 'Passer en anglais');
 
   // Refresh dynamic slider value labels
   const horizonVal = document.getElementById('horizon-value');

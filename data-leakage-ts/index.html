@@ -174,7 +174,7 @@
       Labs
     </a>
     <div class="header-actions">
-      <div class="lang-toggle">
+      <div class="lang-toggle" role="group" aria-label="Language">
         <button class="lang-btn active" data-lang-switch="en">EN</button>
         <button class="lang-btn" data-lang-switch="fr">FR</button>
       </div>
@@ -200,8 +200,8 @@
     <span data-lang-inline="fr">Le data leakage en séries temporelles est l'erreur la plus fréquente — et la plus dangereuse — en forecasting. Votre modèle n'est pas bon. Il triche. Voici comment le voir, le mesurer, et le corriger.</span>
   </p>
   <div class="article-meta">
-    <div class="meta-item"><span class="meta-value">April 2026</span><span class="meta-label">Published</span></div>
-    <div class="meta-item"><span class="meta-value">~10 min</span><span class="meta-label">Read</span></div>
+    <div class="meta-item"><span class="meta-value"><span data-lang-inline="en" class="active">April 2026</span><span data-lang-inline="fr">Avril 2026</span></span><span class="meta-label"><span data-lang-inline="en" class="active">Published</span><span data-lang-inline="fr">Publié</span></span></div>
+    <div class="meta-item"><span class="meta-value">~10 min</span><span class="meta-label"><span data-lang-inline="en" class="active">Read</span><span data-lang-inline="fr">Lecture</span></span></div>
     <div class="meta-item" style="display:flex;gap:var(--space-2);align-items:center;flex-wrap:wrap;">
       <span class="tag">Time Series</span><span class="tag">ML</span><span class="tag">Forecasting</span>
     </div>
@@ -497,6 +497,14 @@ themeBtn.addEventListener('click',()=>{
 let lang='en';
 function setLang(l){
   lang=l;
+  document.documentElement.setAttribute('lang',l);
+  document.title = l === 'fr' ? 'Fuite de données en séries temporelles · Labs · Badreddine EK' : 'Data Leakage in Time Series · Labs · Badreddine EK';
+  const description = document.querySelector('meta[name="description"]');
+  if (description) description.setAttribute('content', l === 'fr'
+    ? 'Pourquoi votre modèle de prévision excelle en test et échoue en production. Le data leakage dans les séries temporelles, expliqué et visualisé.'
+    : 'Why your forecasting model looks great in testing and fails in production. Data leakage in time series, visualized and explained.');
+  document.querySelector('.lang-toggle')?.setAttribute('aria-label', l === 'fr' ? 'Langue' : 'Language');
+  document.querySelector('[data-theme-toggle]')?.setAttribute('aria-label', l === 'fr' ? 'Changer de thème' : 'Toggle theme');
   document.querySelectorAll('[data-lang]').forEach(el=>el.classList.toggle('active',el.dataset.lang===l));
   document.querySelectorAll('[data-lang-inline]').forEach(el=>{
     const show=el.dataset.langInline===l;
@@ -916,7 +924,7 @@ function renderDiagCards(){
     {
       iconEN:'🔎 Test RMSE is suspiciously low',
       iconFR:'🔎 Le RMSE de test est suspicieusement bas',
-      descEN:'If your model performs better on test than on training folds, something is wrong. Models don't usually generalize better than they train.',
+      descEN:"If your model performs better on test than on training folds, something is wrong. Models don't usually generalize better than they train.",
       descFR:'Si votre modèle performe mieux sur le test que sur les folds d\'entraînement, quelque chose ne va pas. Les modèles ne généralisent pas mieux qu\'ils ne s\'entraînent.'
     },
     {

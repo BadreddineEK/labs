@@ -219,7 +219,8 @@
     <span class="lang-en">Interactive Explainer</span>
     <span class="lang-fr" style="display:none">Explainer interactif</span>
   </div>
-  <h1>Attention, <em>Visualized</em></h1>
+  <h1 class="lang-en">Attention, <em>Visualized</em></h1>
+  <h1 class="lang-fr" style="display:none">L’attention visualisée</h1>
   <p class="hero-sub lang-en">In 2017, a single mechanism changed everything. Not a bigger model, not more data. Just a new way to let every word look at every other word at the same time. Here is what actually happens inside.</p>
   <p class="hero-sub lang-fr" style="display:none">En 2017, un seul mécanisme a tout changé. Pas un modèle plus grand, pas plus de données. Juste une nouvelle façon de laisser chaque mot regarder tous les autres en même temps. Voici ce qui se passe vraiment à l'intérieur.</p>
   <div class="hero-meta">
@@ -227,7 +228,7 @@
     <div class="meta-sep"></div>
     <div class="meta-item"><span class="meta-val">~7 min</span><span class="meta-lbl lang-en">Read</span><span class="meta-lbl lang-fr" style="display:none">Lecture</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl lang-en">Published</span><span class="meta-lbl lang-fr" style="display:none">Publié</span></div>
+    <div class="meta-item"><span class="meta-val"><span class="lang-en">Apr 2026</span><span class="lang-fr" style="display:none">Avr. 2026</span></span><span class="meta-lbl lang-en">Published</span><span class="meta-lbl lang-fr" style="display:none">Publié</span></div>
   </div>
 </header>
 
@@ -436,6 +437,13 @@ function applyLang(){
   document.querySelectorAll('.lang-fr').forEach(el=>el.style.display=lang==='fr'?'':'none');
   langToggle.textContent=lang==='en'?'FR':'EN';
   html.setAttribute('lang',lang);
+  document.title=lang==='fr'?'L’attention visualisée · Labs · Badreddine EK':'Attention, Visualized · Labs · Badreddine EK';
+  const description=document.querySelector('meta[name="description"]');
+  if(description)description.setAttribute('content',lang==='fr'
+    ?'Ce que fait le mécanisme d’attention : Query, Key, Value expliqués intuitivement, avec une carte thermique interactive à explorer mot par mot.'
+    :'What the attention mechanism actually does. Query, Key, Value explained intuitively, with an interactive heatmap you can explore token by token.');
+  langToggle.setAttribute('aria-label',lang==='fr'?'Passer en anglais':'Switch to French');
+  toggleBtn?.setAttribute('aria-label',lang==='fr'?'Changer de thème':'Toggle theme');
 }
 applyLang();
 langToggle.addEventListener('click',()=>{

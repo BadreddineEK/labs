@@ -451,7 +451,13 @@
       .hero { padding-top: var(--space-16); }
       .hero h1 { font-size: clamp(2rem, 8vw, 3rem); }
       .hero-meta { gap: var(--space-4); }
-      .header-inner { padding: var(--space-3) var(--space-4); }
+      .header-inner { padding: var(--space-3) var(--space-4); flex-wrap: wrap; }
+      .header-right {
+        flex: 1 1 100%;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: var(--space-2);
+      }
       .grid-section { padding-inline: var(--space-4); }
     }
 

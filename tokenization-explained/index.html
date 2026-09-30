@@ -213,12 +213,12 @@
   </p>
   <div class="article-meta">
     <div class="meta-item">
-      <span class="meta-value">April 2026</span>
-      <span class="meta-label">Published</span>
+      <span class="meta-value"><span data-lang-inline="en" class="active">April 2026</span><span data-lang-inline="fr">Avril 2026</span></span>
+      <span class="meta-label"><span data-lang-inline="en" class="active">Published</span><span data-lang-inline="fr">Publié</span></span>
     </div>
     <div class="meta-item">
       <span class="meta-value">~8 min</span>
-      <span class="meta-label">Read</span>
+      <span class="meta-label"><span data-lang-inline="en" class="active">Read</span><span data-lang-inline="fr">Lecture</span></span>
     </div>
     <div class="meta-item" style="display:flex;gap:var(--space-2);align-items:center;flex-wrap:wrap;">
       <span class="tag">LLM</span>
@@ -482,6 +482,14 @@ themeBtn.addEventListener('click', () => {
 let currentLang = 'en';
 function setLang(lang) {
   currentLang = lang;
+  document.documentElement.setAttribute('lang', lang);
+  document.title = lang === 'fr' ? 'Comment les LLM tokenisent · Labs · Badreddine EK' : 'How LLMs Tokenize · Labs · Badreddine EK';
+  const description = document.querySelector('meta[name="description"]');
+  if (description) description.setAttribute('content', lang === 'fr'
+    ? 'Votre LLM ne lit pas des mots : il lit des fragments. Découvrez la tokenisation, une étape qui façonne tout ce qui suit.'
+    : 'Your LLM doesn\'t read words. It reads fragments. Understand tokenization, the step that shapes everything after.');
+  document.querySelector('.lang-toggle')?.setAttribute('aria-label', lang === 'fr' ? 'Langue' : 'Language');
+  document.querySelector('[data-theme-toggle]')?.setAttribute('aria-label', lang === 'fr' ? 'Changer de thème' : 'Toggle theme');
   document.querySelectorAll('[data-lang]').forEach(el => {
     el.classList.toggle('active', el.dataset.lang === lang);
   });

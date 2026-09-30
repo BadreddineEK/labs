@@ -216,7 +216,7 @@
     <span class="lang-en">Interactive Explainer</span>
     <span class="lang-fr" style="display:none">Explainer interactif</span>
   </div>
-  <h1>How a Model <em>Learns</em></h1>
+  <h1><span class="lang-en">How a Model <em>Learns</em></span><span class="lang-fr" style="display:none">Comment un modèle <em>apprend</em></span></h1>
   <p class="hero-sub lang-en">A model doesn't start smart. It starts random, makes mistakes, measures how wrong it was, and adjusts - millions of times. Here's what that actually looks like.</p>
   <p class="hero-sub lang-fr" style="display:none">Un mod&#232;le ne commence pas intelligent. Il part al&#233;atoire, fait des erreurs, mesure &#224; quel point il s'est tromp&#233;, et s'ajuste - des millions de fois. Voici &#224; quoi &#231;a ressemble concr&#232;tement.</p>
   <div class="hero-meta">
@@ -224,7 +224,7 @@
     <div class="meta-sep"></div>
     <div class="meta-item"><span class="meta-val">~8 min</span><span class="meta-lbl lang-en">Read</span><span class="meta-lbl lang-fr" style="display:none">Lecture</span></div>
     <div class="meta-sep"></div>
-    <div class="meta-item"><span class="meta-val">Apr 2026</span><span class="meta-lbl lang-en">Published</span><span class="meta-lbl lang-fr" style="display:none">Publi&#233;</span></div>
+    <div class="meta-item"><span class="meta-val"><span class="lang-en">Apr 2026</span><span class="lang-fr" style="display:none">Avr. 2026</span></span><span class="meta-lbl lang-en">Published</span><span class="meta-lbl lang-fr" style="display:none">Publi&#233;</span></div>
   </div>
 </header>
 
@@ -538,6 +538,14 @@
     document.querySelectorAll('.lang-en').forEach(el=>el.style.display=lang==='en'?'':'none');
     document.querySelectorAll('.lang-fr').forEach(el=>el.style.display=lang==='fr'?'':'none');
     btn.textContent=lang==='en'?'FR':'EN';
+    document.documentElement.setAttribute('lang',lang);
+    document.title=lang==='fr'?'Comment un modèle apprend · Labs · Badreddine EK':'How a Model Learns - Labs by Badreddine EK';
+    const description=document.querySelector('meta[name="description"]');
+    if(description)description.setAttribute('content',lang==='fr'
+      ?'Descente de gradient, rétropropagation et paysages de perte : découvrez pourquoi un réseau de neurones s’améliore à chaque étape, avec des visualisations interactives.'
+      :'Loss landscapes, gradient descent, backpropagation - why a neural network improves with every step, visualized interactively.');
+    btn.setAttribute('aria-label',lang==='fr'?'Passer en anglais':'Switch to French');
+    document.querySelector('[data-theme-toggle]')?.setAttribute('aria-label',lang==='fr'?'Changer de thème':'Toggle theme');
   }
   applyLang();
   btn.addEventListener('click',()=>{
